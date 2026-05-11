@@ -24,18 +24,18 @@ public class Doctors {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "doctor_id")
-    private Long doctor_id;
+    private Long doctorId;
 
     @Column(name = "user_id",nullable = false, unique = true)
-    private Long user_id;
+    private Long userId;
 
     @Column(name = "medical_license_number",nullable = false, unique = true)
     @Max(value = 50,message = "El numero de licencia medica no puede ser mayor a 50 caracteres")
-    private String medical_license_number;
+    private String medicalLicenseNumber;
 
     @Column(name = "active",nullable = false, unique = false)
     private Boolean active;
 
     @Column(name = "created_at",nullable = false, unique = false)
-    private Date created_at;
+    private Date createdAt;
 }

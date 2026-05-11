@@ -23,15 +23,15 @@ public class Doctor_specialties {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "doctor_specialty_id")
-    private Long doctor_specialty_id;
+    private Long doctorSpecialtyId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "doctor_id",nullable = false)
-    private Long doctor_id;
+    private Long doctorId;
 
     @Column(name = "specialy_id",nullable = false)
-    private Long specialty_id;
+    private Long specialtyId;
 
     @Column(name = "is_primary",nullable = false)
-    private boolean is_primary;
+    private boolean isPrimary;
 }
