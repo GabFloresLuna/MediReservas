@@ -27,7 +27,7 @@ public class Doctor_specialties {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "doctor_id",nullable = false)
-    private Long doctorId;
+    private Doctors doctor;
 
     @Column(name = "specialy_id",nullable = false)
     private Long specialtyId;
