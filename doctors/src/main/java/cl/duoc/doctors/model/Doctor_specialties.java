@@ -1,0 +1,37 @@
+package cl.duoc.doctors.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Table(name = "doctor_specialties")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Doctor_specialties {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "doctor_specialty_id")
+    private Long doctor_specialty_id;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "doctor_id",nullable = false)
+    private Long doctor_id;
+
+    @Column(name = "specialy_id",nullable = false)
+    private Long specialty_id;
+
+    @Column(name = "is_primary",nullable = false)
+    private boolean is_primary;
+}
