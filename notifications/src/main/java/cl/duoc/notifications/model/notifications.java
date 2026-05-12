@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
@@ -33,8 +35,9 @@ public class notifications {
     @Column(name = "user_id", nullable = false)
     private Long  userId;
 
-    @Column(name = "notification_template_id")
-    private Long notificationTemplateId;
+    @ManyToOne
+    @JoinColumn(name = "notification_template_id")
+    private notificationTemplates notificationTemplate;
 
     @Column(name = "notification_channel", nullable = false)
     @Max(value = 30)
@@ -58,6 +61,6 @@ public class notifications {
     @CreationTimestamp
     private LocalDateTime currentTimeStamp;
 
-    /* crear la conexión 1 -> n con templates, no olvidares */
+    /* corroborar que la conexión es correcta */
 
 }
