@@ -44,7 +44,7 @@ public class notificationTemplates {
     private String templateBody;
 
     @Column(name = "active", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private Boolean activo = true;
+    private Boolean active = true;
 
     @Column(name = "created_at", nullable = false)
     @CreationTimestamp

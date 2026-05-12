@@ -57,7 +57,7 @@ public class notifications {
     @Column(name = "sent_at")
     private LocalDateTime sentAt;
 
-    @Column(name = "generated_at", nullable = false)
+    @Column(name = "created_at", nullable = false)
     @CreationTimestamp
     private LocalDateTime currentTimeStamp;
 
