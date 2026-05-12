@@ -10,13 +10,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByAuthUserId(Long authUserId);
 
-    Optional<User> findByRut(String rut);
+    Optional<User> findByRun(String run);
 
     Optional<User> findByEmail(String email);
 
     boolean existsByAuthUserId(Long authUserId);
 
-    boolean existsByRut(String rut);
+    boolean existsByRun(String run);
 
     boolean existsByEmail(String email);
 }

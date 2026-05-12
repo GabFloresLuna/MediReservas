@@ -6,7 +6,7 @@ public record UserResponseDTO(
 
     Long userId,
     Long authUserId,
-    String rut,
+    String run,
     String email,
     boolean active,
     LocalDateTime createdAt
