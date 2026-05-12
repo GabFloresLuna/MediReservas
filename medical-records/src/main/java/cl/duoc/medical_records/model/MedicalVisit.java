@@ -1,6 +1,9 @@
 package cl.duoc.medical_records.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,7 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne; 
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,7 +46,16 @@ public class MedicalVisit
     @Column(name = "visit_reason", length = 255)
     private String visitReason;
 
-    @Column(name = "treatment",columnDefinition = "text" )
+    @Column(name = "observations",columnDefinition = "TEXT" )
+    private String observations;
+
+    @Column(name = "treatment",columnDefinition = "TEXT", nullable = false)
     private String treatment;
 
+    @CreationTimestamp
+    @Column(name = "create_at", updatable = false)
+    private LocalDateTime createAt;
+
+    @OneToMany(mappedBy = "fk_diagnoses_medical_visit")
+    private List<Diagnoses> diagnoses;
 }
