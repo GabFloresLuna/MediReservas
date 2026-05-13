@@ -25,7 +25,7 @@ public class ReceptionistProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "receptionist_profile_id")
-    private Long id;
+    private Long receptionistProfileId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
