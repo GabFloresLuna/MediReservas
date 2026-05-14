@@ -23,46 +23,58 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+	private final UserService userService;
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(
-            @Valid @RequestBody CreateUserRequestDTO request
-    ) {
-        UserResponseDTO response = userService.createUser(request);
+	@PostMapping
+	public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(
+			@Valid @RequestBody CreateUserRequestDTO request) {
+		UserResponseDTO response = userService.createUser(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(201, "Usuario creado correctamente", response));
-    }
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(new ApiResponse<>(201, "Usuario creado correctamente", response));
+	}
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> getAllUsers() {
-        List<UserResponseDTO> response = userService.getAllUsers();
+	@GetMapping
+	public ResponseEntity<ApiResponse<List<UserResponseDTO>>> getAllUsers() {
+		List<UserResponseDTO> response = userService.getAllUsers();
 
-        return ResponseEntity.ok(
-                new ApiResponse<>(200, "Usuarios obtenidos correctamente", response)
-        );
-    }
+		return ResponseEntity.ok(
+				new ApiResponse<>(200, "Usuarios obtenidos correctamente", response));
+	}
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> getUserById(
-            @PathVariable Long userId
-    ) {
-        UserResponseDTO response = userService.getUserById(userId);
+	@GetMapping("/{userId}")
+	public ResponseEntity<ApiResponse<UserResponseDTO>> getUserById(
+			@PathVariable Long userId) {
+		UserResponseDTO response = userService.getUserById(userId);
 
-        return ResponseEntity.ok(
-                new ApiResponse<>(200, "Usuario obtenido correctamente", response)
-        );
-    }
+		return ResponseEntity.ok(
+				new ApiResponse<>(200, "Usuario obtenido correctamente", response));
+	}
 
-    @GetMapping("/{userId}/exists")
-    public ResponseEntity<ApiResponse<Boolean>> existsById(
-            @PathVariable Long userId
-    ) {
-        boolean exists = userService.existsById(userId);
+	@GetMapping("/{userId}/exists")
+	public ResponseEntity<ApiResponse<Boolean>> existsById(
+			@PathVariable Long userId) {
+		boolean exists = userService.existsById(userId);
 
-        return ResponseEntity.ok(
-                new ApiResponse<>(200, "Validación realizada correctamente", exists)
-        );
-    }
+		return ResponseEntity.ok(
+				new ApiResponse<>(200, "Validación realizada correctamente", exists));
+	}
+
+	@GetMapping("/run/{run}")
+	public ResponseEntity<ApiResponse<UserResponseDTO>> getUserByRun(
+			@PathVariable String run) {
+		UserResponseDTO response = userService.getUserByRun(run);
+
+		return ResponseEntity.ok(
+				new ApiResponse<>(200, "Usuario obtenido correctamente por RUN", response));
+	}
+
+	@GetMapping("/email/{email}")
+	public ResponseEntity<ApiResponse<UserResponseDTO>> getUserByEmail(
+			@PathVariable String email) {
+		UserResponseDTO response = userService.getUserByEmail(email);
+
+		return ResponseEntity.ok(
+				new ApiResponse<>(200, "Usuario obtenido correctamente por correo", response));
+	}
 }
