@@ -1,5 +1,7 @@
 package cl.duoc.users.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import cl.duoc.users.dto.CreateUserProfileRequestDTO;
@@ -43,6 +45,24 @@ public class UserProfileService {
 
         return toResponseDTO(profile);
     }
+
+    public List<UserProfileResponseDTO> getAllProfiles() {
+        return userProfileRepository.findAll()
+                .stream()
+                .map(this::toResponseDTO)
+                .toList();
+    }
+
+    public UserProfileResponseDTO getProfileById(Long profileId) {
+        UserProfile profile = userProfileRepository.findById(profileId)
+                .orElseThrow(() -> new RuntimeException("Perfil general no encontrado"));
+
+        return toResponseDTO(profile);
+    }
+
+    public boolean existsByUserId(Long userId) {
+        return userProfileRepository.existsByUserUserId(userId);
+}
 
     public UserProfileResponseDTO toResponseDTO(UserProfile profile) {
         return new UserProfileResponseDTO(

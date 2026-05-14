@@ -53,6 +53,20 @@ public class UserService {
         return toResponseDTO(user);
     }
 
+    public UserResponseDTO getUserByRun(String run) {
+        User user = userRepository.findByRun(run)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado por RUN"));
+
+        return toResponseDTO(user);
+    }
+
+    public UserResponseDTO getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado por correo"));
+
+        return toResponseDTO(user);
+    }
+
     public boolean existsById(Long userId) {
         return userRepository.existsById(userId);
     }
@@ -69,7 +83,6 @@ public class UserService {
                 user.getRun(),
                 user.getEmail(),
                 user.isActive(),
-                user.getCreatedAt()
-        );
+                user.getCreatedAt());
     }
 }
