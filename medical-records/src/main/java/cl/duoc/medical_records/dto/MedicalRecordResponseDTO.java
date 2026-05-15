@@ -6,6 +6,6 @@ public record MedicalRecordResponseDTO
 (
     Long MedicalRecordId,
     Long patientUserId,
-    boolean active,
+    Boolean active,
     LocalDateTime createdAT
 ) {}
