@@ -32,7 +32,7 @@ public class MedicalRecord
     private Long patientId;
 
     @Column(name = "active", nullable = false)
-    private boolean active;
+    private Boolean active = true;
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)
