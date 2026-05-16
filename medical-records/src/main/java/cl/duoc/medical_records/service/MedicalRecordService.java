@@ -1,10 +1,13 @@
 package cl.duoc.medical_records.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cl.duoc.medical_records.dto.CreateMedicalRecordRequestDTO;
+import cl.duoc.medical_records.dto.MedicalRecordDetailResponseDTO;
 import cl.duoc.medical_records.dto.MedicalRecordResponseDTO;
-import cl.duoc.medical_records.model.MedicalRecord;
+import cl.duoc.medical_records.extras.ToDTO;
+import cl.duoc.medical_records.model.MedicalRecord; 
 import cl.duoc.medical_records.repository.MedicalRecordRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -12,42 +15,36 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MedicalRecordService 
 {
+    @Autowired
+    private ToDTO toDTO;
+
     private final MedicalRecordRepository medicalRecordRepository;
 
-    public MedicalRecord toMedicalRecord(CreateMedicalRecordRequestDTO requestDTO)
-    {
-        //Crea modelo
-        MedicalRecord medicalRecord = new MedicalRecord();
-        medicalRecord.setPatientId(requestDTO.patientId());
-        return medicalRecord;
-    }
-
-    public MedicalRecordResponseDTO toMedicalRecordResponseDTO(MedicalRecord medicalRecord)
-    {
-        //Crea responseDTO
-        return new MedicalRecordResponseDTO
-        (
-            medicalRecord.getId(),
-            medicalRecord.getPatientId(),
-            medicalRecord.getActive(),
-            medicalRecord.getCreateAt()
-        );
-    }
-
-
+    
     public MedicalRecordResponseDTO create(CreateMedicalRecordRequestDTO requestDTO)
     {
         //Validación
-        if (medicalRecordRepository.existsByPatientId(requestDTO.patientId()))
+        if (!medicalRecordRepository.existsByPatientId(requestDTO.patientId()))
         {
-            throw new RuntimeException("Ya existe un historial médico con el ID de ese paciente.");
+            throw new RuntimeException("Ya existe un registro médico con el ID de ese paciente.");
         }
 
         //Creación y guardado de modelo
-        MedicalRecord medicalRecord = toMedicalRecord(requestDTO);
+        MedicalRecord medicalRecord = toDTO.toMedicalRecord(requestDTO);
         medicalRecordRepository.save(medicalRecord);
 
         //Creación y retorno de responseDTO
-        return toMedicalRecordResponseDTO(medicalRecord);
+        return toDTO.toMedicalRecordResponseDTO(medicalRecord);
+    }
+
+
+    public MedicalRecordDetailResponseDTO findByPatientId(Long id)
+    {
+        //Validación y asignación del registro del paciente
+        MedicalRecord medicalRecord = medicalRecordRepository.findByPatientId(id)
+            .orElseThrow(() -> new RuntimeException("No existe un registro médico asociado al ID del paciente"));
+
+        //Creación y retorno de responseDTO
+        return toDTO.toMedicalRecordDetailResponseDTO(medicalRecord);
     }
 }
