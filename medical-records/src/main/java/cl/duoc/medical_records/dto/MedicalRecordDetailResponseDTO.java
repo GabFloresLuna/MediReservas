@@ -9,5 +9,5 @@ public record MedicalRecordDetailResponseDTO
     Long patientUserId,
     boolean active,
     LocalDateTime createdAt,
-    List<MedicalVisitDetailDTO> visits
+    List<MedicalVisitDetailReponseDTO> visits
 ) {}
