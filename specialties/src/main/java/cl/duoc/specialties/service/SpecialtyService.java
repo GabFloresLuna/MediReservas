@@ -78,6 +78,36 @@ public class SpecialtyService {
                 .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));
     }
 
+    public SpecialtyResponseDTO updateSpecialty(Long specialtyId, CreateSpecialtyRequestDTO request) {
+        Specialty specialty = findSpecialtyEntityById(specialtyId);
+
+        if (!specialty.getSpecialtyName().equalsIgnoreCase(request.specialtyName())
+                && specialtyRepository.existsBySpecialtyName(request.specialtyName())) {
+            throw new RuntimeException("Ya existe una especialidad con ese nombre");
+        }
+
+        specialty.setSpecialtyName(request.specialtyName());
+        specialty.setDescription(request.description());
+
+        Specialty savedSpecialty = specialtyRepository.save(specialty);
+
+        return toResponseDTO(savedSpecialty);
+    }
+
+    public SpecialtyResponseDTO activateSpecialty(Long specialtyId) {
+        Specialty specialty = findSpecialtyEntityById(specialtyId);
+
+        if (specialty.isActive()) {
+            throw new RuntimeException("La especialidad ya está activada");
+        }
+
+        specialty.setActive(true);
+
+        Specialty savedSpecialty = specialtyRepository.save(specialty);
+
+        return toResponseDTO(savedSpecialty);
+    }
+
     private SpecialtyResponseDTO toResponseDTO(Specialty specialty) {
         return new SpecialtyResponseDTO(
                 specialty.getSpecialtyId(),
