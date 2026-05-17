@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import cl.duoc.users.dto.CreateUserRequestDTO;
+import cl.duoc.users.dto.UpdateUserRequestDTO;
 import cl.duoc.users.dto.UserResponseDTO;
 import cl.duoc.users.model.User;
 import cl.duoc.users.repository.UserRepository;
@@ -74,6 +75,55 @@ public class UserService {
     public User findUserEntityById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    }
+
+    public UserResponseDTO updateUser(Long userId, UpdateUserRequestDTO request) {
+        User user = findUserEntityById(userId);
+
+        if (!user.getRun().equalsIgnoreCase(request.run())
+                && userRepository.existsByRun(request.run())) {
+            throw new RuntimeException("Ya existe un usuario con ese RUN");
+        }
+
+        if (!user.getEmail().equalsIgnoreCase(request.email())
+                && userRepository.existsByEmail(request.email())) {
+            throw new RuntimeException("Ya existe un usuario con ese correo");
+        }
+
+        user.setRun(request.run());
+        user.setEmail(request.email());
+
+        User savedUser = userRepository.save(user);
+
+        return toResponseDTO(savedUser);
+    }
+
+    public UserResponseDTO activateUser(Long userId) {
+        User user = findUserEntityById(userId);
+
+        if (user.isActive()) {
+            throw new RuntimeException("El usuario ya está activado");
+        }
+
+        user.setActive(true);
+
+        User savedUser = userRepository.save(user);
+
+        return toResponseDTO(savedUser);
+    }
+
+    public UserResponseDTO deactivateUser(Long userId) {
+        User user = findUserEntityById(userId);
+
+        if (!user.isActive()) {
+            throw new RuntimeException("El usuario ya está desactivado");
+        }
+
+        user.setActive(false);
+
+        User savedUser = userRepository.save(user);
+
+        return toResponseDTO(savedUser);
     }
 
     private UserResponseDTO toResponseDTO(User user) {

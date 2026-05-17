@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import cl.duoc.users.dto.CreateReceptionistProfileRequestDTO;
 import cl.duoc.users.dto.ReceptionistProfileResponseDTO;
+import cl.duoc.users.dto.UpdateReceptionistProfileRequestDTO;
 import cl.duoc.users.model.ReceptionistProfile;
 import cl.duoc.users.model.User;
 import cl.duoc.users.repository.AdministratorProfileRepository;
@@ -78,6 +79,27 @@ public class ReceptionistProfileService {
 
     public boolean existsByUserId(Long userId) {
         return receptionistProfileRepository.existsByUserUserId(userId);
+    }
+
+    public ReceptionistProfileResponseDTO updateReceptionistProfile(
+            Long receptionistProfileId,
+            UpdateReceptionistProfileRequestDTO request) {
+        ReceptionistProfile profile = receptionistProfileRepository.findById(receptionistProfileId)
+                .orElseThrow(() -> new RuntimeException("Perfil de recepcionista no encontrado"));
+
+        profile.setShift(request.shift());
+        profile.setDepartment(request.department());
+
+        ReceptionistProfile savedProfile = receptionistProfileRepository.save(profile);
+
+        return toResponseDTO(savedProfile);
+    }
+
+    public void deleteReceptionistProfile(Long receptionistProfileId) {
+        ReceptionistProfile profile = receptionistProfileRepository.findById(receptionistProfileId)
+                .orElseThrow(() -> new RuntimeException("Perfil de recepcionista no encontrado"));
+
+        receptionistProfileRepository.delete(profile);
     }
 
     public ReceptionistProfileResponseDTO toResponseDTO(ReceptionistProfile profile) {

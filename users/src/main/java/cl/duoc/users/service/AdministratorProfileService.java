@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import cl.duoc.users.dto.AdministratorProfileResponseDTO;
 import cl.duoc.users.dto.CreateAdministratorProfileRequestDTO;
+import cl.duoc.users.dto.UpdateAdministratorProfileRequestDTO;
 import cl.duoc.users.model.AdministratorProfile;
 import cl.duoc.users.model.User;
 import cl.duoc.users.repository.AdministratorProfileRepository;
@@ -78,6 +79,27 @@ public class AdministratorProfileService {
 
     public boolean existsByUserId(Long userId) {
         return administratorProfileRepository.existsByUserUserId(userId);
+    }
+
+    public AdministratorProfileResponseDTO updateAdministratorProfile(
+            Long administratorProfileId,
+            UpdateAdministratorProfileRequestDTO request) {
+        AdministratorProfile profile = administratorProfileRepository.findById(administratorProfileId)
+                .orElseThrow(() -> new RuntimeException("Perfil de administrador no encontrado"));
+
+        profile.setDepartment(request.department());
+        profile.setPositionName(request.positionName());
+
+        AdministratorProfile savedProfile = administratorProfileRepository.save(profile);
+
+        return toResponseDTO(savedProfile);
+    }
+
+    public void deleteAdministratorProfile(Long administratorProfileId) {
+        AdministratorProfile profile = administratorProfileRepository.findById(administratorProfileId)
+                .orElseThrow(() -> new RuntimeException("Perfil de administrador no encontrado"));
+
+        administratorProfileRepository.delete(profile);
     }
 
     public AdministratorProfileResponseDTO toResponseDTO(AdministratorProfile profile) {

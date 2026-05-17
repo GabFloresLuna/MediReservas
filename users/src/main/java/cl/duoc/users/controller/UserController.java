@@ -5,14 +5,17 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.duoc.users.dto.ApiResponse;
 import cl.duoc.users.dto.CreateUserRequestDTO;
+import cl.duoc.users.dto.UpdateUserRequestDTO;
 import cl.duoc.users.dto.UserResponseDTO;
 import cl.duoc.users.service.UserService;
 import jakarta.validation.Valid;
@@ -76,5 +79,42 @@ public class UserController {
 
 		return ResponseEntity.ok(
 				new ApiResponse<>(200, "Usuario obtenido correctamente por correo", response));
+	}
+
+	@PutMapping("/{userId}")
+	public ResponseEntity<ApiResponse<UserResponseDTO>> updateUser(
+			@PathVariable Long userId,
+			@Valid @RequestBody UpdateUserRequestDTO request) {
+		UserResponseDTO response = userService.updateUser(userId, request);
+
+		return ResponseEntity.ok(
+				new ApiResponse<>(
+						200,
+						"Usuario actualizado correctamente",
+						response));
+	}
+
+	@PatchMapping("/{userId}/activate")
+	public ResponseEntity<ApiResponse<UserResponseDTO>> activateUser(
+			@PathVariable Long userId) {
+		UserResponseDTO response = userService.activateUser(userId);
+
+		return ResponseEntity.ok(
+				new ApiResponse<>(
+						200,
+						"Usuario activado correctamente",
+						response));
+	}
+
+	@PatchMapping("/{userId}/deactivate")
+	public ResponseEntity<ApiResponse<UserResponseDTO>> deactivateUser(
+			@PathVariable Long userId) {
+		UserResponseDTO response = userService.deactivateUser(userId);
+
+		return ResponseEntity.ok(
+				new ApiResponse<>(
+						200,
+						"Usuario desactivado correctamente",
+						response));
 	}
 }

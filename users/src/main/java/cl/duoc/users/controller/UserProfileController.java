@@ -4,15 +4,18 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.duoc.users.dto.ApiResponse;
 import cl.duoc.users.dto.CreateUserProfileRequestDTO;
+import cl.duoc.users.dto.UpdateUserProfileRequestDTO;
 import cl.duoc.users.dto.UserProfileResponseDTO;
 import cl.duoc.users.service.UserProfileService;
 import jakarta.validation.Valid;
@@ -67,5 +70,30 @@ public class UserProfileController {
 
 		return ResponseEntity.ok(
 				new ApiResponse<>(200, "Validación realizada correctamente", response));
+	}
+
+	@PutMapping("/{userProfileId}")
+	public ResponseEntity<ApiResponse<UserProfileResponseDTO>> updateUserProfile(
+			@PathVariable Long userProfileId,
+			@Valid @RequestBody UpdateUserProfileRequestDTO request) {
+		UserProfileResponseDTO response = userProfileService.updateUserProfile(userProfileId, request);
+
+		return ResponseEntity.ok(
+				new ApiResponse<>(
+						200,
+						"Perfil general actualizado correctamente",
+						response));
+	}
+
+	@DeleteMapping("/{userProfileId}")
+	public ResponseEntity<ApiResponse<Object>> deleteUserProfile(
+			@PathVariable Long userProfileId) {
+		userProfileService.deleteUserProfile(userProfileId);
+
+		return ResponseEntity.ok(
+				new ApiResponse<>(
+						200,
+						"Perfil general eliminado correctamente",
+						null));
 	}
 }

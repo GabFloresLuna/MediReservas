@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.duoc.users.dto.ApiResponse;
 import cl.duoc.users.dto.CreateReceptionistProfileRequestDTO;
 import cl.duoc.users.dto.ReceptionistProfileResponseDTO;
+import cl.duoc.users.dto.UpdateReceptionistProfileRequestDTO;
 import cl.duoc.users.service.ReceptionistProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -84,5 +87,32 @@ public class ReceptionistProfileController {
 						200,
 						"Validación realizada correctamente",
 						response));
+	}
+
+	@PutMapping("/{receptionistProfileId}")
+	public ResponseEntity<ApiResponse<ReceptionistProfileResponseDTO>> updateReceptionistProfile(
+			@PathVariable Long receptionistProfileId,
+			@Valid @RequestBody UpdateReceptionistProfileRequestDTO request) {
+		ReceptionistProfileResponseDTO response = receptionistProfileService.updateReceptionistProfile(
+				receptionistProfileId,
+				request);
+
+		return ResponseEntity.ok(
+				new ApiResponse<>(
+						200,
+						"Perfil de recepcionista actualizado correctamente",
+						response));
+	}
+
+	@DeleteMapping("/{receptionistProfileId}")
+	public ResponseEntity<ApiResponse<Object>> deleteReceptionistProfile(
+			@PathVariable Long receptionistProfileId) {
+		receptionistProfileService.deleteReceptionistProfile(receptionistProfileId);
+
+		return ResponseEntity.ok(
+				new ApiResponse<>(
+						200,
+						"Perfil de recepcionista eliminado correctamente",
+						null));
 	}
 }

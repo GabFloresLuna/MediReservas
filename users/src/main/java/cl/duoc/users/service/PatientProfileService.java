@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import cl.duoc.users.dto.CreatePatientProfileRequestDTO;
 import cl.duoc.users.dto.PatientProfileResponseDTO;
+import cl.duoc.users.dto.UpdatePatientProfileRequestDTO;
 import cl.duoc.users.model.PatientProfile;
 import cl.duoc.users.model.User;
 import cl.duoc.users.repository.AdministratorProfileRepository;
@@ -81,6 +82,31 @@ public class PatientProfileService {
 
     public boolean existsByUserId(Long userId) {
         return patientProfileRepository.existsByUserUserId(userId);
+    }
+
+    public PatientProfileResponseDTO updatePatientProfile(
+            Long patientProfileId,
+            UpdatePatientProfileRequestDTO request) {
+        PatientProfile profile = patientProfileRepository.findById(patientProfileId)
+                .orElseThrow(() -> new RuntimeException("Perfil de paciente no encontrado"));
+
+        profile.setHealthInsurance(request.healthInsurance());
+        profile.setEmergencyContactName(request.emergencyContactName());
+        profile.setEmergencyContactPhone(request.emergencyContactPhone());
+        profile.setBloodType(request.bloodType());
+        profile.setAllergies(request.allergies());
+        profile.setWeight(request.weight());
+
+        PatientProfile savedProfile = patientProfileRepository.save(profile);
+
+        return toResponseDTO(savedProfile);
+    }
+
+    public void deletePatientProfile(Long patientProfileId) {
+        PatientProfile profile = patientProfileRepository.findById(patientProfileId)
+                .orElseThrow(() -> new RuntimeException("Perfil de paciente no encontrado"));
+
+        patientProfileRepository.delete(profile);
     }
 
     public PatientProfileResponseDTO toResponseDTO(PatientProfile profile) {

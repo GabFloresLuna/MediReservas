@@ -5,9 +5,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import cl.duoc.users.dto.CreateUserProfileRequestDTO;
+import cl.duoc.users.dto.UpdateUserProfileRequestDTO;
 import cl.duoc.users.dto.UserProfileResponseDTO;
 import cl.duoc.users.model.User;
 import cl.duoc.users.model.UserProfile;
+import cl.duoc.users.repository.AdministratorProfileRepository;
+import cl.duoc.users.repository.PatientProfileRepository;
+import cl.duoc.users.repository.ReceptionistProfileRepository;
 import cl.duoc.users.repository.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +21,9 @@ public class UserProfileService {
 
     private final UserProfileRepository userProfileRepository;
     private final UserService userService;
+    private final PatientProfileRepository patientProfileRepository;
+    private final ReceptionistProfileRepository receptionistProfileRepository;
+    private final AdministratorProfileRepository administratorProfileRepository;
 
     public UserProfileResponseDTO createUserProfile(CreateUserProfileRequestDTO request) {
 
@@ -62,7 +69,46 @@ public class UserProfileService {
 
     public boolean existsByUserId(Long userId) {
         return userProfileRepository.existsByUserUserId(userId);
-}
+    }
+
+    public UserProfileResponseDTO updateUserProfile(Long userProfileId, UpdateUserProfileRequestDTO request) {
+        UserProfile profile = userProfileRepository.findById(userProfileId)
+                .orElseThrow(() -> new RuntimeException("Perfil general no encontrado"));
+
+        profile.setFirstName(request.firstName());
+        profile.setLastName(request.lastName());
+        profile.setPhone(request.phone());
+        profile.setBirthDate(request.birthDate());
+        profile.setAddress(request.address());
+
+        UserProfile savedProfile = userProfileRepository.save(profile);
+
+        return toResponseDTO(savedProfile);
+    }
+
+    public void deleteUserProfile(Long userProfileId) {
+        UserProfile profile = userProfileRepository.findById(userProfileId)
+                .orElseThrow(() -> new RuntimeException("Perfil general no encontrado"));
+
+        Long userId = profile.getUser().getUserId();
+
+        if (patientProfileRepository.existsByUserUserId(userId)) {
+            throw new RuntimeException(
+                    "No se puede eliminar el perfil general porque el usuario tiene un perfil de paciente");
+        }
+
+        if (receptionistProfileRepository.existsByUserUserId(userId)) {
+            throw new RuntimeException(
+                    "No se puede eliminar el perfil general porque el usuario tiene un perfil de recepcionista");
+        }
+
+        if (administratorProfileRepository.existsByUserUserId(userId)) {
+            throw new RuntimeException(
+                    "No se puede eliminar el perfil general porque el usuario tiene un perfil de administrador");
+        }
+
+        userProfileRepository.delete(profile);
+    }
 
     public UserProfileResponseDTO toResponseDTO(UserProfile profile) {
         return new UserProfileResponseDTO(
@@ -72,7 +118,6 @@ public class UserProfileService {
                 profile.getLastName(),
                 profile.getPhone(),
                 profile.getBirthDate(),
-                profile.getAddress()
-        );
+                profile.getAddress());
     }
 }

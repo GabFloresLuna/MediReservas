@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.duoc.users.dto.AdministratorProfileResponseDTO;
 import cl.duoc.users.dto.ApiResponse;
 import cl.duoc.users.dto.CreateAdministratorProfileRequestDTO;
+import cl.duoc.users.dto.UpdateAdministratorProfileRequestDTO;
 import cl.duoc.users.service.AdministratorProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -84,5 +87,32 @@ public class AdministratorProfileController {
 						200,
 						"Validación realizada correctamente",
 						response));
+	}
+
+	@PutMapping("/{administratorProfileId}")
+	public ResponseEntity<ApiResponse<AdministratorProfileResponseDTO>> updateAdministratorProfile(
+			@PathVariable Long administratorProfileId,
+			@Valid @RequestBody UpdateAdministratorProfileRequestDTO request) {
+		AdministratorProfileResponseDTO response = administratorProfileService.updateAdministratorProfile(
+				administratorProfileId,
+				request);
+
+		return ResponseEntity.ok(
+				new ApiResponse<>(
+						200,
+						"Perfil de administrador actualizado correctamente",
+						response));
+	}
+
+	@DeleteMapping("/{administratorProfileId}")
+	public ResponseEntity<ApiResponse<Object>> deleteAdministratorProfile(
+			@PathVariable Long administratorProfileId) {
+		administratorProfileService.deleteAdministratorProfile(administratorProfileId);
+
+		return ResponseEntity.ok(
+				new ApiResponse<>(
+						200,
+						"Perfil de administrador eliminado correctamente",
+						null));
 	}
 }
