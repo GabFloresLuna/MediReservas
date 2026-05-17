@@ -23,7 +23,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
  
     List<Notification> findBySentAtIsNull();
 
-    List<Notification> findByCreatedAt(LocalDateTime createdAt);
+    List<Notification> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
     List<Notification> findByNotificationTemplate(cl.duoc.notifications.model.NotificationTemplate template);
 
