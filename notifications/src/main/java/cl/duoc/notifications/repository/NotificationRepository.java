@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import cl.duoc.notifications.model.Notification;
 
+import java.time.LocalDateTime;
+
+
+
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long>{
@@ -16,8 +20,10 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     List<Notification> findByNotificationStatus(String status);
 
     List<Notification> findByUserIdAndNotificationStatus(Long userId, String status);
-
+ 
     List<Notification> findBySentAtIsNull();
+
+    List<Notification> findByCreatedAt(LocalDateTime createdAt);
 
     List<Notification> findByNotificationTemplate(cl.duoc.notifications.model.NotificationTemplate template);
 
