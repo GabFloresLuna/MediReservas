@@ -53,7 +53,7 @@ public class Notification {
 
     @Column(name = "notification_status", nullable = false)
     @Size(max = 80)
-    private String notificationStatus;
+    private String notificationStatus = "Pendiente";
 
     @Column(name = "sent_at")
     private LocalDateTime sentAt;
