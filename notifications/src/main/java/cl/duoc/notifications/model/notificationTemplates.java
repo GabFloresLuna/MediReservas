@@ -13,7 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class notificationTemplates {
+public class NotificationTemplates {
 
     @Id
     @Column(name = "notification_template_id")
@@ -33,11 +33,11 @@ public class notificationTemplates {
     private Long notificationTemplateId;
 
     @Column (name = "template_code", nullable = false, unique = true)
-    @Max(value = 80)
+    @Size(max = 80)
     private String templateCode;
 
     @Column (name = "template_title", nullable = false)
-    @Max(value = 100)
+    @Size(max = 100)
     private String templateTitle;
 
     @Column (name = "template_body", nullable = false, columnDefinition = "TEXT")
@@ -48,10 +48,10 @@ public class notificationTemplates {
 
     @Column(name = "created_at", nullable = false)
     @CreationTimestamp
-    private LocalDateTime currentTimeStamp;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "notificationTemplate")
-    private List<notifications> notifications;
+    private List<Notifications> notifications;
 
     
 }

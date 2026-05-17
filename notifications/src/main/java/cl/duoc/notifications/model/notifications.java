@@ -13,7 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +25,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class notifications {
+public class Notifications {
 
     @Id
     @Column(name = "notification_id")
@@ -37,21 +37,21 @@ public class notifications {
 
     @ManyToOne
     @JoinColumn(name = "notification_template_id")
-    private notificationTemplates notificationTemplate;
+    private NotificationTemplates notificationTemplate;
 
     @Column(name = "notification_channel", nullable = false)
-    @Max(value = 30)
+    @Size(max = 30)
     private String notificationChannel;
 
     @Column(name = "notification_title", nullable = false)
-    @Max(value = 100)
+    @Size(max  = 100)
     private String notificationTitle;
 
     @Column(name = "notification_message", nullable =  false, columnDefinition = "TEXT")
     private String notificationMessage;
 
     @Column(name = "notification_status", nullable = false)
-    @Max(30)
+    @Size(max = 80)
     private String notificationStatus;
 
     @Column(name = "sent_at")
@@ -59,7 +59,7 @@ public class notifications {
 
     @Column(name = "created_at", nullable = false)
     @CreationTimestamp
-    private LocalDateTime currentTimeStamp;
+    private LocalDateTime createdAt;
 
     /* corroborar que la conexión es correcta */
 
