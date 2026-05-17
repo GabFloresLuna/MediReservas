@@ -25,7 +25,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Notifications {
+public class Notification {
 
     @Id
     @Column(name = "notification_id")
@@ -37,7 +37,7 @@ public class Notifications {
 
     @ManyToOne
     @JoinColumn(name = "notification_template_id")
-    private NotificationTemplates notificationTemplate;
+    private NotificationTemplate notificationTemplate;
 
     @Column(name = "notification_channel", nullable = false)
     @Size(max = 30)
@@ -61,6 +61,6 @@ public class Notifications {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    /* corroborar que la conexión es correcta */
+
 
 }

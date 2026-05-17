@@ -25,7 +25,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class NotificationTemplates {
+public class NotificationTemplate {
 
     @Id
     @Column(name = "notification_template_id")
@@ -51,7 +51,7 @@ public class NotificationTemplates {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "notificationTemplate")
-    private List<Notifications> notifications;
+    private List<Notification> notifications;
 
     
 }
