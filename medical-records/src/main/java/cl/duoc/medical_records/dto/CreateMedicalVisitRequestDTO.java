@@ -2,6 +2,8 @@ package cl.duoc.medical_records.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -18,6 +20,7 @@ public record CreateMedicalVisitRequestDTO
     @NotNull(message = "El ID del doctor es obligatorio")
     Long doctorId,
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "La fecha de atención es obligatoria")
     @PastOrPresent(message = "La fecha de atención no puede ser futura")
     LocalDateTime visitDate,
