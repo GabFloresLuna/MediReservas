@@ -7,8 +7,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: notifications_db
-      MYSQL_USER: mysql8
-      MYSQL_PASSWORD: mysql8
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin123
     ports:
       - "3320:3306"
     volumes:
