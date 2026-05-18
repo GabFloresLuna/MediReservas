@@ -4,11 +4,11 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: mysql_medical_record_db
+    container_name: mysql_medical_records_db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: medical_record_db
+      MYSQL_DATABASE: medical_records_db
       MYSQL_USER: admin
       MYSQL_PASSWORD: admin123
     ports:
