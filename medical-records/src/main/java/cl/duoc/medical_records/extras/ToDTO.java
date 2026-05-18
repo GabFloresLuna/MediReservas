@@ -41,7 +41,7 @@ public class ToDTO
             medicalRecord.getId(),
             medicalRecord.getPatientId(),
             medicalRecord.getActive(),
-            medicalRecord.getCreateAt()
+            medicalRecord.getCreatedAt()
         );
     }
 
@@ -72,7 +72,7 @@ public class ToDTO
             medicalVisit.getVisitReason(),
             medicalVisit.getObservations(),
             medicalVisit.getTreatment(),
-            medicalVisit.getCreateAt()
+            medicalVisit.getCreatedAt()
         );
     }
 
@@ -138,7 +138,7 @@ public class ToDTO
             medicalVisit.getVisitReason(),
             medicalVisit.getObservations(),
             medicalVisit.getTreatment(),
-            medicalVisit.getCreateAt(),
+            medicalVisit.getCreatedAt(),
             medicalVisit.getDiagnoses().stream()
                 .map(this::toDiagnosisResponseDTO)
                 .collect(Collectors.toList()),
@@ -155,7 +155,7 @@ public class ToDTO
             medicalRecord.getId(),
             medicalRecord.getPatientId(),
             medicalRecord.getActive(),
-            medicalRecord.getCreateAt(),
+            medicalRecord.getCreatedAt(),
             medicalRecord.getMedicalVisits().stream()
                 .map(this::toMedicalVisitDetailReponseDTO)
                 .collect(Collectors.toList())
