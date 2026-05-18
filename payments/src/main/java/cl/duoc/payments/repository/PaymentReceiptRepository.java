@@ -1,16 +1,14 @@
 package cl.duoc.payments.repository;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import cl.duoc.payments.model.Payment;
+import cl.duoc.payments.model.PaymentReceipt;
 
-public interface PaymentRepository extends JpaRepository<Payment, Long> {
+public interface PaymentReceiptRepository extends JpaRepository<PaymentReceipt, Long> {
     
-    List<Payment> findByAppointmentId(Long appointmentId);
+    Optional<PaymentReceipt> findByPayment_PaymentId(Long paymentId);
     
-    List<Payment> findByPatientUserId(Long patientUserId);
-    
-    List<Payment> findByPaymentStatus(String paymentStatus);
+    Optional<PaymentReceipt> findByReceiptNumber(String receiptNumber);
 }

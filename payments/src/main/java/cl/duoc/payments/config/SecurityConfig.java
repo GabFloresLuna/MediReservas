@@ -1,4 +1,4 @@
-package cl.duoc.auth.config;
+package cl.duoc.payments.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

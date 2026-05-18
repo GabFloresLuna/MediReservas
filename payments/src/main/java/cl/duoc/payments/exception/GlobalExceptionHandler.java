@@ -12,7 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import cl.duoc.doctors.dto.ApiResponse;
+import cl.duoc.payments.dto.ApiResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
