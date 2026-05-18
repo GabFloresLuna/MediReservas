@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class NotificationService {
         if (dto.getNotificationTemplateId() != null) {
             NotificationTemplate template = templateRepository.findById(dto.getNotificationTemplateId())
                     .orElseThrow(() -> new RuntimeException(
-                            "Id de template no econtrada " + dto.getNotificationTemplateId()));
+                            "Id de template no encontrada " + dto.getNotificationTemplateId()));
             notification.setNotificationTemplate(template);
         }
 
@@ -49,7 +49,7 @@ public class NotificationService {
 
     public NotificationResponseDTO getNotificationById(Long id) {
         Notification notification = notificationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Id no econtrada: " + id));
+                .orElseThrow(() -> new RuntimeException("Id no encontrada: " + id));
         return toResponseDTO(notification);
     }
 
@@ -57,7 +57,7 @@ public class NotificationService {
         return notificationRepository.findByUserId(userId)
                 .stream()
                 .map(this::toResponseDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<NotificationResponseDTO> getNotificationsByStatus(String status) {
