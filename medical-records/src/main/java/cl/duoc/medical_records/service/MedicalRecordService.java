@@ -1,5 +1,8 @@
 package cl.duoc.medical_records.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,5 +49,13 @@ public class MedicalRecordService
 
         //Creación y retorno de responseDTO
         return toDTO.toMedicalRecordDetailResponseDTO(medicalRecord);
+    }
+
+    public List<MedicalRecordDetailResponseDTO> listAll()
+    {
+        return medicalRecordRepository.findAll()
+            .stream()
+            .map(x -> toDTO.toMedicalRecordDetailResponseDTO(x))
+            .collect(Collectors.toList());
     }
 }
