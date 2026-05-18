@@ -35,9 +35,9 @@ public class MedicalRecord
     private Boolean active = true;
 
     @CreationTimestamp
-    @Column(name = "create_at", nullable = false, updatable = false)
-    private LocalDateTime createAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "fk_medical_visit_medical_record")
+    @OneToMany(mappedBy = "medicalRecord")
     private List<MedicalVisit> medicalVisits;
 }

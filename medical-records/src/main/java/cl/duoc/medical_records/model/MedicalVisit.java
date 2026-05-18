@@ -54,12 +54,12 @@ public class MedicalVisit
     private String treatment;
 
     @CreationTimestamp
-    @Column(name = "create_at", updatable = false)
-    private LocalDateTime createAt;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "fk_diagnoses_medical_visit")
+    @OneToMany(mappedBy = "medicalVisit")
     private List<Diagnoses> diagnoses;
     
-    @OneToMany(mappedBy = "fk_vital_signs_medical_visit")
+    @OneToMany(mappedBy = "medicalVisit")
     private List<VitalSigns> vitalSigns;
 }
