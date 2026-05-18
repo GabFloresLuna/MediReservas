@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeneratedReports 
+public class GeneratedReport 
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,5 +50,5 @@ public class GeneratedReports
     private String filePath;
 
     @Column(name = "report_status", length = 30, nullable = false)
-    private String reportStatus;
+    private String reportStatus = "active";
 }
