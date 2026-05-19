@@ -20,12 +20,14 @@ import cl.duoc.medical_records.model.MedicalVisit;
 import cl.duoc.medical_records.model.VitalSigns;
 import cl.duoc.medical_records.repository.MedicalRecordRepository;
 import cl.duoc.medical_records.repository.MedicalVisitRepository;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class ToDTO 
 {
-    private MedicalRecordRepository medicalRecordRepository;
-    private MedicalVisitRepository medicalVisitRepository;
+    private final MedicalRecordRepository medicalRecordRepository;
+    private final MedicalVisitRepository medicalVisitRepository;
 
     public MedicalRecord toMedicalRecord(CreateMedicalRecordRequestDTO requestDTO)
     {
