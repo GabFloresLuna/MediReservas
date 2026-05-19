@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import cl.duoc.notifications.enums.NotificationChannel;
+import cl.duoc.notifications.enums.NotificationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,10 +19,10 @@ public class NotificationResponseDTO {
 
     private Long notificationId;
     private Long userId;
-    private String notificationChannel;
+    private NotificationChannel notificationChannel;
     private String notificationTitle;
     private String notificationMessage;
-    private String notificationStatus;
+    private NotificationStatus notificationStatus;
     private Long notificationTemplateId;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
