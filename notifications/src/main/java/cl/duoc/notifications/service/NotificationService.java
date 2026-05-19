@@ -2,6 +2,9 @@ package cl.duoc.notifications.service;
 
 import cl.duoc.notifications.dto.NotificationResponseDTO;
 import cl.duoc.notifications.dto.NotificationSendRequestDTO;
+import cl.duoc.notifications.dto.NotificationStatusUpdateRequestDTO;
+import cl.duoc.notifications.dto.NotificationUpdateRequestDTO;
+import cl.duoc.notifications.enums.NotificationStatus;
 import cl.duoc.notifications.model.Notification;
 import cl.duoc.notifications.model.NotificationTemplate;
 import cl.duoc.notifications.repository.NotificationRepository;
@@ -60,7 +63,7 @@ public class NotificationService {
                 .toList();
     }
 
-    public List<NotificationResponseDTO> getNotificationsByStatus(String status) {
+    public List<NotificationResponseDTO> getNotificationsByStatus(NotificationStatus status) {
         return notificationRepository.findByNotificationStatus(status)
                 .stream()
                 .map(this::toResponseDTO)
@@ -76,12 +79,49 @@ public class NotificationService {
                 .toList();
     }
 
-    public List<NotificationResponseDTO> getNotificationsByUserIdAndStatus(Long userId, String status) {
+    public List<NotificationResponseDTO> getNotificationsByUserIdAndStatus(Long userId, NotificationStatus status) {
         return notificationRepository.findByUserIdAndNotificationStatus(userId, status)
                 .stream()
                 .map(this::toResponseDTO)
                 .toList();
     }
+
+    public NotificationResponseDTO updateNotification(Long id, NotificationUpdateRequestDTO dto) {
+        Notification notification = notificationRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Id no encontrada: " + id));
+
+    notification.setNotificationChannel(dto.getNotificationChannel());
+    notification.setNotificationTitle(dto.getNotificationTitle());
+    notification.setNotificationMessage(dto.getNotificationMessage());
+
+    if (dto.getNotificationTemplateId() != null) {
+        NotificationTemplate template = templateRepository.findById(dto.getNotificationTemplateId())
+                .orElseThrow(() -> new RuntimeException(
+                        "Plantilla no encontrada con ID: " + dto.getNotificationTemplateId()));
+        notification.setNotificationTemplate(template);
+    } else {
+        notification.setNotificationTemplate(null);
+    }
+
+    Notification updated = notificationRepository.save(notification);
+    return toResponseDTO(updated);
+    }
+
+
+    public NotificationResponseDTO updateNotificationStatus(Long id, NotificationStatusUpdateRequestDTO dto) {
+    Notification notification = notificationRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Id no encontrada: " + id));
+
+    notification.setNotificationStatus(dto.getNotificationStatus());
+
+    if (dto.getNotificationStatus() == NotificationStatus.SENT) {
+        notification.setSentAt(LocalDateTime.now());
+    }
+
+    Notification updated = notificationRepository.save(notification);
+    return toResponseDTO(updated);
+    }
+
 
     private NotificationResponseDTO toResponseDTO(Notification entity) {
         return NotificationResponseDTO.builder()

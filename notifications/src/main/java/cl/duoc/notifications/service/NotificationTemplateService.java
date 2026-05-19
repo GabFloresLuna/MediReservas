@@ -1,6 +1,6 @@
 package cl.duoc.notifications.service;
 
-import cl.duoc.notifications.dto.CreateNotificationTemplateRequestDTO;
+import cl.duoc.notifications.dto.NotificationTemplateCreateRequestDTO;
 import cl.duoc.notifications.dto.NotificationTemplateResponseDTO;
 import cl.duoc.notifications.model.NotificationTemplate;
 import cl.duoc.notifications.repository.NotificationTemplateRepository;
@@ -16,7 +16,7 @@ public class NotificationTemplateService {
 
     private final NotificationTemplateRepository templateRepository;
 
-    public NotificationTemplateResponseDTO createTemplate(CreateNotificationTemplateRequestDTO dto) {
+    public NotificationTemplateResponseDTO createTemplate(NotificationTemplateCreateRequestDTO dto) {
         if (templateRepository.existsByTemplateCode(dto.getTemplateCode())) {
             throw new RuntimeException("El código de plantilla ya existe: " + dto.getTemplateCode());
         }
