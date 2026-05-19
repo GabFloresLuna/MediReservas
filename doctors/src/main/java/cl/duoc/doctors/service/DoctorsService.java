@@ -80,9 +80,9 @@ public class DoctorsService {
     private void saveDoctorSpecialties(Doctors doctor, List<Long> specialtyIds) {
         List<DoctorSpecialties> specialties = specialtyIds.stream().map(specialtyId -> {
             DoctorSpecialties ds = new DoctorSpecialties();
-            ds.setDoctor(doctor); // Aquí usas la relación ManyToOne
+            ds.setDoctor(doctor);
             ds.setSpecialtyId(specialtyId);
-            ds.setPrimary(false); // Valor por defecto o lógica según necesites
+            ds.setPrimary(false);
             return ds;
         }).toList();
 
@@ -97,10 +97,10 @@ public class DoctorsService {
         dto.setMedicalLicenseNumber(doctor.getMedicalLicenseNumber());
         dto.setActive(doctor.getActive());
         
-        // Mapeamos la lista de objetos DoctorSpecialty a una lista de Long (los IDs de las especialidades)
+
         if (doctor.getSpecialties() != null) {
             List<Long> ids = doctor.getSpecialties().stream()
-                    .map(ds -> ds.getSpecialtyId()) // Asumiendo que DoctorSpecialty tiene specialtyId
+                    .map(ds -> ds.getSpecialtyId()) 
                     .toList();
             dto.setSpecialtyIds(ids);
         }
