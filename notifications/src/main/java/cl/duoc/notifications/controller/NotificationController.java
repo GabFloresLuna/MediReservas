@@ -3,6 +3,9 @@ package cl.duoc.notifications.controller;
 import cl.duoc.notifications.dto.ApiResponse;
 import cl.duoc.notifications.dto.NotificationResponseDTO;
 import cl.duoc.notifications.dto.NotificationSendRequestDTO;
+import cl.duoc.notifications.dto.NotificationStatusUpdateRequestDTO;
+import cl.duoc.notifications.dto.NotificationUpdateRequestDTO;
+import cl.duoc.notifications.enums.NotificationStatus;
 import cl.duoc.notifications.service.NotificationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +13,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,7 +76,7 @@ public class NotificationController {
 
     @GetMapping("/status/{status}")
     public ResponseEntity<ApiResponse<List<NotificationResponseDTO>>> getNotificationsByStatus(
-            @PathVariable String status) {
+            @PathVariable NotificationStatus status) {
         List<NotificationResponseDTO> notifications = notificationService.getNotificationsByStatus(status);
         return ResponseEntity.ok(
                 new ApiResponse<>(
@@ -93,12 +98,36 @@ public class NotificationController {
 
     @GetMapping("/user/{userId}/status/{status}")
     public ResponseEntity<ApiResponse<List<NotificationResponseDTO>>> getNotificationsByUserIdAndStatus(
-            @PathVariable Long userId, @PathVariable String status) {
+            @PathVariable Long userId, @PathVariable NotificationStatus status) {
         List<NotificationResponseDTO> notifications = notificationService.getNotificationsByUserIdAndStatus(userId, status);
         return ResponseEntity.ok(
                 new ApiResponse<>(
                     200, 
                     "Notificaciones filtradas exitosamente", 
                     notifications));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<NotificationResponseDTO>> updateNotification(
+        @PathVariable Long id,
+        @Valid @RequestBody NotificationUpdateRequestDTO dto) {
+    NotificationResponseDTO response = notificationService.updateNotification(id, dto);
+    return ResponseEntity.ok(
+            new ApiResponse<>(
+                    200,
+                    "Notificación actualizada exitosamente",
+                    response));
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<ApiResponse<NotificationResponseDTO>> updateNotificationStatus(
+        @PathVariable Long id,
+        @Valid @RequestBody NotificationStatusUpdateRequestDTO dto) {
+    NotificationResponseDTO response = notificationService.updateNotificationStatus(id, dto);
+    return ResponseEntity.ok(
+            new ApiResponse<>(
+                    200,
+                    "Estado de notificación actualizado exitosamente",
+                    response));
     }
 }

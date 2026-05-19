@@ -5,9 +5,12 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-
+import cl.duoc.notifications.enums.NotificationChannel;
+import cl.duoc.notifications.enums.NotificationStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,9 +43,9 @@ public class Notification {
     @JoinColumn(name = "notification_template_id")
     private NotificationTemplate notificationTemplate;
 
-    @Column(name = "notification_channel", nullable = false)
-    @Size(max = 30)
-    private String notificationChannel;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "notification_channel", nullable = false, length = 30)
+    private NotificationChannel notificationChannel;
 
     @Column(name = "notification_title", nullable = false)
     @Size(max  = 100)
@@ -51,9 +54,9 @@ public class Notification {
     @Column(name = "notification_message", nullable =  false, columnDefinition = "TEXT")
     private String notificationMessage;
 
-    @Column(name = "notification_status", nullable = false)
-    @Size(max = 80)
-    private String notificationStatus = "Pendiente";
+    @Enumerated(EnumType.STRING)
+    @Column(name = "notification_status", nullable = false, length = 80)
+    private NotificationStatus notificationStatus = NotificationStatus.PENDING;
 
     @Column(name = "sent_at")
     private LocalDateTime sentAt;
