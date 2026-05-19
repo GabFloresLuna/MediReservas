@@ -42,12 +42,12 @@ public class ReportRequest
     private LocalDate endDate;
 
     @Column(name = "request_status", nullable = false, length = 30)
-    private String requestStatus;
+    private String requestStatus = "Pendiente";
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "reportRequest")
-    private List<GeneratedReports> generatedReports;
+    private List<GeneratedReport> generatedReports;
 }

@@ -1,4 +1,4 @@
-package cl.duoc.medical_records.config;
+package cl.duoc.reports.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
