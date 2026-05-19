@@ -5,7 +5,7 @@ CREATE TABLE notifications (
     notification_channel VARCHAR(30) NOT NULL,
     notification_title VARCHAR(100) NOT NULL,
     notification_message TEXT NOT NULL,
-    notification_status VARCHAR(80) NOT NULL DEFAULT 'Pendiente',
+    notification_status VARCHAR(80) NOT NULL DEFAULT 'PENDING',
     sent_at DATETIME,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
