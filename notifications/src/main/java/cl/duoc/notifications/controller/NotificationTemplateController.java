@@ -1,7 +1,7 @@
 package cl.duoc.notifications.controller;
 
 import cl.duoc.notifications.dto.ApiResponse;
-import cl.duoc.notifications.dto.CreateNotificationTemplateRequestDTO;
+import cl.duoc.notifications.dto.NotificationTemplateCreateRequestDTO;
 import cl.duoc.notifications.dto.NotificationTemplateResponseDTO;
 import cl.duoc.notifications.service.NotificationTemplateService;
 import jakarta.validation.Valid;
@@ -26,7 +26,7 @@ public class NotificationTemplateController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<NotificationTemplateResponseDTO>> createTemplate(
-        @Valid @RequestBody CreateNotificationTemplateRequestDTO dto) {
+        @Valid @RequestBody NotificationTemplateCreateRequestDTO dto) {
             NotificationTemplateResponseDTO response = templateService.createTemplate(dto);
             return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(
