@@ -43,10 +43,9 @@ public class DoctorsService {
         doctor.setUserId(dto.getUserId());
         doctor.setMedicalLicenseNumber(dto.getMedicalLicenseNumber());
         doctor.setActive(true);
-        
+        doctor.setCreatedAt(new java.sql.Date(System.currentTimeMillis()));
+
         Doctors savedDoctor = doctorsRepository.save(doctor);
-        // Aquí podrías agregar lógica para guardar en doctor_specialties si fuera necesario
-        
         return convertToDTO(savedDoctor);
     }
 
