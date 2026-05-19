@@ -9,11 +9,13 @@ import cl.duoc.reports.dto.ReportRequestResponseDTO;
 import cl.duoc.reports.model.GeneratedReport;
 import cl.duoc.reports.model.ReportRequest;
 import cl.duoc.reports.repository.ReportRequestRepository;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class ToDTO 
 { 
-    private ReportRequestRepository reportRequestRepository;
+    private final ReportRequestRepository reportRequestRepository;
 
     public ReportRequest toReportRequest(CreateReportRequestDTO requestDTO)
     {

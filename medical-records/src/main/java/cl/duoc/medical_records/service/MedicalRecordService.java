@@ -27,7 +27,7 @@ public class MedicalRecordService
     public MedicalRecordResponseDTO create(CreateMedicalRecordRequestDTO requestDTO)
     {
         //Validación
-        if (!medicalRecordRepository.existsByPatientId(requestDTO.patientId()))
+        if (medicalRecordRepository.existsByPatientId(requestDTO.patientId()))
         {
             throw new RuntimeException("Ya existe un registro médico con el ID de ese paciente.");
         }
