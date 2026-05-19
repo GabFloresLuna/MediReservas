@@ -71,7 +71,7 @@ public class PrescriptionService {
                 prescription.getPatientUserId(),
                 prescription.getDoctorId(),
                 prescription.getIssuedAt(),
-                prescription.getPrescriptionStatus(),
+                prescription.getPrescriptionStatus().name(),
                 prescription.getNotes()
         );
     }

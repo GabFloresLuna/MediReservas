@@ -3,6 +3,7 @@ package cl.duoc.prescriptions.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.duoc.prescriptions.dto.ApiResponse;
 import cl.duoc.prescriptions.dto.PrescriptionRequest;
 import cl.duoc.prescriptions.dto.PrescriptionResponse;
 import cl.duoc.prescriptions.services.PrescriptionService;
@@ -29,29 +30,33 @@ public class PrescriptionController {
     private final PrescriptionService prescriptionService;
 
     @PostMapping
-    public ResponseEntity<PrescriptionResponse> create(@Valid @RequestBody PrescriptionRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(prescriptionService.create(request));
+    public ResponseEntity<ApiResponse<PrescriptionResponse>> create(@Valid @RequestBody PrescriptionRequest request) {
+        PrescriptionResponse data = prescriptionService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ApiResponse<>(201, "Prescripción creada", data));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PrescriptionResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(prescriptionService.findById(id));
+    public ResponseEntity<ApiResponse<PrescriptionResponse>> findById(@PathVariable Long id) {
+        PrescriptionResponse data = prescriptionService.findById(id);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Prescripción encontrada", data));
     }
 
     @GetMapping
-    public ResponseEntity<List<PrescriptionResponse>> findAll() {
-        return ResponseEntity.ok(prescriptionService.findAll());
+    public ResponseEntity<ApiResponse<List<PrescriptionResponse>>> findAll() {
+        List<PrescriptionResponse> data = prescriptionService.findAll();
+        return ResponseEntity.ok(new ApiResponse<>(200, "Lista de prescripciones", data));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PrescriptionResponse> update(@PathVariable Long id, @Valid @RequestBody PrescriptionRequest request) {
-        return ResponseEntity.ok(prescriptionService.update(id, request));
+    public ResponseEntity<ApiResponse<PrescriptionResponse>> update(@PathVariable Long id, @Valid @RequestBody PrescriptionRequest request) {
+        PrescriptionResponse data = prescriptionService.update(id, request);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Prescripción actualizada", data));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         prescriptionService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new ApiResponse<>(200, "Prescripción eliminada", null));
     }
-
 }

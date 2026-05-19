@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import cl.duoc.prescriptions.dto.PrescriptionItemRequest;
 import cl.duoc.prescriptions.dto.PrescriptionItemResponse;
+import cl.duoc.prescriptions.dto.PrescriptionResponse;
 import cl.duoc.prescriptions.model.Prescription;
 import cl.duoc.prescriptions.model.PrescriptionItem;
 import cl.duoc.prescriptions.repository.PrescriptionItemRepository;
@@ -74,9 +75,19 @@ public class PrescriptionItemService {
     }
 
     private PrescriptionItemResponse mapToResponse(PrescriptionItem item) {
+        PrescriptionResponse prescriptionResponse = new PrescriptionResponse(
+                item.getPrescription().getPrescriptionId(),
+                item.getPrescription().getMedicalVisitId(),
+                item.getPrescription().getPatientUserId(),
+                item.getPrescription().getDoctorId(),
+                item.getPrescription().getIssuedAt(),
+                item.getPrescription().getPrescriptionStatus().name(),
+                item.getPrescription().getNotes()
+        );
+
         return new PrescriptionItemResponse(
                 item.getPrescriptionItemId(),
-                item.getPrescription().getPrescriptionId(),
+                prescriptionResponse,
                 item.getMedicineName(),
                 item.getDosage(),
                 item.getFrequency(),

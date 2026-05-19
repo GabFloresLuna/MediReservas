@@ -2,7 +2,7 @@ package cl.duoc.prescriptions.dto;
 
 public record PrescriptionItemResponse(
     Long prescriptionItemId,
-    Long prescriptionId,
+    PrescriptionResponse prescription,
     String medicineName,
     String dosage,
     String frequency,

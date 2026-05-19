@@ -5,28 +5,44 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import cl.duoc.prescriptions.dto.ApiResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleRuntimeException(RuntimeException rex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(rex.getMessage());
+    public ResponseEntity<ApiResponse<Void>> handleRuntimeException(RuntimeException ex) {
+        ApiResponse<Void> response = new ApiResponse<>(404, ex.getMessage(), null);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException manvex) {
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-        manvex.getBindingResult().getFieldErrors()
+        ex.getBindingResult().getFieldErrors()
                 .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+        ApiResponse<Map<String, String>> response = new ApiResponse<>(400, "Error de validación", errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGenericException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+    public ResponseEntity<ApiResponse<Void>> handleGenericException(Exception ex) {
+        ApiResponse<Void> response = new ApiResponse<>(500, "Error interno del servidor", null);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiResponse<Void>> handleNotReadable(HttpMessageNotReadableException ex) {
+        String message = "Formato JSON inválido o valor no permitido";
+        if (ex.getMessage().contains("PrescriptionStatus")) {
+            message = "Estado de prescripción no válido. Valores aceptados: ACTIVO, EXPIRADO, CANCELADO";
+        }
+        ApiResponse<Void> response = new ApiResponse<>(400, message, null);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }
