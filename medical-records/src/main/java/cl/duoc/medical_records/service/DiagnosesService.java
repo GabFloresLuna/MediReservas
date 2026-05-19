@@ -17,8 +17,7 @@ public class DiagnosesService
     @Autowired
     private ToDTO toDTO;
 
-    private DiagnosesRepository diagnosesRepository;
-
+    private final DiagnosesRepository diagnosesRepository;
 
     public DiagnosisResponseDTO create(CreateDiagnosisRequestDTO requestDTO)
     {

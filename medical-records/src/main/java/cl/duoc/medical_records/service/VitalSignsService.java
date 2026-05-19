@@ -17,7 +17,7 @@ public class VitalSignsService
     @Autowired
     private ToDTO toDTO;
 
-    private VitalSignsRepository vitalSignsRepository;
+    private final VitalSignsRepository vitalSignsRepository;
 
 
     public VitalSignResponseDTO create(CreateVitalSignRequestDTO requestDTO)

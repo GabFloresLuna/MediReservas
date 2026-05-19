@@ -18,7 +18,7 @@ public class MedicalVisitService
     @Autowired
     private ToDTO toDTO;
 
-    private MedicalVisitRepository medicalVisitRepository;
+    private final MedicalVisitRepository medicalVisitRepository;
 
     public MedicalVisitResponseDTO create(CreateMedicalVisitRequestDTO requestDTO)
     {
