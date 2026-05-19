@@ -18,7 +18,8 @@ public record CreateVitalSignRequestDTO
     @DecimalMax(value = "45.0", message = "La temperatura no puede ser mayor a 45.0 °C")
     BigDecimal temperature,
 
-    @Pattern(
+    @Pattern
+    (
         regexp = "^\\d{2,3}/\\d{2,3}$",
         message = "La presión arterial debe tener formato 120/80"
     )
