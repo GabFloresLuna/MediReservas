@@ -29,7 +29,6 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    // ==================== PAYMENTS CRUD ====================
     
     // GET: Obtener todos los pagos
     @GetMapping
