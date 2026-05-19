@@ -63,11 +63,10 @@ public class DoctorsService {
     public DoctorsDTO update(Long id, DoctorsDTO dto) {
         Doctors doctor = doctorsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Doctor no encontrado"));
-
+        doctor.setUserId(dto.getUserId());
+        doctor.setActive(dto.isActive());
         doctor.setMedicalLicenseNumber(dto.getMedicalLicenseNumber());
-        // Actualizamos otros campos si es necesario
-        
-        // Actualizar especialidades: Borramos las anteriores y guardamos las nuevas
+
         doctorSpecialtiesRepository.deleteByDoctor(doctor); 
         if (dto.getSpecialtyIds() != null) {
             saveDoctorSpecialties(doctor, dto.getSpecialtyIds());

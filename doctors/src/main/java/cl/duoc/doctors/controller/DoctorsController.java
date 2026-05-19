@@ -46,7 +46,7 @@ public class DoctorsController {
         return new ResponseEntity<>(createdDoctor, HttpStatus.CREATED);
     }
 
-    // PUT: Actualizar un doctor existentedawsda
+    // PUT: Actualizar un doctor existente
     @PutMapping("/{id}")
     public ResponseEntity<DoctorsDTO> updateDoctor(@PathVariable Long id, @RequestBody DoctorsDTO doctorsDTO) {
         DoctorsDTO updatedDoctor = doctorsService.update(id, doctorsDTO);

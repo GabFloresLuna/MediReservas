@@ -28,7 +28,7 @@ public class DoctorSpecialties {
     @JoinColumn(name = "doctor_id",nullable = false)
     private Doctors doctor;
 
-    @Column(name = "specialy_id",nullable = false)
+    @Column(name = "specialty_id",nullable = false)
     private Long specialtyId;
 
     @Column(name = "is_primary",nullable = false)
