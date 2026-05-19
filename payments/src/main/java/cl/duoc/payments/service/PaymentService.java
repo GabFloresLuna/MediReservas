@@ -109,12 +109,10 @@ public class PaymentService {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
         
-        // Verificar si ya existe un comprobante para este pago
         if (paymentReceiptRepository.findByPayment_PaymentId(paymentId).isPresent()) {
             throw new RuntimeException("Ya existe un comprobante para este pago");
         }
         
-        // Verificar que el pago esté completado
         if (!"COMPLETED".equals(payment.getPaymentStatus())) {
             throw new RuntimeException("Solo se pueden generar comprobantes para pagos completados");
         }
@@ -142,12 +140,11 @@ public class PaymentService {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
         
-        // Validar que el pago esté completado
         if (!"COMPLETED".equals(payment.getPaymentStatus())) {
             throw new RuntimeException("Solo se pueden reembolsar pagos completados");
         }
-        
-        // Validar que el monto de reembolso no exceda el monto del pago
+
+
         if (refundAmount.compareTo(payment.getAmount()) > 0) {
             throw new RuntimeException("El monto de reembolso no puede exceder el monto del pago");
         }
@@ -161,7 +158,6 @@ public class PaymentService {
         
         Refund savedRefund = refundRepository.save(refund);
         
-        // Actualizar estado del pago a REFUNDING
         payment.setPaymentStatus("REFUNDING");
         paymentRepository.save(payment);
         
@@ -177,7 +173,6 @@ public class PaymentService {
         refund.setRefundStatus(status);
         Refund savedRefund = refundRepository.save(refund);
         
-        // Si el reembolso fue completado, actualizar estado del pago
         if ("COMPLETED".equals(status)) {
             Payment payment = refund.getPayment();
             payment.setPaymentStatus("REFUNDED");
@@ -200,7 +195,6 @@ public class PaymentService {
         Payment payment = paymentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
         
-        // Solo permitir eliminar pagos pendientes
         if (!"PENDING".equals(payment.getPaymentStatus())) {
             throw new RuntimeException("Solo se pueden eliminar pagos en estado PENDING");
         }
