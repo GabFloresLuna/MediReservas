@@ -3,6 +3,8 @@ package cl.duoc.auth.service;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +29,23 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     public AuthResponseDTO register(RegisterRequestDTO request) {
 
         if (authUserRepository.existsByEmail(request.email())) {
+            logger.warn("Registro rechazado: ya existe usuario con correo {}", request.email());
             throw new RuntimeException("Ya existe un usuario registrado con ese correo");
         }
 
         Role role = roleRepository.findByRoleName(request.roleName())
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Registro rechazado: rol no encontrado {}", request.roleName());
+                    return new RuntimeException("Rol no encontrado");
+                });
 
         if (!role.isActive()) {
+            logger.warn("Registro rechazado: rol inactivo {}", request.roleName());
             throw new RuntimeException("El rol seleccionado no está activo");
         }
 
@@ -64,13 +72,18 @@ public class AuthService {
     public AuthResponseDTO login(LoginRequestDTO request) {
 
         AuthUser authUser = authUserRepository.findByEmail(request.email())
-                .orElseThrow(() -> new RuntimeException("Credenciales inválidas"));
+                .orElseThrow(() -> {
+                    logger.warn("Login rechazado: correo no registrado {}", request.email());
+                    return new RuntimeException("Credenciales inválidas");
+                });
 
         if (!authUser.isEnabled()) {
+            logger.warn("Login rechazado: usuario deshabilitado {}", request.email());
             throw new RuntimeException("El usuario está deshabilitado");
         }
 
         if (!passwordEncoder.matches(request.password(), authUser.getPasswordHash())) {
+            logger.warn("Login rechazado: contraseña incorrecta para {}", request.email());
             throw new RuntimeException("Credenciales inválidas");
         }
 
