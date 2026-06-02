@@ -10,6 +10,7 @@ import cl.duoc.medical_records.dto.ApiResponse;
 import cl.duoc.medical_records.dto.CreateDiagnosisRequestDTO;
 import cl.duoc.medical_records.dto.DiagnosisResponseDTO;
 import cl.duoc.medical_records.service.DiagnosesService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +22,7 @@ public class DiagnosesController
     private final DiagnosesService diagnosesService; 
 
     @PostMapping()
+    @Operation(summary = "Crear diagnostico", description = "Permite crear diagnostico con id del paciente, descripcion y notas")
     public ResponseEntity<ApiResponse<DiagnosisResponseDTO>> createDiagnosis(@Valid @RequestBody CreateDiagnosisRequestDTO requestDTO)
     {
         DiagnosisResponseDTO diagnosis = diagnosesService.create(requestDTO);

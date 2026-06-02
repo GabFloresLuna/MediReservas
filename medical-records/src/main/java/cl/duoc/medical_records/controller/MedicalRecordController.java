@@ -14,7 +14,8 @@ import cl.duoc.medical_records.dto.ApiResponse;
 import cl.duoc.medical_records.dto.CreateMedicalRecordRequestDTO; 
 import cl.duoc.medical_records.dto.MedicalRecordDetailResponseDTO;
 import cl.duoc.medical_records.dto.MedicalRecordResponseDTO; 
-import cl.duoc.medical_records.service.MedicalRecordService; 
+import cl.duoc.medical_records.service.MedicalRecordService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +27,7 @@ public class MedicalRecordController
     private final MedicalRecordService medicalRecordService;
 
     @GetMapping()
+    @Operation(summary = "Lista los resgistros médicos",description = "Permite listar TODOS los registros médicos almacenados")
     public ResponseEntity<ApiResponse<List<MedicalRecordDetailResponseDTO>>> getAllMedicalRecords()
     {
         List<MedicalRecordDetailResponseDTO> medicalRecords = medicalRecordService.listAll();
@@ -39,6 +41,7 @@ public class MedicalRecordController
     }
 
     @PostMapping()
+    @Operation(summary = "Crea un nuevo registro médico", description = "Permite crear un nuevo registro médico utilizando el ID del paciente")
     public ResponseEntity<ApiResponse<MedicalRecordResponseDTO>> createMedicalRecord(@Valid @RequestBody CreateMedicalRecordRequestDTO requestDTO )
     {
         MedicalRecordResponseDTO medicalRecord = medicalRecordService.create(requestDTO);
@@ -54,6 +57,7 @@ public class MedicalRecordController
     }
     
     @GetMapping("{id}")
+    @Operation(summary = "Obtiene un registro médico por ID del paciente", description = "Permite obtener un registro médico consultando con el ID del paciente")
     public ResponseEntity<ApiResponse<MedicalRecordDetailResponseDTO>> getById(@PathVariable Long id)
     {
         MedicalRecordDetailResponseDTO medicalRecord = medicalRecordService.findByPatientId(id);
