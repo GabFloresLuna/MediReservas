@@ -23,12 +23,14 @@ import cl.duoc.auth.dto.RegisterRequestDTO;
 import cl.duoc.auth.dto.RoleResponseDTO;
 import cl.duoc.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Tag(name = "Auth", description = "Enpoints para la autenticación de usuarios")
 public class AuthController {
 
     private final AuthService authService;
