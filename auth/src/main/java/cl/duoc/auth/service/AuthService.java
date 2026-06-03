@@ -25,11 +25,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
+
     private final AuthUserRepository authUserRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     public AuthResponseDTO register(RegisterRequestDTO request) {
 
@@ -132,19 +133,28 @@ public class AuthService {
 
     public AuthUser findAuthUserEntityById(Long authUserId) {
         return authUserRepository.findById(authUserId)
-                .orElseThrow(() -> new RuntimeException("Usuario de autenticación no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: usuario de autenticación no encontrado con ID {}", authUserId);
+                    return new RuntimeException("Usuario de autenticación no encontrado");
+                });
     }
 
     public RoleResponseDTO getRoleById(Long roleId) {
         Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: rol no encontrado con ID {}", roleId);
+                    return new RuntimeException("Rol no encontrado");
+                });
 
         return toRoleResponseDTO(role);
     }
 
     public RoleResponseDTO getRoleByName(String roleName) {
         Role role = roleRepository.findByRoleName(roleName)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: rol no encontrado con nombre {}", roleName);
+                    return new RuntimeException("Rol no encontrado");
+                });
 
         return toRoleResponseDTO(role);
     }
@@ -159,9 +169,13 @@ public class AuthService {
 
     public RoleResponseDTO activateRole(Long roleId) {
         Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Activación de rol rechazada: rol no encontrado con ID {}", roleId);
+                    return new RuntimeException("Rol no encontrado");
+                });
 
         if (role.isActive()) {
+            logger.warn("Activación de rol rechazada: el rol ya estaba activo. roleId={}", roleId);
             throw new RuntimeException("El rol ya está activado");
         }
 
@@ -174,9 +188,13 @@ public class AuthService {
 
     public RoleResponseDTO deactivateRole(Long roleId) {
         Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Desactivación de rol rechazada: rol no encontrado con ID {}", roleId);
+                    return new RuntimeException("Rol no encontrado");
+                });
 
         if (!role.isActive()) {
+            logger.warn("Desactivación de rol rechazada: el rol ya estaba desactivado. roleId={}", roleId);
             throw new RuntimeException("El rol ya está desactivado");
         }
 
@@ -189,7 +207,10 @@ public class AuthService {
 
     public AuthUserResponseDTO getUserByEmail(String email) {
         AuthUser authUser = authUserRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario de autenticación no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: usuario de autenticación no encontrado con correo {}", email);
+                    return new RuntimeException("Usuario de autenticación no encontrado");
+                });
 
         return toAuthUserResponseDTO(authUser);
     }
@@ -198,6 +219,7 @@ public class AuthService {
         AuthUser authUser = findAuthUserEntityById(authUserId);
 
         if (authUser.isEnabled()) {
+            logger.warn("Habilitación rechazada: el usuario ya estaba habilitado. authUserId={}", authUserId);
             throw new RuntimeException("El usuario ya está habilitado");
         }
 
@@ -212,6 +234,7 @@ public class AuthService {
         AuthUser authUser = findAuthUserEntityById(authUserId);
 
         if (!authUser.isEnabled()) {
+            logger.warn("Deshabilitación rechazada: el usuario ya estaba deshabilitado. authUserId={}", authUserId);
             throw new RuntimeException("El usuario ya está deshabilitado");
         }
 
@@ -226,6 +249,7 @@ public class AuthService {
         AuthUser authUser = findAuthUserEntityById(authUserId);
 
         if (!passwordEncoder.matches(request.currentPassword(), authUser.getPasswordHash())) {
+            logger.warn("Cambio de contraseña rechazado: contraseña actual incorrecta para authUserId={}", authUserId);
             throw new RuntimeException("Credenciales inválidas");
         }
 

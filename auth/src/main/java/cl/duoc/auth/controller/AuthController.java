@@ -30,169 +30,77 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@Tag(name = "Auth", description = "Enpoints para la autenticación de usuarios")
+@Tag(name = "Auth", description = "Endpoints para autenticación, usuarios de autenticación, roles y validación de tokens JWT")
 public class AuthController {
 
     private final AuthService authService;
 
     @PostMapping("/register")
-    @Operation(summary = "Registrar un nuevo usuario", description = "Permite registrar un nuevo usuario con email y contraseña.")
+    @Operation(summary = "Registrar usuario de autenticación", description = "Crea un nuevo usuario de autenticación, asigna un rol activo y genera un token JWT inicial.")
     public ResponseEntity<ApiResponse<AuthResponseDTO>> register(
             @Valid @RequestBody RegisterRequestDTO request) {
         AuthResponseDTO response = authService.register(request);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(201, "Usuario registrado correctamente", response));
+                .body(new ApiResponse<>(
+                        201,
+                        "Usuario registrado correctamente",
+                        response));
     }
 
     @PostMapping("/login")
-    @Operation(summary = "Iniciar sesión", description = "Permite al usuario iniciar sesión mediante email y contraseña.")
+    @Operation(summary = "Iniciar sesión", description = "Valida las credenciales del usuario y genera un token JWT si el inicio de sesión es correcto.")
     public ResponseEntity<ApiResponse<AuthResponseDTO>> login(
             @Valid @RequestBody LoginRequestDTO request) {
         AuthResponseDTO response = authService.login(request);
 
         return ResponseEntity.ok(
-                new ApiResponse<>(200, "Inicio de sesión correcto", response));
+                new ApiResponse<>(
+                        200,
+                        "Inicio de sesión correcto",
+                        response));
     }
 
     @GetMapping("/users")
-    @Operation(summary = "Listar usuarios autenticados", description = "Lista todos los usuarios que se hayan registrado.")
+    @Operation(summary = "Listar usuarios de autenticación", description = "Obtiene todos los usuarios registrados en el microservicio de autenticación.")
     public ResponseEntity<ApiResponse<List<AuthUserResponseDTO>>> getAllUsers() {
         List<AuthUserResponseDTO> response = authService.getAllUsers();
 
         return ResponseEntity.ok(
-                new ApiResponse<>(200, "Usuarios de autenticación obtenidos correctamente", response));
+                new ApiResponse<>(
+                        200,
+                        "Usuarios de autenticación obtenidos correctamente",
+                        response));
     }
 
     @GetMapping("/users/{authUserId}")
-    @Operation(summary = "Obtener usuario por id", description = "Obtiene la información de un usuario buscandolo mediante su id.")
+    @Operation(summary = "Buscar usuario de autenticación por ID", description = "Obtiene la información de un usuario de autenticación mediante su identificador.")
     public ResponseEntity<ApiResponse<AuthUserResponseDTO>> getUserById(
             @PathVariable Long authUserId) {
         AuthUserResponseDTO response = authService.getUserById(authUserId);
 
         return ResponseEntity.ok(
-                new ApiResponse<>(200, "Usuario de autenticación obtenido correctamente", response));
+                new ApiResponse<>(
+                        200,
+                        "Usuario de autenticación encontrado",
+                        response));
     }
 
     @GetMapping("/users/{authUserId}/exists")
-    @Operation(summary = "Valida si un usuario existe por id", description = "Busca un usuario por id y valida si este existe.")
+    @Operation(summary = "Validar existencia de usuario", description = "Verifica si existe un usuario de autenticación mediante su identificador.")
     public ResponseEntity<ApiResponse<Boolean>> existsById(
             @PathVariable Long authUserId) {
         boolean response = authService.existsById(authUserId);
 
         return ResponseEntity.ok(
-                new ApiResponse<>(200, "Validación realizada correctamente", response));
-    }
-
-    @GetMapping("/roles")
-    @Operation(summary = "Obtener roles", description = "Obtiene todos los roles que existen.")
-    public ResponseEntity<ApiResponse<List<RoleResponseDTO>>> getAllRoles() {
-        List<RoleResponseDTO> response = authService.getAllRoles();
-
-        return ResponseEntity.ok(
-                new ApiResponse<>(200, "Roles obtenidos correctamente", response));
-    }
-
-    @GetMapping("/validate")
-    @Operation(summary = "Validar token", description = "Realiza la validación del token generado al registar/iniciar sesión.")
-    public ResponseEntity<ApiResponse<Boolean>> validateToken(
-            @RequestParam String token) {
-        boolean response = authService.validateToken(token);
-
-        return ResponseEntity.ok(
-                new ApiResponse<>(200, "Validación de token realizada correctamente", response));
-    }
-
-    @GetMapping("/token/email")
-    @Operation(summary = "Extraer email", description = "Extrae el email del usuario a partir del token")
-    public ResponseEntity<ApiResponse<String>> extractEmailFromToken(
-            @RequestParam String token) {
-        String response = authService.extractEmailFromToken(token);
-
-        return ResponseEntity.ok(
-                new ApiResponse<>(200, "Correo extraído correctamente desde el token", response));
-    }
-
-    @GetMapping("/roles/{roleId}")
-    @Operation(summary = "Obtener rol por id", description = "Obtiene la información de un rol a partir de su id.")
-    public ResponseEntity<ApiResponse<RoleResponseDTO>> getRoleById(
-            @PathVariable Long roleId) {
-        RoleResponseDTO response = authService.getRoleById(roleId);
-
-        return ResponseEntity.ok(
                 new ApiResponse<>(
                         200,
-                        "Rol obtenido correctamente",
-                        response));
-    }
-
-    @GetMapping("/roles/name/{roleName}")
-    @Operation(summary = "Obtener rol por nombre", description = "Obtiene la información de un rol a partir del nombre.")
-    public ResponseEntity<ApiResponse<RoleResponseDTO>> getRoleByName(
-            @PathVariable String roleName) {
-        RoleResponseDTO response = authService.getRoleByName(roleName);
-
-        return ResponseEntity.ok(
-                new ApiResponse<>(
-                        200,
-                        "Rol obtenido correctamente por nombre",
-                        response));
-    }
-
-    @GetMapping("/roles/{roleId}/exists")
-    @Operation(summary = "Valida si rol existe por id", description = "Busca un rol por id y valida si este existe.")
-    public ResponseEntity<ApiResponse<Boolean>> roleExistsById(
-            @PathVariable Long roleId) {
-        boolean response = authService.roleExistsById(roleId);
-
-        return ResponseEntity.ok(
-                new ApiResponse<>(
-                        200,
-                        "Validación de rol realizada correctamente",
-                        response));
-    }
-
-    @GetMapping("/roles/{roleId}/active")
-    @Operation(summary = "Valida si rol esta activo", description = "Busca un rol por id y valida si este se encuentra activo.")
-    public ResponseEntity<ApiResponse<Boolean>> roleExistsActiveById(
-            @PathVariable Long roleId) {
-        boolean response = authService.roleExistsActiveById(roleId);
-
-        return ResponseEntity.ok(
-                new ApiResponse<>(
-                        200,
-                        "Validación de rol activo realizada correctamente",
-                        response));
-    }
-
-    @PatchMapping("/roles/{roleId}/activate")
-    @Operation(summary = "Activa un rol", description = "Actualiza el estado de 'active' a verdadero.")
-    public ResponseEntity<ApiResponse<RoleResponseDTO>> activateRole(
-            @PathVariable Long roleId) {
-        RoleResponseDTO response = authService.activateRole(roleId);
-
-        return ResponseEntity.ok(
-                new ApiResponse<>(
-                        200,
-                        "Rol activado correctamente",
-                        response));
-    }
-
-    @PatchMapping("/roles/{roleId}/deactivate")
-    @Operation(summary = "Desactiva un rol", description = "Actualiza el estado de 'active' a falso.")
-    public ResponseEntity<ApiResponse<RoleResponseDTO>> deactivateRole(
-            @PathVariable Long roleId) {
-        RoleResponseDTO response = authService.deactivateRole(roleId);
-
-        return ResponseEntity.ok(
-                new ApiResponse<>(
-                        200,
-                        "Rol desactivado correctamente",
+                        "Validación realizada correctamente",
                         response));
     }
 
     @GetMapping("/users/email/{email}")
-    @Operation(summary = "Obtener usuario por email", description = "Obtiene la información de un usuario mediante su email.")
+    @Operation(summary = "Buscar usuario por correo", description = "Obtiene un usuario de autenticación mediante su correo electrónico.")
     public ResponseEntity<ApiResponse<AuthUserResponseDTO>> getUserByEmail(
             @PathVariable String email) {
         AuthUserResponseDTO response = authService.getUserByEmail(email);
@@ -200,12 +108,12 @@ public class AuthController {
         return ResponseEntity.ok(
                 new ApiResponse<>(
                         200,
-                        "Usuario de autenticación obtenido correctamente por correo",
+                        "Usuario de autenticación encontrado por correo",
                         response));
     }
 
     @PatchMapping("/users/{authUserId}/enable")
-    @Operation(summary = "Activa un usuario", description = "Actualiza el estado de 'enabled' a verdadero.")
+    @Operation(summary = "Habilitar usuario", description = "Actualiza el estado del usuario para permitir nuevamente su acceso al sistema.")
     public ResponseEntity<ApiResponse<AuthUserResponseDTO>> enableUser(
             @PathVariable Long authUserId) {
         AuthUserResponseDTO response = authService.enableUser(authUserId);
@@ -218,7 +126,7 @@ public class AuthController {
     }
 
     @PatchMapping("/users/{authUserId}/disable")
-    @Operation(summary = "Desactiva un usuario", description = "Actualiza el estado de 'enabled' a falso.")
+    @Operation(summary = "Deshabilitar usuario", description = "Desactiva el acceso de un usuario de autenticación sin eliminar su registro.")
     public ResponseEntity<ApiResponse<AuthUserResponseDTO>> disableUser(
             @PathVariable Long authUserId) {
         AuthUserResponseDTO response = authService.disableUser(authUserId);
@@ -231,7 +139,7 @@ public class AuthController {
     }
 
     @PutMapping("/users/{authUserId}/password")
-    @Operation(summary = "Cambiar contraseña", description = "Permite cambiar la contraseña de un usuario a partir de su id.")
+    @Operation(summary = "Cambiar contraseña", description = "Actualiza la contraseña de un usuario validando previamente su contraseña actual.")
     public ResponseEntity<ApiResponse<AuthUserResponseDTO>> changePassword(
             @PathVariable Long authUserId,
             @Valid @RequestBody ChangePasswordRequestDTO request) {
@@ -241,6 +149,122 @@ public class AuthController {
                 new ApiResponse<>(
                         200,
                         "Contraseña actualizada correctamente",
+                        response));
+    }
+
+    @GetMapping("/roles")
+    @Operation(summary = "Listar roles", description = "Obtiene todos los roles disponibles para los usuarios del sistema.")
+    public ResponseEntity<ApiResponse<List<RoleResponseDTO>>> getAllRoles() {
+        List<RoleResponseDTO> response = authService.getAllRoles();
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Roles obtenidos correctamente",
+                        response));
+    }
+
+    @GetMapping("/roles/{roleId}")
+    @Operation(summary = "Buscar rol por ID", description = "Obtiene la información de un rol mediante su identificador.")
+    public ResponseEntity<ApiResponse<RoleResponseDTO>> getRoleById(
+            @PathVariable Long roleId) {
+        RoleResponseDTO response = authService.getRoleById(roleId);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Rol encontrado",
+                        response));
+    }
+
+    @GetMapping("/roles/name/{roleName}")
+    @Operation(summary = "Buscar rol por nombre", description = "Obtiene la información de un rol mediante su nombre.")
+    public ResponseEntity<ApiResponse<RoleResponseDTO>> getRoleByName(
+            @PathVariable String roleName) {
+        RoleResponseDTO response = authService.getRoleByName(roleName);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Rol encontrado por nombre",
+                        response));
+    }
+
+    @GetMapping("/roles/{roleId}/exists")
+    @Operation(summary = "Validar existencia de rol", description = "Verifica si existe un rol mediante su identificador.")
+    public ResponseEntity<ApiResponse<Boolean>> roleExistsById(
+            @PathVariable Long roleId) {
+        boolean response = authService.roleExistsById(roleId);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Validación de rol realizada correctamente",
+                        response));
+    }
+
+    @GetMapping("/roles/{roleId}/active")
+    @Operation(summary = "Validar rol activo", description = "Verifica si un rol existe y se encuentra activo.")
+    public ResponseEntity<ApiResponse<Boolean>> roleExistsActiveById(
+            @PathVariable Long roleId) {
+        boolean response = authService.roleExistsActiveById(roleId);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Validación de rol activo realizada correctamente",
+                        response));
+    }
+
+    @PatchMapping("/roles/{roleId}/activate")
+    @Operation(summary = "Activar rol", description = "Activa un rol previamente desactivado para que pueda ser asignado a usuarios.")
+    public ResponseEntity<ApiResponse<RoleResponseDTO>> activateRole(
+            @PathVariable Long roleId) {
+        RoleResponseDTO response = authService.activateRole(roleId);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Rol activado correctamente",
+                        response));
+    }
+
+    @PatchMapping("/roles/{roleId}/deactivate")
+    @Operation(summary = "Desactivar rol", description = "Desactiva un rol para evitar que sea asignado a nuevos usuarios.")
+    public ResponseEntity<ApiResponse<RoleResponseDTO>> deactivateRole(
+            @PathVariable Long roleId) {
+        RoleResponseDTO response = authService.deactivateRole(roleId);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Rol desactivado correctamente",
+                        response));
+    }
+
+    @GetMapping("/validate")
+    @Operation(summary = "Validar token JWT", description = "Verifica si un token JWT es válido.")
+    public ResponseEntity<ApiResponse<Boolean>> validateToken(
+            @RequestParam String token) {
+        boolean response = authService.validateToken(token);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Token validado correctamente",
+                        response));
+    }
+
+    @GetMapping("/token/email")
+    @Operation(summary = "Extraer correo desde token JWT", description = "Obtiene el correo electrónico contenido dentro de un token JWT.")
+    public ResponseEntity<ApiResponse<String>> extractEmailFromToken(
+            @RequestParam String token) {
+        String response = authService.extractEmailFromToken(token);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Correo extraído correctamente desde el token",
                         response));
     }
 }
