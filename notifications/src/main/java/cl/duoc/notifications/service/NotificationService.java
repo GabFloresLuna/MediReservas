@@ -37,8 +37,7 @@ public class NotificationService {
                     .orElseThrow(() -> new RuntimeException(
                             "Id de template no encontrada " + dto.getNotificationTemplateId()));
             notification.setNotificationTemplate(template);
-        }
-
+            }
         Notification saved = notificationRepository.save(notification);
         return toResponseDTO(saved);
     }
@@ -89,38 +88,37 @@ public class NotificationService {
     public NotificationResponseDTO updateNotification(Long id, NotificationUpdateRequestDTO dto) {
         Notification notification = notificationRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Id no encontrada: " + id));
-
-    notification.setNotificationChannel(dto.getNotificationChannel());
-    notification.setNotificationTitle(dto.getNotificationTitle());
-    notification.setNotificationMessage(dto.getNotificationMessage());
-
-    if (dto.getNotificationTemplateId() != null) {
-        NotificationTemplate template = templateRepository.findById(dto.getNotificationTemplateId())
+            notification.setNotificationChannel(dto.getNotificationChannel());
+            notification.setNotificationTitle(dto.getNotificationTitle());
+            notification.setNotificationMessage(dto.getNotificationMessage());
+        
+        if (dto.getNotificationTemplateId() != null) {
+            NotificationTemplate template = templateRepository.findById(dto.getNotificationTemplateId())
                 .orElseThrow(() -> new RuntimeException(
-                        "Plantilla no encontrada con ID: " + dto.getNotificationTemplateId()));
-        notification.setNotificationTemplate(template);
-    } else {
-        notification.setNotificationTemplate(null);
-    }
-
-    Notification updated = notificationRepository.save(notification);
-    return toResponseDTO(updated);
+                    "Plantilla no encontrada con ID: " + dto.getNotificationTemplateId()));
+            notification.setNotificationTemplate(template);
+        } 
+        else {
+            notification.setNotificationTemplate(null);
+        }
+        Notification updated = notificationRepository.save(notification);
+            return toResponseDTO(updated);
     }
 
 
     public NotificationResponseDTO updateNotificationStatus(Long id, NotificationStatusUpdateRequestDTO dto) {
-    Notification notification = notificationRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Id no encontrada: " + id));
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Id no encontrada: " + id));
+                
+        notification.setNotificationStatus(dto.getNotificationStatus());
 
-    notification.setNotificationStatus(dto.getNotificationStatus());
-
-    if (dto.getNotificationStatus() == NotificationStatus.SENT) {
-        notification.setSentAt(LocalDateTime.now());
+        if (dto.getNotificationStatus() == NotificationStatus.SENT) {
+            notification.setSentAt(LocalDateTime.now());
+        }
+        Notification updated = notificationRepository.save(notification);
+        return toResponseDTO(updated);
     }
-
-    Notification updated = notificationRepository.save(notification);
-    return toResponseDTO(updated);
-    }
+    
 
 
     private NotificationResponseDTO toResponseDTO(Notification entity) {
