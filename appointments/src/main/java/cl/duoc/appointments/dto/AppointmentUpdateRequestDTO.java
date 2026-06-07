@@ -1,0 +1,34 @@
+package cl.duoc.appointments.dto;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+
+// DTO para PUT /api/v1/appointments/{id}
+// Incluye changedByUserId y changeReason porque la actualización también genera
+// un registro en appointment_status_history (aunque el status no cambie)
+@Data
+public class AppointmentUpdateRequestDTO {
+
+    @NotNull(message = "El ID del médico es obligatorio")
+    @Positive(message = "El ID del médico debe ser mayor a cero")
+    private Long doctorId;
+
+    @NotNull(message = "El ID de la especialidad es obligatorio")
+    @Positive(message = "El ID de la especialidad debe ser mayor a cero")
+    private Long specialtyId;
+
+    @NotNull(message = "El ID del bloque de agenda es obligatorio")
+    @Positive(message = "El ID del bloque de agenda debe ser mayor a cero")
+    private Long scheduleSlotId;
+
+    @Size(max = 255, message = "El motivo debe tener máximo 255 caracteres")
+    private String reason;
+
+    @Positive(message = "El ID del usuario que modifica debe ser mayor a cero")
+    private Long changedByUserId;
+
+    @Size(max = 255, message = "La razón de cambio debe tener máximo 255 caracteres")
+    private String changeReason;
+}
