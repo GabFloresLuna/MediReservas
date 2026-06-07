@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-// Mismo patrón que NotificationResponseDTO:
-// - @Builder para construirlo desde el service con .builder()...build()
-// - @JsonFormat en los campos de fecha para formato legible en la respuesta JSON
+
 @Data
 @Builder
 @NoArgsConstructor

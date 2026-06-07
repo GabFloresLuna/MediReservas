@@ -5,9 +5,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-// DTO para PUT /api/v1/appointments/{id}
-// Incluye changedByUserId y changeReason porque la actualización también genera
-// un registro en appointment_status_history (aunque el status no cambie)
+
 @Data
 public class AppointmentUpdateRequestDTO {
 

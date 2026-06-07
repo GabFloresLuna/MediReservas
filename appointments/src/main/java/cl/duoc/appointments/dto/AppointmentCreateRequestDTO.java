@@ -5,8 +5,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-// DTO para POST /api/v1/appointments
-// Reutiliza el mismo estilo de validaciones que NotificationSendRequestDTO
+
 @Data
 public class AppointmentCreateRequestDTO {
 
