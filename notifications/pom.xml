@@ -112,12 +112,12 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>3.0.3</version>
 		</dependency>
-		<!-- Eureka -->
+		<!-- Eureka 
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
-
+		-->
 
 	</dependencies>
 
