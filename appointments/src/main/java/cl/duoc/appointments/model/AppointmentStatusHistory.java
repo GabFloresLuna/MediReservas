@@ -17,7 +17,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.CreationTimestamp;
 
 import cl.duoc.appointments.enums.AppointmentStatus;
 
@@ -54,6 +54,6 @@ public class AppointmentStatusHistory {
     private String changeReason;
 
     @Column(name = "changed_at", nullable = false)
-    @UpdateTimestamp
+    @CreationTimestamp
     private LocalDateTime changedAt;
 }
