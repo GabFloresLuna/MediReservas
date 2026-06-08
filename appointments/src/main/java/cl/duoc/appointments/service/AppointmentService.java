@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -138,7 +137,6 @@ public class AppointmentService {
         cancellation.setAppointment(updated);
         cancellation.setCancelledByUserId(dto.getCancelledByUserId());
         cancellation.setCancellationReason(dto.getCancellationReason());
-        cancellation.setCancelledAt(LocalDateTime.now());
         cancellationRepository.save(cancellation);
 
         saveHistory(updated, oldStatus, AppointmentStatus.CANCELLED,
@@ -206,7 +204,6 @@ public class AppointmentService {
         history.setNewStatus(newStatus);
         history.setChangedByUserId(changedByUserId);
         history.setChangeReason(changeReason);
-        history.setChangedAt(LocalDateTime.now());
         statusHistoryRepository.save(history);
     }
 
