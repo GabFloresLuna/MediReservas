@@ -182,7 +182,6 @@ public class AppointmentService {
     }
 
     // Busca la cita o lanza 404 — centraliza el findById().orElseThrow
-    // igual que en NotificationService donde se repite el mismo patrón
     private Appointment findOrThrow(Long id) {
         return appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cita no encontrada con ID: " + id));
@@ -211,8 +210,6 @@ public class AppointmentService {
         statusHistoryRepository.save(history);
     }
 
-
-    // construye el DTO de respuesta desde la entidad usando el @Builder del DTO
     private AppointmentResponseDTO toResponseDTO(Appointment entity) {
         return AppointmentResponseDTO.builder()
                 .appointmentId(entity.getAppointmentId())
