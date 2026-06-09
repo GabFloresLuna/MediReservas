@@ -10,6 +10,7 @@ import cl.duoc.notifications.model.NotificationTemplate;
 import cl.duoc.notifications.repository.NotificationRepository;
 import cl.duoc.notifications.repository.NotificationTemplateRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -34,10 +36,12 @@ public class NotificationService {
 
         if (dto.getNotificationTemplateId() != null) {
             NotificationTemplate template = templateRepository.findById(dto.getNotificationTemplateId())
-                    .orElseThrow(() -> new RuntimeException(
-                            "Id de template no encontrada " + dto.getNotificationTemplateId()));
+                    .orElseThrow(() -> {
+                        log.warn("Template no encontrada con ID: {}", dto.getNotificationTemplateId());
+                        return new RuntimeException("Id de template no encontrada " + dto.getNotificationTemplateId());
+                    });
             notification.setNotificationTemplate(template);
-            }
+        }
         Notification saved = notificationRepository.save(notification);
         return toResponseDTO(saved);
     }
@@ -51,7 +55,10 @@ public class NotificationService {
 
     public NotificationResponseDTO getNotificationById(Long id) {
         Notification notification = notificationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Id no encontrada: " + id));
+                .orElseThrow(() -> {
+                    log.warn("Notificación no encontrada con ID: {}", id);
+                    return new RuntimeException("Id no encontrada: " + id);
+                });
         return toResponseDTO(notification);
     }
 
@@ -87,17 +94,22 @@ public class NotificationService {
 
     public NotificationResponseDTO updateNotification(Long id, NotificationUpdateRequestDTO dto) {
         Notification notification = notificationRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Id no encontrada: " + id));
+            .orElseThrow(() -> {
+                log.warn("Notificación no encontrada con ID: {}", id);
+                return new RuntimeException("Id no encontrada: " + id);
+            });
             notification.setNotificationChannel(dto.getNotificationChannel());
             notification.setNotificationTitle(dto.getNotificationTitle());
             notification.setNotificationMessage(dto.getNotificationMessage());
-        
+
         if (dto.getNotificationTemplateId() != null) {
             NotificationTemplate template = templateRepository.findById(dto.getNotificationTemplateId())
-                .orElseThrow(() -> new RuntimeException(
-                    "Plantilla no encontrada con ID: " + dto.getNotificationTemplateId()));
+                .orElseThrow(() -> {
+                    log.warn("Template no encontrada con ID: {}", dto.getNotificationTemplateId());
+                    return new RuntimeException("Plantilla no encontrada con ID: " + dto.getNotificationTemplateId());
+                });
             notification.setNotificationTemplate(template);
-        } 
+        }
         else {
             notification.setNotificationTemplate(null);
         }
@@ -108,8 +120,11 @@ public class NotificationService {
 
     public NotificationResponseDTO updateNotificationStatus(Long id, NotificationStatusUpdateRequestDTO dto) {
         Notification notification = notificationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Id no encontrada: " + id));
-                
+                .orElseThrow(() -> {
+                    log.warn("Notificación no encontrada con ID: {}", id);
+                    return new RuntimeException("Id no encontrada: " + id);
+                });
+
         notification.setNotificationStatus(dto.getNotificationStatus());
 
         if (dto.getNotificationStatus() == NotificationStatus.SENT) {
@@ -118,7 +133,7 @@ public class NotificationService {
         Notification updated = notificationRepository.save(notification);
         return toResponseDTO(updated);
     }
-    
+
 
 
     private NotificationResponseDTO toResponseDTO(Notification entity) {
