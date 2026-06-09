@@ -28,7 +28,7 @@ public record CreatePatientProfileRequestDTO(
     String allergies,
 
     @DecimalMin(value = "1.00", message = "El peso debe ser mayor a 0 kg")
-    @DecimalMax(value = "300.00", message = "El peso no puede superar los 400 kg")
+    @DecimalMax(value = "300.00", message = "El peso no puede superar los 300 kg")
     BigDecimal weight
 
 ) {}

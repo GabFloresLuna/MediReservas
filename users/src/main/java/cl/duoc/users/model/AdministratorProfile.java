@@ -1,6 +1,5 @@
 package cl.duoc.users.model;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,7 +24,7 @@ public class AdministratorProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false, unique = true)
+    @Column(name = "administrator_profile_id")
     private Long administratorProfileId;
 
     @OneToOne(fetch = FetchType.LAZY)
