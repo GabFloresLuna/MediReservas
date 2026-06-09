@@ -13,12 +13,13 @@ import cl.duoc.appointments.repository.AppointmentCancellationRepository;
 import cl.duoc.appointments.repository.AppointmentRepository;
 import cl.duoc.appointments.repository.AppointmentStatusHistoryRepository;
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AppointmentService {
@@ -80,6 +81,7 @@ public class AppointmentService {
 
         // Regla: solo se puede editar si está PENDING (confirmadas o cerradas no se tocan)
         if (appointment.getAppointmentStatus() != AppointmentStatus.PENDING) {
+            log.warn("Intento de editar cita ID {} en estado inválido: {}", id, appointment.getAppointmentStatus());
             throw new RuntimeException(
                 "Solo se pueden editar citas en estado PENDING. Estado actual: "
                 + appointment.getAppointmentStatus());
@@ -122,6 +124,7 @@ public class AppointmentService {
         // Regla: solo desde PENDING o CONFIRMED (completadas o ya canceladas no se pueden cancelar)
         if (appointment.getAppointmentStatus() != AppointmentStatus.PENDING
                 && appointment.getAppointmentStatus() != AppointmentStatus.CONFIRMED) {
+            log.warn("Intento de cancelar cita ID {} en estado inválido: {}", id, appointment.getAppointmentStatus());
             throw new RuntimeException(
                 "Solo se pueden cancelar citas en estado PENDING o CONFIRMED. Estado actual: "
                 + appointment.getAppointmentStatus());
@@ -182,12 +185,17 @@ public class AppointmentService {
     // Busca la cita o lanza 404 — centraliza el findById().orElseThrow
     private Appointment findOrThrow(Long id) {
         return appointmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cita no encontrada con ID: " + id));
+                .orElseThrow(() -> {
+                    log.warn("Cita no encontrada con ID: {}", id);
+                    return new RuntimeException("Cita no encontrada con ID: " + id);
+                });
     }
 
     // Valida que el status actual sea el requerido para la transición
     private void validateTransition(Appointment appointment, AppointmentStatus required, String action) {
         if (appointment.getAppointmentStatus() != required) {
+            log.warn("Transición inválida para cita ID {}: se requiere {} pero está en {}",
+                    appointment.getAppointmentId(), required, appointment.getAppointmentStatus());
             throw new RuntimeException(
                 "No se puede " + action + " una cita en estado "
                 + appointment.getAppointmentStatus()
