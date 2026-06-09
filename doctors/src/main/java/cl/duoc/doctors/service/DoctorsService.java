@@ -77,8 +77,6 @@ public class DoctorsService {
         doctor.setUserId(dto.getUserId());
         doctor.setActive(dto.isActive());
         doctor.setMedicalLicenseNumber(dto.getMedicalLicenseNumber());
-
-        log.debug("Limpiando especialidades anteriores para el doctor ID: {}", id);
         doctorSpecialtiesRepository.deleteByDoctor(doctor); 
         
         if (dto.getSpecialtyIds() != null) {
