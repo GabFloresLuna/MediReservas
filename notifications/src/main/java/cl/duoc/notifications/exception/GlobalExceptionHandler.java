@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import cl.duoc.notifications.dto.ApiResponse;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -27,7 +25,6 @@ public class GlobalExceptionHandler {
 		ex.getBindingResult().getFieldErrors()
 				.forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
 
-		log.warn("Error de validación en campos: {}", errors);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new ApiResponse<>(
 						400,
@@ -38,7 +35,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<ApiResponse<Object>> handleInvalidJson(
 			HttpMessageNotReadableException ex) {
-		log.warn("JSON inválido recibido: {}", ex.getMessage());
+	
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new ApiResponse<>(
 						400,
@@ -49,7 +46,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public ResponseEntity<ApiResponse<Object>> handleMethodNotAllowed(
 			HttpRequestMethodNotSupportedException ex) {
-		log.warn("Método HTTP no permitido: {}", ex.getMethod());
+	
 		return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
 				.body(new ApiResponse<>(
 						405,
@@ -60,7 +57,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<ApiResponse<Object>> handleDataIntegrityViolation(
 			DataIntegrityViolationException ex) {
-		log.error("Violación de integridad de datos: {}", ex.getMessage());
+
 		return ResponseEntity.status(HttpStatus.CONFLICT)
 				.body(new ApiResponse<>(
 						409,
@@ -90,7 +87,7 @@ public class GlobalExceptionHandler {
 			code = 409;
 		}
 
-		log.error("Error de negocio [{}]: {}", code, message);
+	
 		return ResponseEntity.status(status)
 				.body(new ApiResponse<>(
 						code,
@@ -100,7 +97,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiResponse<Object>> handleGenericException(Exception ex) {
-		log.error("Error interno inesperado", ex);
+	
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.body(new ApiResponse<>(
 						500,
