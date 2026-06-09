@@ -1,7 +1,6 @@
 package cl.duoc.auth.service;
 
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,22 +38,10 @@ public class AuthService {
             throw new RuntimeException("Ya existe un usuario registrado con ese correo");
         }
 
-        Role role = roleRepository.findByRoleName(request.roleName())
-                .orElseThrow(() -> {
-                    logger.warn("Registro rechazado: rol no encontrado {}", request.roleName());
-                    return new RuntimeException("Rol no encontrado");
-                });
-
-        if (!role.isActive()) {
-            logger.warn("Registro rechazado: rol inactivo {}", request.roleName());
-            throw new RuntimeException("El rol seleccionado no está activo");
-        }
-
         AuthUser authUser = new AuthUser();
         authUser.setEmail(request.email());
         authUser.setPasswordHash(passwordEncoder.encode(request.password()));
         authUser.setEnabled(true);
-        authUser.setRoles(Set.of(role));
 
         AuthUser savedUser = authUserRepository.save(authUser);
 
@@ -254,6 +241,36 @@ public class AuthService {
         }
 
         authUser.setPasswordHash(passwordEncoder.encode(request.newPassword()));
+
+        AuthUser savedUser = authUserRepository.save(authUser);
+
+        return toAuthUserResponseDTO(savedUser);
+    }
+
+    public AuthUserResponseDTO assignRole(Long authUserId, String roleName) {
+        AuthUser authUser = findAuthUserEntityById(authUserId);
+
+        Role role = roleRepository.findByRoleName(roleName)
+                .orElseThrow(() -> {
+                    logger.warn("Asignación de rol rechazada: rol no encontrado {}", roleName);
+                    return new RuntimeException("Rol no encontrado");
+                });
+
+        if (!role.isActive()) {
+            logger.warn("Asignación de rol rechazada: rol inactivo {}", roleName);
+            throw new RuntimeException("El rol seleccionado no está activo");
+        }
+
+        boolean alreadyAssigned = authUser.getRoles()
+                .stream()
+                .anyMatch(existingRole -> existingRole.getRoleName().equalsIgnoreCase(roleName));
+
+        if (alreadyAssigned) {
+            logger.warn("Asignación de rol rechazada: usuario ya tiene el rol {}. authUserId={}", roleName, authUserId);
+            throw new RuntimeException("El usuario ya tiene asignado ese rol");
+        }
+
+        authUser.getRoles().add(role);
 
         AuthUser savedUser = authUserRepository.save(authUser);
 

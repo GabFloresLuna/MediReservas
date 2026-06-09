@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.duoc.auth.dto.ApiResponse;
+import cl.duoc.auth.dto.AssignRoleRequestDTO;
 import cl.duoc.auth.dto.AuthResponseDTO;
 import cl.duoc.auth.dto.AuthUserResponseDTO;
 import cl.duoc.auth.dto.ChangePasswordRequestDTO;
@@ -265,6 +266,20 @@ public class AuthController {
                 new ApiResponse<>(
                         200,
                         "Correo extraído correctamente desde el token",
+                        response));
+    }
+
+    @PatchMapping("/users/{authUserId}/roles")
+    @Operation(summary = "Asignar rol a usuario", description = "Asigna un rol activo a un usuario de autenticación. Este endpoint puede ser usado por otros microservicios cuando se crea un perfil específico.")
+    public ResponseEntity<ApiResponse<AuthUserResponseDTO>> assignRole(
+            @PathVariable Long authUserId,
+            @Valid @RequestBody AssignRoleRequestDTO request) {
+        AuthUserResponseDTO response = authService.assignRole(authUserId, request.roleName());
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        200,
+                        "Rol asignado correctamente",
                         response));
     }
 }
