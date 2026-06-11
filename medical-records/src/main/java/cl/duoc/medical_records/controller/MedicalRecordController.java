@@ -31,7 +31,7 @@ public class MedicalRecordController
     private static final Logger logger = LoggerFactory.getLogger(VitalSignsController.class);
 
     @GetMapping()
-    @Operation(summary = "Obtiene todos los registros medicos", description = "Permite obtener una lista de todos los registros medicos")
+    @Operation(summary = "Lista los resgistros médicos",description = "Permite listar TODOS los registros médicos almacenados")
     public ResponseEntity<ApiResponse<List<MedicalRecordDetailResponseDTO>>> getAllMedicalRecords()
     {
         try
@@ -60,7 +60,7 @@ public class MedicalRecordController
     }
 
     @PostMapping()
-    @Operation(summary = "Crea un registro medico", description = "Permite crear un registro medico")
+    @Operation(summary = "Crea un nuevo registro médico", description = "Permite crear un nuevo registro médico utilizando el ID del paciente")
     public ResponseEntity<ApiResponse<MedicalRecordResponseDTO>> createMedicalRecord(@Valid @RequestBody CreateMedicalRecordRequestDTO requestDTO )
     {
         try
@@ -91,7 +91,7 @@ public class MedicalRecordController
     }
     
     @GetMapping("{id}")
-    @Operation(summary = "Obtiene un registro medico por ID", description = "Permite obtener un registro medico a través del ID del paciente")
+    @Operation(summary = "Obtiene un registro médico por ID del paciente", description = "Permite obtener un registro médico consultando con el ID del paciente")
     public ResponseEntity<ApiResponse<MedicalRecordDetailResponseDTO>> getById(@PathVariable Long id)
     {
         try

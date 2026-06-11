@@ -25,7 +25,7 @@ public class DiagnosesController
     private static final Logger logger = LoggerFactory.getLogger(DiagnosesController.class);
 
     @PostMapping()
-    @Operation(summary = "Crea un nuevo diagnostico", description = "Permite registrar un nuevo diagnostico")
+    @Operation(summary = "Crear diagnostico", description = "Permite crear diagnostico con id del paciente, descripcion y notas")
     public ResponseEntity<ApiResponse<DiagnosisResponseDTO>> createDiagnosis(@Valid @RequestBody CreateDiagnosisRequestDTO requestDTO)
     {
         try

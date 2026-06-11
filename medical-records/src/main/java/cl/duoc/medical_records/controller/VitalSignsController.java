@@ -27,7 +27,7 @@ public class VitalSignsController
     private static final Logger logger = LoggerFactory.getLogger(VitalSignsController.class);
    
     @PostMapping()
-    @Operation(summary = "Registra signos vitales", description = "Permite registrar signos vitales")
+    @Operation(summary = "Registra signos vitales", description = "Permite registrar los signos vitales relacionados al ID de visita médica")
     public ResponseEntity<ApiResponse<VitalSignResponseDTO>> createVitalSings(@Valid @RequestBody CreateVitalSignRequestDTO requestDTO)
     {
         try
@@ -44,12 +44,12 @@ public class VitalSignsController
         }
         catch (Exception e)
         {
-            logger.error("Error al registrar diagnostico: ", e.getMessage());
+            logger.error("Error al registrar signos vitales: {}", e.getMessage());
             ApiResponse<VitalSignResponseDTO> response =
-                new ApiResponse<VitalSignResponseDTO>
+                new ApiResponse<>
                 (
                     400,
-                    "Error al registrar diagnostico: " + e.getMessage(),
+                    "Error al registrar signos vitales: " + e.getMessage(),
                     null
                 );
             return ResponseEntity.badRequest().body(response);
