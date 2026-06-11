@@ -19,40 +19,74 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/medical-records")
 public class MedicalRecordController 
 {
     private final MedicalRecordService medicalRecordService;
+    private static final Logger logger = LoggerFactory.getLogger(VitalSignsController.class);
 
     @GetMapping()
     @Operation(summary = "Lista los resgistros médicos",description = "Permite listar TODOS los registros médicos almacenados")
     public ResponseEntity<ApiResponse<List<MedicalRecordDetailResponseDTO>>> getAllMedicalRecords()
     {
-        List<MedicalRecordDetailResponseDTO> medicalRecords = medicalRecordService.listAll();
-        ApiResponse<List<MedicalRecordDetailResponseDTO>> response = 
-            new ApiResponse<>
-            (200,
-            "Listado de registros médicos",
-            medicalRecords
-            );
-        return ResponseEntity.ok(response);
+        try
+        {
+            List<MedicalRecordDetailResponseDTO> medicalRecords = medicalRecordService.listAll();
+            ApiResponse<List<MedicalRecordDetailResponseDTO>> response = 
+                new ApiResponse<>
+                (200,
+                "Listado de registros médicos",
+                medicalRecords
+                );
+            return ResponseEntity.ok(response);
+        }
+        catch (Exception e)
+        {
+            logger.error("Error al registrar diagnostico: ", e.getMessage());
+            ApiResponse<List<MedicalRecordDetailResponseDTO>> response =
+                new ApiResponse<List<MedicalRecordDetailResponseDTO>>
+                (
+                    400,
+                    "Error al registrar diagnostico: " + e.getMessage(),
+                    null
+                );
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 
     @PostMapping()
     @Operation(summary = "Crea un nuevo registro médico", description = "Permite crear un nuevo registro médico utilizando el ID del paciente")
     public ResponseEntity<ApiResponse<MedicalRecordResponseDTO>> createMedicalRecord(@Valid @RequestBody CreateMedicalRecordRequestDTO requestDTO )
     {
-        MedicalRecordResponseDTO medicalRecord = medicalRecordService.create(requestDTO);
-        ApiResponse<MedicalRecordResponseDTO> response =
-            new ApiResponse<>
-            (
-                200,
-                "Registro médico creado",
-                medicalRecord
-            );
-        return ResponseEntity.ok(response);
+        try
+        {
+            MedicalRecordResponseDTO medicalRecord = medicalRecordService.create(requestDTO);
+            ApiResponse<MedicalRecordResponseDTO> response =
+                new ApiResponse<>
+                (
+                    200,
+                    "Registro médico creado",
+                    medicalRecord
+                );
+            return ResponseEntity.ok(response);
+        }
+        catch (Exception e)
+        {
+            logger.error("Error al registrar diagnostico: ", e.getMessage());
+            ApiResponse<MedicalRecordResponseDTO> response =
+                new ApiResponse<MedicalRecordResponseDTO>
+                (
+                    400,
+                    "Error al registrar diagnostico: " + e.getMessage(),
+                    null
+                );
+            return ResponseEntity.badRequest().body(response);
+        }
 
     }
     
@@ -60,14 +94,29 @@ public class MedicalRecordController
     @Operation(summary = "Obtiene un registro médico por ID del paciente", description = "Permite obtener un registro médico consultando con el ID del paciente")
     public ResponseEntity<ApiResponse<MedicalRecordDetailResponseDTO>> getById(@PathVariable Long id)
     {
-        MedicalRecordDetailResponseDTO medicalRecord = medicalRecordService.findByPatientId(id);
-        ApiResponse<MedicalRecordDetailResponseDTO> response = 
-            new ApiResponse<>
-            (
-                200,
-                "Registro médico encontrado",
-                medicalRecord
-            );
-        return ResponseEntity.ok(response);
+        try
+        {
+            MedicalRecordDetailResponseDTO medicalRecord = medicalRecordService.findByPatientId(id);
+            ApiResponse<MedicalRecordDetailResponseDTO> response = 
+                new ApiResponse<>
+                (
+                    200,
+                    "Registro médico encontrado",
+                    medicalRecord
+                );
+            return ResponseEntity.ok(response);
+        }
+        catch (Exception e)
+        {
+            logger.error("Error al registrar diagnostico: ", e.getMessage());
+            ApiResponse<MedicalRecordDetailResponseDTO> response =
+                new ApiResponse<MedicalRecordDetailResponseDTO>
+                (
+                    400,
+                    "Error al registrar diagnostico: " + e.getMessage(),
+                    null
+                );
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 }

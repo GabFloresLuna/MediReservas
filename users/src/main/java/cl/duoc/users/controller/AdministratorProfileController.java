@@ -18,17 +18,21 @@ import cl.duoc.users.dto.ApiResponse;
 import cl.duoc.users.dto.CreateAdministratorProfileRequestDTO;
 import cl.duoc.users.dto.UpdateAdministratorProfileRequestDTO;
 import cl.duoc.users.service.AdministratorProfileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/administrator-profiles")
 @RequiredArgsConstructor
+@Tag(name = "Administrator Profiles", description = "Endpoints para la gestión de perfiles de administrador")
 public class AdministratorProfileController {
 
 	private final AdministratorProfileService administratorProfileService;
 
 	@PostMapping
+	@Operation(summary = "Crear perfil de administrador", description = "Crea un perfil de administrador para un usuario existente que ya posee perfil general. Al crearlo, se asigna el rol ADMIN en Auth Service.")
 	public ResponseEntity<ApiResponse<AdministratorProfileResponseDTO>> createAdministratorProfile(
 			@Valid @RequestBody CreateAdministratorProfileRequestDTO request) {
 		AdministratorProfileResponseDTO response = administratorProfileService.createAdministratorProfile(request);
@@ -41,6 +45,7 @@ public class AdministratorProfileController {
 	}
 
 	@GetMapping
+	@Operation(summary = "Listar perfiles de administrador", description = "Obtiene todos los perfiles de administrador registrados.")
 	public ResponseEntity<ApiResponse<List<AdministratorProfileResponseDTO>>> getAllAdministratorProfiles() {
 		List<AdministratorProfileResponseDTO> response = administratorProfileService.getAllAdministratorProfiles();
 
@@ -52,6 +57,7 @@ public class AdministratorProfileController {
 	}
 
 	@GetMapping("/{administratorProfileId}")
+	@Operation(summary = "Buscar perfil de administrador por ID", description = "Obtiene un perfil de administrador mediante su identificador.")
 	public ResponseEntity<ApiResponse<AdministratorProfileResponseDTO>> getAdministratorProfileById(
 			@PathVariable Long administratorProfileId) {
 		AdministratorProfileResponseDTO response = administratorProfileService
@@ -65,6 +71,7 @@ public class AdministratorProfileController {
 	}
 
 	@GetMapping("/user/{userId}")
+	@Operation(summary = "Buscar perfil de administrador por usuario", description = "Obtiene el perfil de administrador asociado a un usuario mediante su userId.")
 	public ResponseEntity<ApiResponse<AdministratorProfileResponseDTO>> getAdministratorProfileByUserId(
 			@PathVariable Long userId) {
 		AdministratorProfileResponseDTO response = administratorProfileService
@@ -78,6 +85,7 @@ public class AdministratorProfileController {
 	}
 
 	@GetMapping("/user/{userId}/exists")
+	@Operation(summary = "Validar existencia de perfil de administrador", description = "Verifica si un usuario ya posee perfil de administrador.")
 	public ResponseEntity<ApiResponse<Boolean>> existsByUserId(
 			@PathVariable Long userId) {
 		boolean response = administratorProfileService.existsByUserId(userId);
@@ -90,6 +98,7 @@ public class AdministratorProfileController {
 	}
 
 	@PutMapping("/{administratorProfileId}")
+	@Operation(summary = "Actualizar perfil de administrador", description = "Actualiza los datos administrativos del perfil, como departamento y cargo.")
 	public ResponseEntity<ApiResponse<AdministratorProfileResponseDTO>> updateAdministratorProfile(
 			@PathVariable Long administratorProfileId,
 			@Valid @RequestBody UpdateAdministratorProfileRequestDTO request) {
@@ -105,6 +114,7 @@ public class AdministratorProfileController {
 	}
 
 	@DeleteMapping("/{administratorProfileId}")
+	@Operation(summary = "Eliminar perfil de administrador", description = "Elimina un perfil de administrador registrado.")
 	public ResponseEntity<ApiResponse<Object>> deleteAdministratorProfile(
 			@PathVariable Long administratorProfileId) {
 		administratorProfileService.deleteAdministratorProfile(administratorProfileId);

@@ -4,6 +4,7 @@ import cl.duoc.notifications.dto.ApiResponse;
 import cl.duoc.notifications.dto.NotificationTemplateCreateRequestDTO;
 import cl.duoc.notifications.dto.NotificationTemplateResponseDTO;
 import cl.duoc.notifications.service.NotificationTemplateService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ public class NotificationTemplateController {
     private final NotificationTemplateService templateService;
 
     @PostMapping
+    @Operation(summary = "Crear una nueva plantilla de notificación", description = "Crea una nueva plantilla de notificación que puede ser utilizada para enviar notificaciones del sistema.")
     public ResponseEntity<ApiResponse<NotificationTemplateResponseDTO>> createTemplate(
         @Valid @RequestBody NotificationTemplateCreateRequestDTO dto) {
             NotificationTemplateResponseDTO response = templateService.createTemplate(dto);
@@ -36,6 +38,7 @@ public class NotificationTemplateController {
     }
 
     @GetMapping
+    @Operation(summary = "Obtener todas las plantillas de notificación", description = "Retorna una lista de todas las plantillas de notificación disponibles.")
     public ResponseEntity<ApiResponse<List<NotificationTemplateResponseDTO>>> getAllTemplates() {
         List<NotificationTemplateResponseDTO> templates = templateService.getAllTemplates();
         return ResponseEntity.ok(
@@ -46,6 +49,7 @@ public class NotificationTemplateController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener una plantilla de notificación por ID", description = "Retorna una plantilla de notificación específica según su ID.")
     public ResponseEntity<ApiResponse<NotificationTemplateResponseDTO>> getTemplateById(
             @PathVariable Long id) {
         NotificationTemplateResponseDTO response = templateService.getTemplateById(id);
@@ -57,6 +61,7 @@ public class NotificationTemplateController {
     }
 
     @GetMapping("/active")
+    @Operation(summary = "Obtiene todas las plantillas de notificación activas", description = "Retorna una lista de todas las plantillas de notificación activas disponibles.")
     public ResponseEntity<ApiResponse<List<NotificationTemplateResponseDTO>>> getActiveTemplates() {
         List<NotificationTemplateResponseDTO> templates = templateService.getActiveTemplates();
         return ResponseEntity.ok(

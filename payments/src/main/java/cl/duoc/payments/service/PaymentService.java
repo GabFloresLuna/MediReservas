@@ -18,7 +18,11 @@ import cl.duoc.payments.repository.PaymentRepository;
 import cl.duoc.payments.repository.RefundRepository;
 import jakarta.transaction.Transactional;
 
+// IMPORTS PARA LOGS
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
@@ -35,6 +39,7 @@ public class PaymentService {
 
     // --- OBTENER TODOS LOS PAGOS ---
     public List<PaymentDTO> findAllPayments() {
+        log.info("Buscando el listado completo de todos los pagos registrados.");
         return paymentRepository.findAll().stream()
                 .map(this::convertToPaymentDTO)
                 .toList();
@@ -42,13 +47,18 @@ public class PaymentService {
 
     // --- OBTENER PAGO POR ID ---
     public PaymentDTO findPaymentById(Long id) {
+        log.info("Buscando pago con ID: {}", id);
         Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
+                .orElseThrow(() -> {
+                    log.error("Error: No se encontró el pago con ID: {}", id);
+                    return new RuntimeException("Pago no encontrado");
+                });
         return convertToPaymentDTO(payment);
     }
 
     // --- OBTENER PAGOS POR APPOINTMENT ID ---
     public List<PaymentDTO> findPaymentsByAppointmentId(Long appointmentId) {
+        log.info("Buscando pagos asociados a la cita (Appointment ID): {}", appointmentId);
         return paymentRepository.findByAppointmentId(appointmentId).stream()
                 .map(this::convertToPaymentDTO)
                 .toList();
@@ -56,6 +66,7 @@ public class PaymentService {
 
     // --- OBTENER PAGOS POR PATIENT USER ID ---
     public List<PaymentDTO> findPaymentsByPatientUserId(Long patientUserId) {
+        log.info("Buscando pagos asociados al paciente (Patient User ID): {}", patientUserId);
         return paymentRepository.findByPatientUserId(patientUserId).stream()
                 .map(this::convertToPaymentDTO)
                 .toList();
@@ -63,6 +74,7 @@ public class PaymentService {
 
     // --- OBTENER PAGOS POR ESTADO ---
     public List<PaymentDTO> findPaymentsByStatus(String status) {
+        log.info("Filtrando pagos por estado: {}", status);
         return paymentRepository.findByPaymentStatus(status).stream()
                 .map(this::convertToPaymentDTO)
                 .toList();
@@ -71,6 +83,9 @@ public class PaymentService {
     // --- CREAR NUEVO PAGO ---
     @Transactional
     public PaymentDTO createPayment(PaymentDTO paymentDTO) {
+        log.info("Iniciando creación de un nuevo pago para la cita ID: {} por un monto de: {}", 
+                paymentDTO.getAppointmentId(), paymentDTO.getAmount());
+        
         Payment payment = new Payment();
         payment.setAppointmentId(paymentDTO.getAppointmentId());
         payment.setPatientUserId(paymentDTO.getPatientUserId());
@@ -81,39 +96,58 @@ public class PaymentService {
         payment.setCreatedAt(LocalDateTime.now());
         
         Payment savedPayment = paymentRepository.save(payment);
+        log.info("Pago creado exitosamente en estado PENDING con ID asignado: {} y código de transacción: {}", 
+                savedPayment.getPaymentId(), savedPayment.getTransactionCode());
         return convertToPaymentDTO(savedPayment);
     }
 
     // --- ACTUALIZAR ESTADO DE PAGO (Ej: COMPLETADO, FALLIDO) ---
     @Transactional
     public PaymentDTO updatePaymentStatus(Long id, String status, String transactionCode) {
+        log.info("Solicitando actualización de estado para el pago ID: {}. Nuevo estado: {}", id, status);
+        
         Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
+                .orElseThrow(() -> {
+                    log.error("Error al actualizar estado: Pago no encontrado con ID: {}", id);
+                    return new RuntimeException("Pago no encontrado");
+                });
         
         payment.setPaymentStatus(status);
         
         if ("COMPLETED".equals(status)) {
             payment.setPaidAt(LocalDateTime.now());
+            log.info("El pago ID: {} ha sido marcado como COMPLETED. Se registra fecha de pago.", id);
         }
         
         if (transactionCode != null && !transactionCode.isEmpty()) {
+            log.info("Actualizando código de transacción para el pago ID: {} con valor: {}", id, transactionCode);
             payment.setTransactionCode(transactionCode);
         }
         
-        return convertToPaymentDTO(paymentRepository.save(payment));
+        Payment updatedPayment = paymentRepository.save(payment);
+        log.info("Estado del pago ID: {} actualizado correctamente en base de datos.", id);
+        return convertToPaymentDTO(updatedPayment);
     }
 
     // --- GENERAR COMPROBANTE DE PAGO ---
     @Transactional
     public PaymentReceiptDTO generateReceipt(Long paymentId) {
+        log.info("Iniciando generación de comprobante de pago para el registro ID: {}", paymentId);
+        
         Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
+                .orElseThrow(() -> {
+                    log.error("Error al generar comprobante: No existe el pago con ID: {}", paymentId);
+                    return new RuntimeException("Pago no encontrado");
+                });
         
         if (paymentReceiptRepository.findByPayment_PaymentId(paymentId).isPresent()) {
+            log.error("Error al generar comprobante: Ya existe una boleta emitida para el pago ID: {}", paymentId);
             throw new RuntimeException("Ya existe un comprobante para este pago");
         }
         
         if (!"COMPLETED".equals(payment.getPaymentStatus())) {
+            log.error("Error al generar comprobante: El pago ID: {} se encuentra en estado {}, debe estar COMPLETED", 
+                    paymentId, payment.getPaymentStatus());
             throw new RuntimeException("Solo se pueden generar comprobantes para pagos completados");
         }
         
@@ -124,28 +158,43 @@ public class PaymentService {
         receipt.setTotalAmount(payment.getAmount());
         
         PaymentReceipt savedReceipt = paymentReceiptRepository.save(receipt);
+        log.info("Comprobante generado con éxito. ID: {}, Número de boleta: {}", 
+                savedReceipt.getPaymentReceiptId(), savedReceipt.getReceiptNumber());
         return convertToReceiptDTO(savedReceipt);
     }
 
     // --- OBTENER COMPROBANTE POR ID DE PAGO ---
     public PaymentReceiptDTO getReceiptByPaymentId(Long paymentId) {
+        log.info("Buscando comprobante asociado al pago ID: {}", paymentId);
         PaymentReceipt receipt = paymentReceiptRepository.findByPayment_PaymentId(paymentId)
-                .orElseThrow(() -> new RuntimeException("Comprobante no encontrado para este pago"));
+                .orElseThrow(() -> {
+                    log.error("Error: No se encontró comprobante para el pago ID: {}", paymentId);
+                    return new RuntimeException("Comprobante no encontrado para este pago");
+                });
         return convertToReceiptDTO(receipt);
     }
 
     // --- SOLICITAR REEMBOLSO ---
     @Transactional
     public RefundDTO requestRefund(Long paymentId, BigDecimal refundAmount, String reason) {
+        log.warn("Alerta: Se ha iniciado una solicitud de reembolso para el pago ID: {}. Monto solicitado: {}. Motivo: {}", 
+                paymentId, refundAmount, reason);
+        
         Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
+                .orElseThrow(() -> {
+                    log.error("Error en reembolso: No se encontró el pago con ID: {}", paymentId);
+                    return new RuntimeException("Pago no encontrado");
+                });
         
         if (!"COMPLETED".equals(payment.getPaymentStatus())) {
+            log.error("Error en reembolso: El pago ID: {} está en estado {} (Debe estar COMPLETED)", 
+                    paymentId, payment.getPaymentStatus());
             throw new RuntimeException("Solo se pueden reembolsar pagos completados");
         }
 
-
         if (refundAmount.compareTo(payment.getAmount()) > 0) {
+            log.error("Error en reembolso: El monto solicitado ({}) supera el valor original de la transacción ({})", 
+                    refundAmount, payment.getAmount());
             throw new RuntimeException("El monto de reembolso no puede exceder el monto del pago");
         }
         
@@ -161,14 +210,21 @@ public class PaymentService {
         payment.setPaymentStatus("REFUNDING");
         paymentRepository.save(payment);
         
+        log.info("Solicitud de reembolso ID: {} creada con éxito. El pago ID: {} cambió a estado REFUNDING.", 
+                savedRefund.getRefundId(), paymentId);
         return convertToRefundDTO(savedRefund);
     }
 
     // --- ACTUALIZAR ESTADO DE REEMBOLSO ---
     @Transactional
     public RefundDTO updateRefundStatus(Long refundId, String status) {
+        log.info("Actualizando estado de la solicitud de reembolso ID: {}. Nuevo estado: {}", refundId, status);
+        
         Refund refund = refundRepository.findById(refundId)
-                .orElseThrow(() -> new RuntimeException("Reembolso no encontrado"));
+                .orElseThrow(() -> {
+                    log.error("Error al actualizar reembolso: Registro no encontrado con ID: {}", refundId);
+                    return new RuntimeException("Reembolso no encontrado");
+                });
         
         refund.setRefundStatus(status);
         Refund savedRefund = refundRepository.save(refund);
@@ -177,13 +233,17 @@ public class PaymentService {
             Payment payment = refund.getPayment();
             payment.setPaymentStatus("REFUNDED");
             paymentRepository.save(payment);
+            log.warn("El reembolso ID: {} se ha completado. El pago ID: {} pasa a estado final REFUNDED.", 
+                    refundId, payment.getPaymentId());
         }
         
+        log.info("Estado del reembolso ID: {} modificado con éxito.", refundId);
         return convertToRefundDTO(savedRefund);
     }
 
     // --- OBTENER REEMBOLSOS POR PAGO ---
     public List<RefundDTO> getRefundsByPaymentId(Long paymentId) {
+        log.info("Listando todos los reembolsos históricos solicitados para el pago ID: {}", paymentId);
         return refundRepository.findByPayment_PaymentId(paymentId).stream()
                 .map(this::convertToRefundDTO)
                 .toList();
@@ -192,14 +252,22 @@ public class PaymentService {
     // --- ELIMINAR PAGO (Solo si está pendiente) ---
     @Transactional
     public void deletePayment(Long id) {
+        log.warn("Intento de eliminación física del registro de pago ID: {}", id);
+        
         Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pago no encontrado"));
+                .orElseThrow(() -> {
+                    log.error("Error al eliminar: No se encontró el pago con ID: {}", id);
+                    return new RuntimeException("Pago no encontrado");
+                });
         
         if (!"PENDING".equals(payment.getPaymentStatus())) {
+            log.error("Error al eliminar: Cancelado. El pago ID: {} se encuentra en estado {} y no puede borrarse.", 
+                    id, payment.getPaymentStatus());
             throw new RuntimeException("Solo se pueden eliminar pagos en estado PENDING");
         }
         
         paymentRepository.delete(payment);
+        log.info("El pago ID: {} ha sido eliminado físicamente de la base de datos de manera exitosa.", id);
     }
 
     // --- MÉTODOS AUXILIARES ---

@@ -34,3 +34,6 @@ build/
 
 ### MY_SQL ###
 /mysql_data/
+
+### Logger ###
+/logs/

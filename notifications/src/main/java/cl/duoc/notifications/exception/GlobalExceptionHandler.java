@@ -35,6 +35,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<ApiResponse<Object>> handleInvalidJson(
 			HttpMessageNotReadableException ex) {
+	
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(new ApiResponse<>(
 						400,
@@ -45,6 +46,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
 	public ResponseEntity<ApiResponse<Object>> handleMethodNotAllowed(
 			HttpRequestMethodNotSupportedException ex) {
+	
 		return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
 				.body(new ApiResponse<>(
 						405,
@@ -55,6 +57,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<ApiResponse<Object>> handleDataIntegrityViolation(
 			DataIntegrityViolationException ex) {
+
 		return ResponseEntity.status(HttpStatus.CONFLICT)
 				.body(new ApiResponse<>(
 						409,
@@ -84,6 +87,7 @@ public class GlobalExceptionHandler {
 			code = 409;
 		}
 
+	
 		return ResponseEntity.status(status)
 				.body(new ApiResponse<>(
 						code,
@@ -93,6 +97,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiResponse<Object>> handleGenericException(Exception ex) {
+	
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 				.body(new ApiResponse<>(
 						500,

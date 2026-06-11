@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.validation.constraints.Size;;
 
 @Entity
 @Table(name = "doctors")
@@ -33,7 +32,6 @@ public class Doctors {
     private Long userId;
 
     @Column(name = "medical_license_number", nullable = false, unique = true)
-    @Size(max = 50, message = "El numero de licencia medica no puede ser mayor a 50 caracteres") 
     private String medicalLicenseNumber;
 
     @Column(name = "active",nullable = false, unique = false)

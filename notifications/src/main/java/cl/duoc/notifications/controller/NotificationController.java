@@ -7,6 +7,7 @@ import cl.duoc.notifications.dto.NotificationStatusUpdateRequestDTO;
 import cl.duoc.notifications.dto.NotificationUpdateRequestDTO;
 import cl.duoc.notifications.enums.NotificationStatus;
 import cl.duoc.notifications.service.NotificationService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,6 +33,7 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @PostMapping
+    @Operation(summary = "Crear una nueva notificación", description = "Envía una nueva notificación de un evento del sistema.")
     public ResponseEntity<ApiResponse<NotificationResponseDTO>> createNotification(
             @Valid @RequestBody NotificationSendRequestDTO dto) {
         NotificationResponseDTO response = notificationService.createNotification(dto);
@@ -43,6 +45,7 @@ public class NotificationController {
     }
 
     @GetMapping
+    @Operation(summary = "Obtener todas las notificaciones", description = "Retorna una lista con todas las notificaciones del sistema.")
     public ResponseEntity<ApiResponse<List<NotificationResponseDTO>>> getAllNotifications() {
         List<NotificationResponseDTO> notifications = notificationService.getAllNotifications();
         return ResponseEntity.ok(
@@ -53,6 +56,7 @@ public class NotificationController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener una notificación por ID", description = "Retorna una notificación específica según su ID.")
     public ResponseEntity<ApiResponse<NotificationResponseDTO>> getNotificationById(
             @PathVariable Long id) {
         NotificationResponseDTO response = notificationService.getNotificationById(id);
@@ -64,6 +68,7 @@ public class NotificationController {
     }
 
     @GetMapping("/user/{userId}")
+    @Operation(summary = "Obtener notificaciones por ID de usuario", description = "Retorna una lista de notificaciones asociadas a un usuario específico.")
     public ResponseEntity<ApiResponse<List<NotificationResponseDTO>>> getNotificationsByUserId(
             @PathVariable Long userId) {
         List<NotificationResponseDTO> notifications = notificationService.getNotificationsByUserId(userId);
@@ -75,6 +80,7 @@ public class NotificationController {
     }
 
     @GetMapping("/status/{status}")
+    @Operation(summary = "Obtener notificaciones por estado", description = "Retorna una lista de notificaciones según su estado.")
     public ResponseEntity<ApiResponse<List<NotificationResponseDTO>>> getNotificationsByStatus(
             @PathVariable NotificationStatus status) {
         List<NotificationResponseDTO> notifications = notificationService.getNotificationsByStatus(status);
@@ -86,6 +92,7 @@ public class NotificationController {
     }
 
     @GetMapping("/date/{date}")
+    @Operation(summary = "Obtener notificaciones por fecha", description = "Retorna una lista de notificaciones creadas en una fecha específica.")
     public ResponseEntity<ApiResponse<List<NotificationResponseDTO>>> getNotificationsByDate(
             @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         List<NotificationResponseDTO> notifications = notificationService.getNotificationsByDate(date);
@@ -97,6 +104,7 @@ public class NotificationController {
     }
 
     @GetMapping("/user/{userId}/status/{status}")
+    @Operation(summary = "Obtener notificaciones por ID de usuario y estado", description = "Retorna una lista de notificaciones asociadas a un usuario específico y según su estado.")
     public ResponseEntity<ApiResponse<List<NotificationResponseDTO>>> getNotificationsByUserIdAndStatus(
             @PathVariable Long userId, @PathVariable NotificationStatus status) {
         List<NotificationResponseDTO> notifications = notificationService.getNotificationsByUserIdAndStatus(userId, status);
@@ -108,6 +116,7 @@ public class NotificationController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar una notificación", description = "Actualiza los detalles de una notificación existente según su ID.")
     public ResponseEntity<ApiResponse<NotificationResponseDTO>> updateNotification(
         @PathVariable Long id,
         @Valid @RequestBody NotificationUpdateRequestDTO dto) {
@@ -120,6 +129,7 @@ public class NotificationController {
     }
 
     @PatchMapping("/{id}/status")
+    @Operation(summary = "Actualizar el estado de una notificación", description = "Actualiza el estado de una notificación existente según su ID.")
     public ResponseEntity<ApiResponse<NotificationResponseDTO>> updateNotificationStatus(
         @PathVariable Long id,
         @Valid @RequestBody NotificationStatusUpdateRequestDTO dto) {

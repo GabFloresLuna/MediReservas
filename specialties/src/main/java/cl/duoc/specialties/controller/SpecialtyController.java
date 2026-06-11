@@ -17,17 +17,21 @@ import cl.duoc.specialties.dto.ApiResponse;
 import cl.duoc.specialties.dto.CreateSpecialtyRequestDTO;
 import cl.duoc.specialties.dto.SpecialtyResponseDTO;
 import cl.duoc.specialties.service.SpecialtyService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/specialties")
 @RequiredArgsConstructor
+@Tag(name = "Specialties", description = "Endpoints para la gestión de especialidades médicas")
 public class SpecialtyController {
 
 	private final SpecialtyService specialtyService;
 
 	@PostMapping
+	@Operation(summary = "Crear especialidad", description = "Registra una nueva especialidad médica en el catálogo del sistema.")
 	public ResponseEntity<ApiResponse<SpecialtyResponseDTO>> createSpecialty(
 			@Valid @RequestBody CreateSpecialtyRequestDTO request) {
 		SpecialtyResponseDTO response = specialtyService.createSpecialty(request);
@@ -40,6 +44,7 @@ public class SpecialtyController {
 	}
 
 	@GetMapping
+	@Operation(summary = "Listar especialidades", description = "Obtiene todas las especialidades médicas registradas.")
 	public ResponseEntity<ApiResponse<List<SpecialtyResponseDTO>>> getAllSpecialties() {
 		List<SpecialtyResponseDTO> response = specialtyService.getAllSpecialties();
 
@@ -51,6 +56,7 @@ public class SpecialtyController {
 	}
 
 	@GetMapping("/{specialtyId}")
+	@Operation(summary = "Buscar especialidad por ID", description = "Obtiene una especialidad médica mediante su identificador.")
 	public ResponseEntity<ApiResponse<SpecialtyResponseDTO>> getSpecialtyById(
 			@PathVariable Long specialtyId) {
 		SpecialtyResponseDTO response = specialtyService.getSpecialtyById(specialtyId);
@@ -63,6 +69,7 @@ public class SpecialtyController {
 	}
 
 	@GetMapping("/name/{specialtyName}")
+	@Operation(summary = "Buscar especialidad por nombre", description = "Obtiene una especialidad médica mediante su nombre.")
 	public ResponseEntity<ApiResponse<SpecialtyResponseDTO>> getSpecialtyByName(
 			@PathVariable String specialtyName) {
 		SpecialtyResponseDTO response = specialtyService.getSpecialtyByName(specialtyName);
@@ -75,6 +82,7 @@ public class SpecialtyController {
 	}
 
 	@GetMapping("/{specialtyId}/exists")
+	@Operation(summary = "Validar existencia de especialidad", description = "Verifica si existe una especialidad médica mediante su identificador.")
 	public ResponseEntity<ApiResponse<Boolean>> existsById(
 			@PathVariable Long specialtyId) {
 		boolean response = specialtyService.existsById(specialtyId);
@@ -87,6 +95,7 @@ public class SpecialtyController {
 	}
 
 	@GetMapping("/{specialtyId}/active")
+	@Operation(summary = "Validar especialidad activa", description = "Verifica si una especialidad existe y se encuentra activa.")
 	public ResponseEntity<ApiResponse<Boolean>> existsActiveById(
 			@PathVariable Long specialtyId) {
 		boolean response = specialtyService.existsActiveById(specialtyId);
@@ -99,6 +108,7 @@ public class SpecialtyController {
 	}
 
 	@PutMapping("/{specialtyId}")
+	@Operation(summary = "Actualizar especialidad", description = "Actualiza el nombre y la descripción de una especialidad médica.")
 	public ResponseEntity<ApiResponse<SpecialtyResponseDTO>> updateSpecialty(
 			@PathVariable Long specialtyId,
 			@Valid @RequestBody CreateSpecialtyRequestDTO request) {
@@ -112,6 +122,7 @@ public class SpecialtyController {
 	}
 
 	@PatchMapping("/{specialtyId}/deactivate")
+	@Operation(summary = "Desactivar especialidad", description = "Desactiva lógicamente una especialidad médica.")
 	public ResponseEntity<ApiResponse<SpecialtyResponseDTO>> deactivateSpecialty(
 			@PathVariable Long specialtyId) {
 		SpecialtyResponseDTO response = specialtyService.deactivateSpecialty(specialtyId);
@@ -124,6 +135,7 @@ public class SpecialtyController {
 	}
 
 	@PatchMapping("/{specialtyId}/activate")
+	@Operation(summary = "Activar especialidad", description = "Activa una especialidad médica previamente desactivada.")
 	public ResponseEntity<ApiResponse<SpecialtyResponseDTO>> activateSpecialty(
 			@PathVariable Long specialtyId) {
 		SpecialtyResponseDTO response = specialtyService.activateSpecialty(specialtyId);

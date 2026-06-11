@@ -79,6 +79,11 @@ public class GlobalExceptionHandler {
 			code = 404;
 		}
 
+		if (message != null && message.toLowerCase().contains("no existe")) {
+			status = HttpStatus.NOT_FOUND;
+			code = 404;
+		}
+
 		if (message != null && message.toLowerCase().contains("ya existe")) {
 			status = HttpStatus.CONFLICT;
 			code = 409;

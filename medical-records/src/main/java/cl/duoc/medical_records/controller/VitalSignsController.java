@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cl.duoc.medical_records.dto.ApiResponse;
-import cl.duoc.medical_records.dto.CreateVitalSignRequestDTO;
+import cl.duoc.medical_records.dto.CreateVitalSignRequestDTO; 
 import cl.duoc.medical_records.dto.VitalSignResponseDTO;
 import cl.duoc.medical_records.service.VitalSignsService;
 import io.swagger.v3.oas.annotations.Operation;

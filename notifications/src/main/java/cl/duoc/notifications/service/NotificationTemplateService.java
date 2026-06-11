@@ -5,11 +5,13 @@ import cl.duoc.notifications.dto.NotificationTemplateResponseDTO;
 import cl.duoc.notifications.model.NotificationTemplate;
 import cl.duoc.notifications.repository.NotificationTemplateRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationTemplateService {
@@ -18,6 +20,7 @@ public class NotificationTemplateService {
 
     public NotificationTemplateResponseDTO createTemplate(NotificationTemplateCreateRequestDTO dto) {
         if (templateRepository.existsByTemplateCode(dto.getTemplateCode())) {
+            log.warn("Intento de crear plantilla con código duplicado: {}", dto.getTemplateCode());
             throw new RuntimeException("El código de plantilla ya existe: " + dto.getTemplateCode());
         }
 
@@ -40,7 +43,10 @@ public class NotificationTemplateService {
 
     public NotificationTemplateResponseDTO getTemplateById(Long id) {
         NotificationTemplate template = templateRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Plantilla no encontrada con ID: " + id));
+                .orElseThrow(() -> {
+                    log.warn("Plantilla no encontrada con ID: {}", id);
+                    return new RuntimeException("Plantilla no encontrada con ID: " + id);
+                });
 
         return toResponseDTO(template);
     }
