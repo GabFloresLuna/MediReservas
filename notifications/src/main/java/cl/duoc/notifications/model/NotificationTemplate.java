@@ -1,6 +1,7 @@
 package cl.duoc.notifications.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -51,7 +52,7 @@ public class NotificationTemplate {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "notificationTemplate")
-    private List<Notification> notifications;
+    private List<Notification> notifications = new ArrayList<>();
 
     
 }
