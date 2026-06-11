@@ -18,17 +18,21 @@ import cl.duoc.users.dto.CreateUserRequestDTO;
 import cl.duoc.users.dto.UpdateUserRequestDTO;
 import cl.duoc.users.dto.UserResponseDTO;
 import cl.duoc.users.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
+@Tag(name = "Users", description = "Endpoints para la gestión de usuarios base del sistema")
 public class UserController {
 
 	private final UserService userService;
 
 	@PostMapping
+	@Operation(summary = "Crear usuario base", description = "Crea un usuario base del sistema validando previamente que exista un usuario de autenticación en Auth Service con el correo indicado.")
 	public ResponseEntity<ApiResponse<UserResponseDTO>> createUser(
 			@Valid @RequestBody CreateUserRequestDTO request) {
 		UserResponseDTO response = userService.createUser(request);
@@ -38,6 +42,7 @@ public class UserController {
 	}
 
 	@GetMapping
+	@Operation(summary = "Listar usuarios", description = "Obtiene todos los usuarios base registrados en el sistema.")
 	public ResponseEntity<ApiResponse<List<UserResponseDTO>>> getAllUsers() {
 		List<UserResponseDTO> response = userService.getAllUsers();
 
@@ -46,6 +51,7 @@ public class UserController {
 	}
 
 	@GetMapping("/{userId}")
+	@Operation(summary = "Buscar usuario por ID", description = "Obtiene un usuario base mediante su identificador interno.")
 	public ResponseEntity<ApiResponse<UserResponseDTO>> getUserById(
 			@PathVariable Long userId) {
 		UserResponseDTO response = userService.getUserById(userId);
@@ -55,6 +61,7 @@ public class UserController {
 	}
 
 	@GetMapping("/{userId}/exists")
+	@Operation(summary = "Validar existencia de usuario", description = "Verifica si existe un usuario base mediante su identificador. Este endpoint puede ser utilizado por otros microservicios como referencia lógica.")
 	public ResponseEntity<ApiResponse<Boolean>> existsById(
 			@PathVariable Long userId) {
 		boolean exists = userService.existsById(userId);
@@ -64,6 +71,7 @@ public class UserController {
 	}
 
 	@GetMapping("/run/{run}")
+	@Operation(summary = "Buscar usuario por RUN", description = "Obtiene un usuario base mediante su RUN.")
 	public ResponseEntity<ApiResponse<UserResponseDTO>> getUserByRun(
 			@PathVariable String run) {
 		UserResponseDTO response = userService.getUserByRun(run);
@@ -73,6 +81,7 @@ public class UserController {
 	}
 
 	@GetMapping("/email/{email}")
+	@Operation(summary = "Buscar usuario por correo", description = "Obtiene un usuario base mediante su correo electrónico.")
 	public ResponseEntity<ApiResponse<UserResponseDTO>> getUserByEmail(
 			@PathVariable String email) {
 		UserResponseDTO response = userService.getUserByEmail(email);
@@ -82,6 +91,7 @@ public class UserController {
 	}
 
 	@PutMapping("/{userId}")
+	@Operation(summary = "Actualizar usuario", description = "Actualiza los datos principales de un usuario base, como RUN y correo.")
 	public ResponseEntity<ApiResponse<UserResponseDTO>> updateUser(
 			@PathVariable Long userId,
 			@Valid @RequestBody UpdateUserRequestDTO request) {
@@ -95,6 +105,7 @@ public class UserController {
 	}
 
 	@PatchMapping("/{userId}/activate")
+	@Operation(summary = "Activar usuario", description = "Activa lógicamente un usuario base previamente desactivado.")
 	public ResponseEntity<ApiResponse<UserResponseDTO>> activateUser(
 			@PathVariable Long userId) {
 		UserResponseDTO response = userService.activateUser(userId);
@@ -107,6 +118,7 @@ public class UserController {
 	}
 
 	@PatchMapping("/{userId}/deactivate")
+	@Operation(summary = "Desactivar usuario", description = "Desactiva lógicamente un usuario base sin eliminarlo de la base de datos.")
 	public ResponseEntity<ApiResponse<UserResponseDTO>> deactivateUser(
 			@PathVariable Long userId) {
 		UserResponseDTO response = userService.deactivateUser(userId);

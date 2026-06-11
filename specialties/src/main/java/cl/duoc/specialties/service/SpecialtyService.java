@@ -2,6 +2,8 @@ package cl.duoc.specialties.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import cl.duoc.specialties.dto.CreateSpecialtyRequestDTO;
@@ -15,10 +17,13 @@ import lombok.RequiredArgsConstructor;
 public class SpecialtyService {
 
     private final SpecialtyRepository specialtyRepository;
+    private static final Logger logger = LoggerFactory.getLogger(SpecialtyService.class);
 
     public SpecialtyResponseDTO createSpecialty(CreateSpecialtyRequestDTO request) {
 
         if (specialtyRepository.existsBySpecialtyName(request.specialtyName())) {
+            logger.warn("Creación de especialidad rechazada: ya existe especialidad con nombre {}",
+                    request.specialtyName());
             throw new RuntimeException("Ya existe una especialidad con ese nombre");
         }
 
@@ -46,7 +51,10 @@ public class SpecialtyService {
 
     public SpecialtyResponseDTO getSpecialtyByName(String specialtyName) {
         Specialty specialty = specialtyRepository.findBySpecialtyName(specialtyName)
-                .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: especialidad no encontrada con nombre {}", specialtyName);
+                    return new RuntimeException("Especialidad no encontrada");
+                });
 
         return toResponseDTO(specialty);
     }
@@ -63,6 +71,7 @@ public class SpecialtyService {
         Specialty specialty = findSpecialtyEntityById(specialtyId);
 
         if (!specialty.isActive()) {
+            logger.warn("Desactivación rechazada: especialidad ya estaba desactivada. specialtyId={}", specialtyId);
             throw new RuntimeException("La especialidad ya está desactivada");
         }
 
@@ -75,7 +84,10 @@ public class SpecialtyService {
 
     public Specialty findSpecialtyEntityById(Long specialtyId) {
         return specialtyRepository.findById(specialtyId)
-                .orElseThrow(() -> new RuntimeException("Especialidad no encontrada"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: especialidad no encontrada con ID {}", specialtyId);
+                    return new RuntimeException("Especialidad no encontrada");
+                });
     }
 
     public SpecialtyResponseDTO updateSpecialty(Long specialtyId, CreateSpecialtyRequestDTO request) {
@@ -83,6 +95,7 @@ public class SpecialtyService {
 
         if (!specialty.getSpecialtyName().equalsIgnoreCase(request.specialtyName())
                 && specialtyRepository.existsBySpecialtyName(request.specialtyName())) {
+            logger.warn("Actualización rechazada: ya existe especialidad con nombre {}", request.specialtyName());
             throw new RuntimeException("Ya existe una especialidad con ese nombre");
         }
 
@@ -98,6 +111,7 @@ public class SpecialtyService {
         Specialty specialty = findSpecialtyEntityById(specialtyId);
 
         if (specialty.isActive()) {
+            logger.warn("Activación rechazada: especialidad ya estaba activada. specialtyId={}", specialtyId);
             throw new RuntimeException("La especialidad ya está activada");
         }
 

@@ -1,8 +1,9 @@
 package cl.duoc.auth.service;
 
 import java.util.List;
-import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
+
     private final AuthUserRepository authUserRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -31,21 +34,14 @@ public class AuthService {
     public AuthResponseDTO register(RegisterRequestDTO request) {
 
         if (authUserRepository.existsByEmail(request.email())) {
+            logger.warn("Registro rechazado: ya existe usuario con correo {}", request.email());
             throw new RuntimeException("Ya existe un usuario registrado con ese correo");
-        }
-
-        Role role = roleRepository.findByRoleName(request.roleName())
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
-
-        if (!role.isActive()) {
-            throw new RuntimeException("El rol seleccionado no está activo");
         }
 
         AuthUser authUser = new AuthUser();
         authUser.setEmail(request.email());
         authUser.setPasswordHash(passwordEncoder.encode(request.password()));
         authUser.setEnabled(true);
-        authUser.setRoles(Set.of(role));
 
         AuthUser savedUser = authUserRepository.save(authUser);
 
@@ -64,13 +60,18 @@ public class AuthService {
     public AuthResponseDTO login(LoginRequestDTO request) {
 
         AuthUser authUser = authUserRepository.findByEmail(request.email())
-                .orElseThrow(() -> new RuntimeException("Credenciales inválidas"));
+                .orElseThrow(() -> {
+                    logger.warn("Login rechazado: correo no registrado {}", request.email());
+                    return new RuntimeException("Credenciales inválidas");
+                });
 
         if (!authUser.isEnabled()) {
+            logger.warn("Login rechazado: usuario deshabilitado {}", request.email());
             throw new RuntimeException("El usuario está deshabilitado");
         }
 
         if (!passwordEncoder.matches(request.password(), authUser.getPasswordHash())) {
+            logger.warn("Login rechazado: contraseña incorrecta para {}", request.email());
             throw new RuntimeException("Credenciales inválidas");
         }
 
@@ -119,19 +120,28 @@ public class AuthService {
 
     public AuthUser findAuthUserEntityById(Long authUserId) {
         return authUserRepository.findById(authUserId)
-                .orElseThrow(() -> new RuntimeException("Usuario de autenticación no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: usuario de autenticación no encontrado con ID {}", authUserId);
+                    return new RuntimeException("Usuario de autenticación no encontrado");
+                });
     }
 
     public RoleResponseDTO getRoleById(Long roleId) {
         Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: rol no encontrado con ID {}", roleId);
+                    return new RuntimeException("Rol no encontrado");
+                });
 
         return toRoleResponseDTO(role);
     }
 
     public RoleResponseDTO getRoleByName(String roleName) {
         Role role = roleRepository.findByRoleName(roleName)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: rol no encontrado con nombre {}", roleName);
+                    return new RuntimeException("Rol no encontrado");
+                });
 
         return toRoleResponseDTO(role);
     }
@@ -146,9 +156,13 @@ public class AuthService {
 
     public RoleResponseDTO activateRole(Long roleId) {
         Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Activación de rol rechazada: rol no encontrado con ID {}", roleId);
+                    return new RuntimeException("Rol no encontrado");
+                });
 
         if (role.isActive()) {
+            logger.warn("Activación de rol rechazada: el rol ya estaba activo. roleId={}", roleId);
             throw new RuntimeException("El rol ya está activado");
         }
 
@@ -161,9 +175,13 @@ public class AuthService {
 
     public RoleResponseDTO deactivateRole(Long roleId) {
         Role role = roleRepository.findById(roleId)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Desactivación de rol rechazada: rol no encontrado con ID {}", roleId);
+                    return new RuntimeException("Rol no encontrado");
+                });
 
         if (!role.isActive()) {
+            logger.warn("Desactivación de rol rechazada: el rol ya estaba desactivado. roleId={}", roleId);
             throw new RuntimeException("El rol ya está desactivado");
         }
 
@@ -176,7 +194,10 @@ public class AuthService {
 
     public AuthUserResponseDTO getUserByEmail(String email) {
         AuthUser authUser = authUserRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario de autenticación no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: usuario de autenticación no encontrado con correo {}", email);
+                    return new RuntimeException("Usuario de autenticación no encontrado");
+                });
 
         return toAuthUserResponseDTO(authUser);
     }
@@ -185,6 +206,7 @@ public class AuthService {
         AuthUser authUser = findAuthUserEntityById(authUserId);
 
         if (authUser.isEnabled()) {
+            logger.warn("Habilitación rechazada: el usuario ya estaba habilitado. authUserId={}", authUserId);
             throw new RuntimeException("El usuario ya está habilitado");
         }
 
@@ -199,6 +221,7 @@ public class AuthService {
         AuthUser authUser = findAuthUserEntityById(authUserId);
 
         if (!authUser.isEnabled()) {
+            logger.warn("Deshabilitación rechazada: el usuario ya estaba deshabilitado. authUserId={}", authUserId);
             throw new RuntimeException("El usuario ya está deshabilitado");
         }
 
@@ -213,10 +236,41 @@ public class AuthService {
         AuthUser authUser = findAuthUserEntityById(authUserId);
 
         if (!passwordEncoder.matches(request.currentPassword(), authUser.getPasswordHash())) {
+            logger.warn("Cambio de contraseña rechazado: contraseña actual incorrecta para authUserId={}", authUserId);
             throw new RuntimeException("Credenciales inválidas");
         }
 
         authUser.setPasswordHash(passwordEncoder.encode(request.newPassword()));
+
+        AuthUser savedUser = authUserRepository.save(authUser);
+
+        return toAuthUserResponseDTO(savedUser);
+    }
+
+    public AuthUserResponseDTO assignRole(Long authUserId, String roleName) {
+        AuthUser authUser = findAuthUserEntityById(authUserId);
+
+        Role role = roleRepository.findByRoleName(roleName)
+                .orElseThrow(() -> {
+                    logger.warn("Asignación de rol rechazada: rol no encontrado {}", roleName);
+                    return new RuntimeException("Rol no encontrado");
+                });
+
+        if (!role.isActive()) {
+            logger.warn("Asignación de rol rechazada: rol inactivo {}", roleName);
+            throw new RuntimeException("El rol seleccionado no está activo");
+        }
+
+        boolean alreadyAssigned = authUser.getRoles()
+                .stream()
+                .anyMatch(existingRole -> existingRole.getRoleName().equalsIgnoreCase(roleName));
+
+        if (alreadyAssigned) {
+            logger.warn("Asignación de rol rechazada: usuario ya tiene el rol {}. authUserId={}", roleName, authUserId);
+            throw new RuntimeException("El usuario ya tiene asignado ese rol");
+        }
+
+        authUser.getRoles().add(role);
 
         AuthUser savedUser = authUserRepository.save(authUser);
 

@@ -2,8 +2,11 @@ package cl.duoc.users.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import cl.duoc.users.client.AuthClient;
 import cl.duoc.users.dto.CreatePatientProfileRequestDTO;
 import cl.duoc.users.dto.PatientProfileResponseDTO;
 import cl.duoc.users.dto.UpdatePatientProfileRequestDTO;
@@ -19,27 +22,38 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PatientProfileService {
 
+    private static final Logger logger = LoggerFactory.getLogger(PatientProfileService.class);
+
     private final PatientProfileRepository patientProfileRepository;
     private final ReceptionistProfileRepository receptionistProfileRepository;
     private final AdministratorProfileRepository administratorProfileRepository;
     private final UserProfileRepository userProfileRepository;
     private final UserService userService;
+    private final AuthClient authClient;
 
     public PatientProfileResponseDTO createPatientProfile(CreatePatientProfileRequestDTO request) {
 
         if (!userProfileRepository.existsByUserUserId(request.userId())) {
+            logger.warn("Creación de perfil de paciente rechazada: usuario sin perfil general. userId={}",
+                    request.userId());
             throw new RuntimeException("El usuario debe tener un perfil general antes de crear un perfil de paciente");
         }
 
         if (patientProfileRepository.existsByUserUserId(request.userId())) {
+            logger.warn("Creación de perfil de paciente rechazada: usuario ya tiene perfil de paciente. userId={}",
+                    request.userId());
             throw new RuntimeException("El usuario ya tiene un perfil de paciente");
         }
 
         if (receptionistProfileRepository.existsByUserUserId(request.userId())) {
+            logger.warn("Creación de perfil de paciente rechazada: usuario ya tiene perfil de recepcionista. userId={}",
+                    request.userId());
             throw new RuntimeException("El usuario ya tiene un perfil de recepcionista");
         }
 
         if (administratorProfileRepository.existsByUserUserId(request.userId())) {
+            logger.warn("Creación de perfil de paciente rechazada: usuario ya tiene perfil de administrador. userId={}",
+                    request.userId());
             throw new RuntimeException("El usuario ya tiene un perfil de administrador");
         }
 
@@ -56,12 +70,17 @@ public class PatientProfileService {
 
         PatientProfile savedProfile = patientProfileRepository.save(profile);
 
+        authClient.assignRole(user.getAuthUserId(), "PATIENT");
+
         return toResponseDTO(savedProfile);
     }
 
     public PatientProfileResponseDTO getPatientProfileByUserId(Long userId) {
         PatientProfile profile = patientProfileRepository.findByUserUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Perfil de paciente no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: perfil de paciente no encontrado para userId={}", userId);
+                    return new RuntimeException("Perfil de paciente no encontrado");
+                });
 
         return toResponseDTO(profile);
     }
@@ -75,7 +94,10 @@ public class PatientProfileService {
 
     public PatientProfileResponseDTO getPatientProfileById(Long patientProfileId) {
         PatientProfile profile = patientProfileRepository.findById(patientProfileId)
-                .orElseThrow(() -> new RuntimeException("Perfil de paciente no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: perfil de paciente no encontrado con ID {}", patientProfileId);
+                    return new RuntimeException("Perfil de paciente no encontrado");
+                });
 
         return toResponseDTO(profile);
     }
@@ -88,7 +110,11 @@ public class PatientProfileService {
             Long patientProfileId,
             UpdatePatientProfileRequestDTO request) {
         PatientProfile profile = patientProfileRepository.findById(patientProfileId)
-                .orElseThrow(() -> new RuntimeException("Perfil de paciente no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Actualización rechazada: perfil de paciente no encontrado con ID {}",
+                            patientProfileId);
+                    return new RuntimeException("Perfil de paciente no encontrado");
+                });
 
         profile.setHealthInsurance(request.healthInsurance());
         profile.setEmergencyContactName(request.emergencyContactName());
@@ -104,7 +130,10 @@ public class PatientProfileService {
 
     public void deletePatientProfile(Long patientProfileId) {
         PatientProfile profile = patientProfileRepository.findById(patientProfileId)
-                .orElseThrow(() -> new RuntimeException("Perfil de paciente no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Eliminación rechazada: perfil de paciente no encontrado con ID {}", patientProfileId);
+                    return new RuntimeException("Perfil de paciente no encontrado");
+                });
 
         patientProfileRepository.delete(profile);
     }

@@ -18,17 +18,21 @@ import cl.duoc.users.dto.CreateUserProfileRequestDTO;
 import cl.duoc.users.dto.UpdateUserProfileRequestDTO;
 import cl.duoc.users.dto.UserProfileResponseDTO;
 import cl.duoc.users.service.UserProfileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/user-profiles")
 @RequiredArgsConstructor
+@Tag(name = "User Profiles", description = "Endpoints para la gestión del perfil general de los usuarios")
 public class UserProfileController {
 
 	private final UserProfileService userProfileService;
 
 	@PostMapping
+	@Operation(summary = "Crear perfil general", description = "Crea el perfil general de un usuario existente. Cada usuario solo puede tener un perfil general.")
 	public ResponseEntity<ApiResponse<UserProfileResponseDTO>> createUserProfile(
 			@Valid @RequestBody CreateUserProfileRequestDTO request) {
 		UserProfileResponseDTO response = userProfileService.createUserProfile(request);
@@ -38,6 +42,7 @@ public class UserProfileController {
 	}
 
 	@GetMapping("/user/{userId}")
+	@Operation(summary = "Buscar perfil general por usuario", description = "Obtiene el perfil general asociado a un usuario mediante su userId.")
 	public ResponseEntity<ApiResponse<UserProfileResponseDTO>> getProfileByUserId(
 			@PathVariable Long userId) {
 		UserProfileResponseDTO response = userProfileService.getProfileByUserId(userId);
@@ -47,6 +52,7 @@ public class UserProfileController {
 	}
 
 	@GetMapping
+	@Operation(summary = "Listar perfiles generales", description = "Obtiene todos los perfiles generales registrados en el sistema.")
 	public ResponseEntity<ApiResponse<List<UserProfileResponseDTO>>> getAllProfiles() {
 		List<UserProfileResponseDTO> response = userProfileService.getAllProfiles();
 
@@ -55,6 +61,7 @@ public class UserProfileController {
 	}
 
 	@GetMapping("/{profileId}")
+	@Operation(summary = "Buscar perfil general por ID", description = "Obtiene un perfil general mediante su identificador.")
 	public ResponseEntity<ApiResponse<UserProfileResponseDTO>> getProfileById(
 			@PathVariable Long profileId) {
 		UserProfileResponseDTO response = userProfileService.getProfileById(profileId);
@@ -64,6 +71,7 @@ public class UserProfileController {
 	}
 
 	@GetMapping("/user/{userId}/exists")
+	@Operation(summary = "Validar existencia de perfil general", description = "Verifica si un usuario ya posee perfil general registrado.")
 	public ResponseEntity<ApiResponse<Boolean>> existsByUserId(
 			@PathVariable Long userId) {
 		boolean response = userProfileService.existsByUserId(userId);
@@ -73,6 +81,7 @@ public class UserProfileController {
 	}
 
 	@PutMapping("/{userProfileId}")
+	@Operation(summary = "Actualizar perfil general", description = "Actualiza los datos generales del perfil de usuario, como nombre, apellido, teléfono, fecha de nacimiento y dirección.")
 	public ResponseEntity<ApiResponse<UserProfileResponseDTO>> updateUserProfile(
 			@PathVariable Long userProfileId,
 			@Valid @RequestBody UpdateUserProfileRequestDTO request) {
@@ -86,6 +95,7 @@ public class UserProfileController {
 	}
 
 	@DeleteMapping("/{userProfileId}")
+	@Operation(summary = "Eliminar perfil general", description = "Elimina un perfil general solo si el usuario no posee perfiles específicos asociados.")
 	public ResponseEntity<ApiResponse<Object>> deleteUserProfile(
 			@PathVariable Long userProfileId) {
 		userProfileService.deleteUserProfile(userProfileId);
