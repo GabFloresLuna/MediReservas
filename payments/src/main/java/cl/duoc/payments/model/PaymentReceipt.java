@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "payment_receipts")
@@ -31,6 +32,7 @@ public class PaymentReceipt {
 
     @OneToOne
     @JoinColumn(name = "payment_id", nullable = false, unique = true)
+    @JsonBackReference
     private Payment payment;
 
     @Column(name = "receipt_number", nullable = false, unique = true, length = 50)
