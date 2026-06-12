@@ -26,6 +26,7 @@ CREATE TABLE diagnoses (
     medical_visit_id BIGINT NOT NULL,
     diagnosis_description VARCHAR(255) NOT NULL,
     diagnosis_notes TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_diagnoses_medical_visit
         FOREIGN KEY (medical_visit_id)

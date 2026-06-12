@@ -2,8 +2,7 @@ package cl.duoc.medical_records.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
+ 
 import org.springframework.stereotype.Service;
 
 import cl.duoc.medical_records.dto.CreateMedicalRecordRequestDTO;
@@ -18,9 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MedicalRecordService 
 {
-    @Autowired
-    private ToDTO toDTO;
-
+    private final ToDTO toDTO;
     private final MedicalRecordRepository medicalRecordRepository;
 
     
@@ -57,5 +54,38 @@ public class MedicalRecordService
             .stream()
             .map(x -> toDTO.toMedicalRecordDetailResponseDTO(x))
             .collect(Collectors.toList());
+    }
+
+    public MedicalRecordDetailResponseDTO findByMedicalRecordId(Long medicalRecordId) {
+        MedicalRecord medicalRecord = medicalRecordRepository.findById(medicalRecordId)
+            .orElseThrow(() -> new RuntimeException("Registro médico no encontrado con ID: " + medicalRecordId));
+        return toDTO.toMedicalRecordDetailResponseDTO(medicalRecord);
+    }
+
+    public MedicalRecordResponseDTO deactivate(Long medicalRecordId) {
+        MedicalRecord medicalRecord = medicalRecordRepository.findById(medicalRecordId)
+            .orElseThrow(() -> new RuntimeException("Registro médico no encontrado con ID: " + medicalRecordId));
+        medicalRecord.setActive(false);
+        MedicalRecord saved = medicalRecordRepository.save(medicalRecord);
+        return toDTO.toMedicalRecordResponseDTO(saved);
+    }
+
+    public MedicalRecordResponseDTO activate(Long medicalRecordId) {
+        MedicalRecord medicalRecord = medicalRecordRepository.findById(medicalRecordId)
+            .orElseThrow(() -> new RuntimeException("Registro médico no encontrado con ID: " + medicalRecordId));
+        medicalRecord.setActive(true);
+        MedicalRecord saved = medicalRecordRepository.save(medicalRecord);
+        return toDTO.toMedicalRecordResponseDTO(saved);
+    }
+
+    public void delete(Long medicalRecordId) {
+        MedicalRecord medicalRecord = medicalRecordRepository.findById(medicalRecordId)
+            .orElseThrow(() -> new RuntimeException("Registro médico no encontrado con ID: " + medicalRecordId));
+        
+        if (medicalRecord.getMedicalVisits() != null && !medicalRecord.getMedicalVisits().isEmpty()) {
+            throw new IllegalStateException("No se puede eliminar el registro médico porque tiene visitas asociadas");
+        }
+        
+        medicalRecordRepository.deleteById(medicalRecordId);
     }
 }
