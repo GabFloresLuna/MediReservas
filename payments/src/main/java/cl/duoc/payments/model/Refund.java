@@ -3,6 +3,8 @@ package cl.duoc.payments.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +33,7 @@ public class Refund {
 
     @ManyToOne
     @JoinColumn(name = "payment_id", nullable = false)
+    @JsonBackReference
     private Payment payment;
 
     @Column(name = "refund_amount", nullable = false, precision = 10, scale = 2)

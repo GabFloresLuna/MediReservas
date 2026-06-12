@@ -2,8 +2,12 @@ package cl.duoc.users.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import cl.duoc.users.client.AuthClient;
+import cl.duoc.users.dto.AuthUserResponseDTO;
 import cl.duoc.users.dto.CreateUserRequestDTO;
 import cl.duoc.users.dto.UpdateUserRequestDTO;
 import cl.duoc.users.dto.UserResponseDTO;
@@ -15,24 +19,37 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     private final UserRepository userRepository;
+    private final AuthClient authClient;
 
     public UserResponseDTO createUser(CreateUserRequestDTO request) {
 
-        if (userRepository.existsByAuthUserId(request.authUserId())) {
+        AuthUserResponseDTO authUser = authClient.getAuthUserByEmail(request.email());
+
+        if (!authUser.enabled()) {
+            logger.warn("Creación de usuario rechazada: auth user deshabilitado. email={}", request.email());
+            throw new RuntimeException("El usuario de autenticación está deshabilitado");
+        }
+
+        if (userRepository.existsByAuthUserId(authUser.authUserId())) {
+            logger.warn("Creación de usuario rechazada: ya existe usuario con authUserId={}", authUser.authUserId());
             throw new RuntimeException("Ya existe un usuario con ese authUserId");
         }
 
         if (userRepository.existsByRun(request.run())) {
+            logger.warn("Creación de usuario rechazada: RUN duplicado {}", request.run());
             throw new RuntimeException("Ya existe un usuario con ese RUN");
         }
 
         if (userRepository.existsByEmail(request.email())) {
+            logger.warn("Creación de usuario rechazada: correo duplicado {}", request.email());
             throw new RuntimeException("Ya existe un usuario con ese correo");
         }
 
         User user = new User();
-        user.setAuthUserId(request.authUserId());
+        user.setAuthUserId(authUser.authUserId());
         user.setRun(request.run());
         user.setEmail(request.email());
         user.setActive(true);
@@ -56,14 +73,20 @@ public class UserService {
 
     public UserResponseDTO getUserByRun(String run) {
         User user = userRepository.findByRun(run)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado por RUN"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: usuario no encontrado por RUN {}", run);
+                    return new RuntimeException("Usuario no encontrado por RUN");
+                });
 
         return toResponseDTO(user);
     }
 
     public UserResponseDTO getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado por correo"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: usuario no encontrado por correo {}", email);
+                    return new RuntimeException("Usuario no encontrado por correo");
+                });
 
         return toResponseDTO(user);
     }
@@ -74,7 +97,10 @@ public class UserService {
 
     public User findUserEntityById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> {
+                    logger.warn("Búsqueda rechazada: usuario no encontrado con ID {}", userId);
+                    return new RuntimeException("Usuario no encontrado");
+                });
     }
 
     public UserResponseDTO updateUser(Long userId, UpdateUserRequestDTO request) {
@@ -82,11 +108,13 @@ public class UserService {
 
         if (!user.getRun().equalsIgnoreCase(request.run())
                 && userRepository.existsByRun(request.run())) {
+            logger.warn("Actualización rechazada: RUN duplicado {}", request.run());
             throw new RuntimeException("Ya existe un usuario con ese RUN");
         }
 
         if (!user.getEmail().equalsIgnoreCase(request.email())
                 && userRepository.existsByEmail(request.email())) {
+            logger.warn("Actualización rechazada: correo duplicado {}", request.email());
             throw new RuntimeException("Ya existe un usuario con ese correo");
         }
 
@@ -102,6 +130,7 @@ public class UserService {
         User user = findUserEntityById(userId);
 
         if (user.isActive()) {
+            logger.warn("Activación rechazada: usuario ya estaba activo. userId={}", userId);
             throw new RuntimeException("El usuario ya está activado");
         }
 
@@ -116,6 +145,7 @@ public class UserService {
         User user = findUserEntityById(userId);
 
         if (!user.isActive()) {
+            logger.warn("Desactivación rechazada: usuario ya estaba desactivado. userId={}", userId);
             throw new RuntimeException("El usuario ya está desactivado");
         }
 

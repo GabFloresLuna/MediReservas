@@ -1,0 +1,16 @@
+package cl.duoc.appointments.dto;
+
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+
+
+@Data
+public class AppointmentStatusChangeRequestDTO {
+
+    @Positive(message = "El ID del usuario que realiza el cambio debe ser mayor a cero")
+    private Long changedByUserId;
+
+    @Size(max = 255, message = "La razón debe tener máximo 255 caracteres")
+    private String changeReason;
+}

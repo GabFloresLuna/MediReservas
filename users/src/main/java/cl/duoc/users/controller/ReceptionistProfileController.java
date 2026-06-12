@@ -18,17 +18,21 @@ import cl.duoc.users.dto.CreateReceptionistProfileRequestDTO;
 import cl.duoc.users.dto.ReceptionistProfileResponseDTO;
 import cl.duoc.users.dto.UpdateReceptionistProfileRequestDTO;
 import cl.duoc.users.service.ReceptionistProfileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/receptionist-profiles")
 @RequiredArgsConstructor
+@Tag(name = "Receptionist Profiles", description = "Endpoints para la gestión de perfiles de recepcionista")
 public class ReceptionistProfileController {
 
 	private final ReceptionistProfileService receptionistProfileService;
 
 	@PostMapping
+	@Operation(summary = "Crear perfil de recepcionista", description = "Crea un perfil de recepcionista para un usuario existente que ya posee perfil general. Al crearlo, se asigna el rol RECEPTIONIST en Auth Service.")
 	public ResponseEntity<ApiResponse<ReceptionistProfileResponseDTO>> createReceptionistProfile(
 			@Valid @RequestBody CreateReceptionistProfileRequestDTO request) {
 		ReceptionistProfileResponseDTO response = receptionistProfileService.createReceptionistProfile(request);
@@ -41,6 +45,7 @@ public class ReceptionistProfileController {
 	}
 
 	@GetMapping
+	@Operation(summary = "Listar perfiles de recepcionista", description = "Obtiene todos los perfiles de recepcionista registrados.")
 	public ResponseEntity<ApiResponse<List<ReceptionistProfileResponseDTO>>> getAllReceptionistProfiles() {
 		List<ReceptionistProfileResponseDTO> response = receptionistProfileService.getAllReceptionistProfiles();
 
@@ -52,6 +57,7 @@ public class ReceptionistProfileController {
 	}
 
 	@GetMapping("/{receptionistProfileId}")
+	@Operation(summary = "Buscar perfil de recepcionista por ID", description = "Obtiene un perfil de recepcionista mediante su identificador.")
 	public ResponseEntity<ApiResponse<ReceptionistProfileResponseDTO>> getReceptionistProfileById(
 			@PathVariable Long receptionistProfileId) {
 		ReceptionistProfileResponseDTO response = receptionistProfileService
@@ -65,6 +71,7 @@ public class ReceptionistProfileController {
 	}
 
 	@GetMapping("/user/{userId}")
+	@Operation(summary = "Buscar perfil de recepcionista por usuario", description = "Obtiene el perfil de recepcionista asociado a un usuario mediante su userId.")
 	public ResponseEntity<ApiResponse<ReceptionistProfileResponseDTO>> getReceptionistProfileByUserId(
 			@PathVariable Long userId) {
 		ReceptionistProfileResponseDTO response = receptionistProfileService
@@ -78,6 +85,7 @@ public class ReceptionistProfileController {
 	}
 
 	@GetMapping("/user/{userId}/exists")
+	@Operation(summary = "Validar existencia de perfil de recepcionista", description = "Verifica si un usuario ya posee perfil de recepcionista.")
 	public ResponseEntity<ApiResponse<Boolean>> existsByUserId(
 			@PathVariable Long userId) {
 		boolean response = receptionistProfileService.existsByUserId(userId);
@@ -90,6 +98,7 @@ public class ReceptionistProfileController {
 	}
 
 	@PutMapping("/{receptionistProfileId}")
+	@Operation(summary = "Actualizar perfil de recepcionista", description = "Actualiza los datos laborales asociados a un perfil de recepcionista, como turno y departamento.")
 	public ResponseEntity<ApiResponse<ReceptionistProfileResponseDTO>> updateReceptionistProfile(
 			@PathVariable Long receptionistProfileId,
 			@Valid @RequestBody UpdateReceptionistProfileRequestDTO request) {
@@ -105,6 +114,7 @@ public class ReceptionistProfileController {
 	}
 
 	@DeleteMapping("/{receptionistProfileId}")
+	@Operation(summary = "Eliminar perfil de recepcionista", description = "Elimina un perfil de recepcionista registrado.")
 	public ResponseEntity<ApiResponse<Object>> deleteReceptionistProfile(
 			@PathVariable Long receptionistProfileId) {
 		receptionistProfileService.deleteReceptionistProfile(receptionistProfileId);
