@@ -15,16 +15,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "vital_signs")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class VitalSigns 
-{
+@Getter
+@Setter
+public class VitalSigns {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vital_sign_id")

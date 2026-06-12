@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public record MedicalRecordResponseDTO
 (
-    Long MedicalRecordId,
+    Long medicalRecordId,
     Long patientUserId,
     Boolean active,
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime createdAT
+    LocalDateTime createdAt
 ) {}

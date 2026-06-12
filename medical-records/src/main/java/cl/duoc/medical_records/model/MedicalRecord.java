@@ -1,9 +1,10 @@
 package cl.duoc.medical_records.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.CreationTimestamp; 
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,16 +14,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "medical_records")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class MedicalRecord
-{
+@Getter
+@Setter
+public class MedicalRecord {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "medical_record_id")
@@ -39,5 +42,5 @@ public class MedicalRecord
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "medicalRecord")
-    private List<MedicalVisit> medicalVisits;
+    private List<MedicalVisit> medicalVisits = new ArrayList<>();
 }
