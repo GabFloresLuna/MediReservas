@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class MedicalRecordService 
 {
     private final ToDTO toDTO;
+
     private final MedicalRecordRepository medicalRecordRepository;
 
     

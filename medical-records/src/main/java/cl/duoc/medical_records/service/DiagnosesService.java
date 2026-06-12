@@ -1,7 +1,5 @@
 package cl.duoc.medical_records.service;
-
-import java.util.List;
-import java.util.stream.Collectors;
+ 
 import org.springframework.stereotype.Service;
 import cl.duoc.medical_records.dto.*;
 import cl.duoc.medical_records.extras.ToDTO;
@@ -11,9 +9,10 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class DiagnosesService {
-    
+public class DiagnosesService 
+{
     private final ToDTO toDTO;
+
     private final DiagnosesRepository diagnosesRepository;
 
     public DiagnosisResponseDTO create(CreateDiagnosisRequestDTO requestDTO) {
