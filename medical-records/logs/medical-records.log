@@ -588,3 +588,9 @@ com.netflix.discovery.shared.transport.TransportException: Cannot execute reques
 	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
 2026-06-12 15:37:12 - Completed shut down of DiscoveryClient
+2026-06-12 16:27:15 - Starting MedicalRecordsApplication using Java 21.0.4 with PID 9020 (C:\Users\Hanrol\Desktop\Codigos\Duoc\FullStack 1\Eva2 - Proyecto Grupal\MediReservas\medical-records\target\classes started by Hanrol in C:\Users\Hanrol\Desktop\Codigos\Duoc\FullStack 1\Eva2 - Proyecto Grupal\MediReservas\medical-records)
+2026-06-12 16:27:15 - Running with Spring Boot v4.0.6, Spring v7.0.7
+2026-06-12 16:27:15 - No active profile set, falling back to 1 default profile: "default"
+2026-06-12 16:27:17 - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-12 16:27:17 - Finished Spring Data repository scanning in 242 ms. Found 3 JPA repository interfaces.
+2026-06-12 16:27:18 - BeanFactory id=d59549dd-185c-3d42-816d-09958597c65e
