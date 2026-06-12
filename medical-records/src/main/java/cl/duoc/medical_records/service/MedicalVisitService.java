@@ -2,13 +2,8 @@ package cl.duoc.medical_records.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import cl.duoc.medical_records.dto.CreateMedicalVisitRequestDTO; 
-import cl.duoc.medical_records.dto.MedicalVisitDetailReponseDTO;
-import cl.duoc.medical_records.dto.MedicalVisitResponseDTO;
+import cl.duoc.medical_records.dto.*;
 import cl.duoc.medical_records.extras.ToDTO;
 import cl.duoc.medical_records.model.MedicalVisit;
 import cl.duoc.medical_records.repository.MedicalVisitRepository;
@@ -16,33 +11,69 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class MedicalVisitService 
-{
-    @Autowired
-    private ToDTO toDTO;
-
+public class MedicalVisitService {
+    
+    private final ToDTO toDTO;
     private final MedicalVisitRepository medicalVisitRepository;
 
-    public MedicalVisitResponseDTO create(CreateMedicalVisitRequestDTO requestDTO)
-    {
-        //Creación y guardado de modelo
+    public MedicalVisitResponseDTO create(CreateMedicalVisitRequestDTO requestDTO) {
         MedicalVisit medicalVisit = toDTO.toMedicalVisit(requestDTO);
-        medicalVisitRepository.save(medicalVisit);
-
-        //Creación y retorno de responseDTO
-        return toDTO.toMedicalVisitResponseDTO(medicalVisit);
+        MedicalVisit saved = medicalVisitRepository.save(medicalVisit);
+        return toDTO.toMedicalVisitResponseDTO(saved);
     }
 
-    public List<MedicalVisitDetailReponseDTO> findAllById(Long id)
-    {
-        //Validación y asignación de visita médica
-        List<MedicalVisit> medicalVisit = medicalVisitRepository.findAllByPatientId(id)
-            .stream()
-            .map(x -> x.orElseThrow(() -> new RuntimeException("No existe una visita médica registrada con ese ID")))
-            .collect(Collectors.toList());
+    public List<MedicalVisitDetailReponseDTO> findAllByPatientId(Long patientId) {
+        List<MedicalVisit> medicalVisits = medicalVisitRepository.findByMedicalRecord_PatientId(patientId);
         
-        //Creación y retorno de responseDTO
-        return medicalVisit.stream().map(x -> toDTO.toMedicalVisitDetailReponseDTO(x)).collect(Collectors.toList());
+        if (medicalVisits.isEmpty()) {
+            throw new RuntimeException("No existen visitas médicas para el paciente con ID: " + patientId);
+        }
+        
+        return medicalVisits.stream()
+            .map(toDTO::toMedicalVisitDetailReponseDTO)
+            .collect(Collectors.toList());
     }
 
+    public MedicalVisitDetailReponseDTO findDetailById(Long medicalVisitId) {
+        MedicalVisit medicalVisit = medicalVisitRepository.findById(medicalVisitId)
+            .orElseThrow(() -> new RuntimeException("Visita médica no encontrada con ID: " + medicalVisitId));
+        return toDTO.toMedicalVisitDetailReponseDTO(medicalVisit);
+    }
+
+    public List<MedicalVisitResponseDTO> findByMedicalRecordId(Long medicalRecordId) {
+        return medicalVisitRepository.findByMedicalRecordId(medicalRecordId)
+            .stream()
+            .map(toDTO::toMedicalVisitResponseDTO)
+            .collect(Collectors.toList());
+    }
+
+    public MedicalVisitResponseDTO update(Long medicalVisitId, UpdateMedicalVisitRequestDTO requestDTO) {
+        MedicalVisit existingVisit = medicalVisitRepository.findById(medicalVisitId)
+            .orElseThrow(() -> new RuntimeException("Visita médica no encontrada con ID: " + medicalVisitId));
+        
+        if (requestDTO.visitReason() != null) {
+            existingVisit.setVisitReason(requestDTO.visitReason());
+        }
+        if (requestDTO.observations() != null) {
+            existingVisit.setObservations(requestDTO.observations());
+        }
+        if (requestDTO.treatment() != null) {
+            existingVisit.setTreatment(requestDTO.treatment());
+        }
+        
+        MedicalVisit updated = medicalVisitRepository.save(existingVisit);
+        return toDTO.toMedicalVisitResponseDTO(updated);
+    }
+
+    public void delete(Long medicalVisitId) {
+        MedicalVisit medicalVisit = medicalVisitRepository.findById(medicalVisitId)
+            .orElseThrow(() -> new RuntimeException("Visita médica no encontrada con ID: " + medicalVisitId));
+        
+        if ((medicalVisit.getDiagnoses() != null && !medicalVisit.getDiagnoses().isEmpty()) ||
+            (medicalVisit.getVitalSigns() != null && !medicalVisit.getVitalSigns().isEmpty())) {
+            throw new IllegalStateException("No se puede eliminar la visita médica porque tiene diagnósticos o signos vitales asociados");
+        }
+        
+        medicalVisitRepository.deleteById(medicalVisitId);
+    }
 }
