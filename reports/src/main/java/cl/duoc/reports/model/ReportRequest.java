@@ -2,6 +2,7 @@ package cl.duoc.reports.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,8 +23,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportRequest 
-{
+public class ReportRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "report_request_id")
@@ -49,5 +49,5 @@ public class ReportRequest
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "reportRequest")
-    private List<GeneratedReport> generatedReports;
+    private List<GeneratedReport> generatedReports = new ArrayList<>();
 }

@@ -3,7 +3,6 @@ package cl.duoc.reports.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cl.duoc.reports.dto.CreateGeneratedReportRequestDTO;
@@ -15,24 +14,20 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class GeneratedReportService 
-{
-    @Autowired
-    private ToDTO toDTO;
+public class GeneratedReportService {
+    private final ToDTO toDTO;
     private final GeneratedReportRepository generatedReportsRepository;
-    
-    public GeneratedReportResponseDTO create(CreateGeneratedReportRequestDTO requestDTO)
-    {
+
+    public GeneratedReportResponseDTO create(CreateGeneratedReportRequestDTO requestDTO) {
         GeneratedReport generatedReport = toDTO.toGeneratedReport(requestDTO);
         generatedReportsRepository.save(generatedReport);
         return toDTO.toGeneratedReportResponseDTO(generatedReport);
     }
 
-    public List<GeneratedReportResponseDTO> listAll()
-    {
+    public List<GeneratedReportResponseDTO> listAll() {
         return generatedReportsRepository.findAll()
-            .stream()
-            .map(x -> toDTO.toGeneratedReportResponseDTO(x))
-            .collect(Collectors.toList());
+                .stream()
+                .map(x -> toDTO.toGeneratedReportResponseDTO(x))
+                .collect(Collectors.toList());
     }
 }
