@@ -20,15 +20,15 @@ server:
   port: 9010
 
 # Configuración de Eureka Client (descomentar si se utiliza Eureka para el descubrimiento de servicios)
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:8761/eureka/
-#      register-with-eureka: true
-#      fetch-registry: true
-#  instance:
-#    lease-renewal-interval-in-seconds: 30
-#    lease-expiration-duration-in-seconds: 90
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+      register-with-eureka: true
+      fetch-registry: true
+  instance:
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
 
 # Configuración de logging
 logging:
