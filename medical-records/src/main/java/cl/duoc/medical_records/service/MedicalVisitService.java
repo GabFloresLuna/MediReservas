@@ -1,6 +1,5 @@
 package cl.duoc.medical_records.service;
-
-import org.springframework.beans.factory.annotation.Autowired;
+ 
 import org.springframework.stereotype.Service;
 
 import cl.duoc.medical_records.dto.CreateMedicalVisitRequestDTO; 
@@ -15,8 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MedicalVisitService 
 {
-    @Autowired
-    private ToDTO toDTO;
+    private final ToDTO toDTO;
 
     private final MedicalVisitRepository medicalVisitRepository;
 

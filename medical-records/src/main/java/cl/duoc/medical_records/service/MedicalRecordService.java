@@ -2,8 +2,7 @@ package cl.duoc.medical_records.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
+ 
 import org.springframework.stereotype.Service;
 
 import cl.duoc.medical_records.dto.CreateMedicalRecordRequestDTO;
@@ -18,8 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MedicalRecordService 
 {
-    @Autowired
-    private ToDTO toDTO;
+    private final ToDTO toDTO;
 
     private final MedicalRecordRepository medicalRecordRepository;
 
