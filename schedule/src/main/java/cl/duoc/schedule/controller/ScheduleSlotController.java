@@ -17,16 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 import cl.duoc.schedule.dto.ApiResponse;
 import cl.duoc.schedule.dto.ScheduleSlotRequest;
 import cl.duoc.schedule.dto.ScheduleSlotResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/schedule-slots")
 @RequiredArgsConstructor
+@Tag(name = "ScheduleSlots", description = "API de gestión de slots de agenda")
 public class ScheduleSlotController {
 
     private final ScheduleSlotService scheduleSlotService;
 
+    @Operation(summary = "Crear slot de agenda")
     @PostMapping
     public ResponseEntity<ApiResponse<ScheduleSlotResponse>> create(@Valid @RequestBody ScheduleSlotRequest request) {
         ScheduleSlotResponse data = scheduleSlotService.create(request);
@@ -34,18 +38,21 @@ public class ScheduleSlotController {
                 .body(new ApiResponse<>(201, "Slot creado", data));
     }
 
+    @Operation(summary = "Obtener slot de agenda por ID")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ScheduleSlotResponse>> findById(@PathVariable Long id) {
         ScheduleSlotResponse data = scheduleSlotService.findById(id);
         return ResponseEntity.ok(new ApiResponse<>(200, "Slot encontrado", data));
     }
 
+    @Operation(summary = "Listar todos los slots de agenda")
     @GetMapping
     public ResponseEntity<ApiResponse<List<ScheduleSlotResponse>>> findAll() {
         List<ScheduleSlotResponse> data = scheduleSlotService.findAll();
         return ResponseEntity.ok(new ApiResponse<>(200, "Lista de slots", data));
     }
 
+    @Operation(summary = "Actualizar slot de agenda")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ScheduleSlotResponse>> update(@PathVariable Long id, @Valid @RequestBody ScheduleSlotRequest request) {
         ScheduleSlotResponse data = scheduleSlotService.update(id, request);
