@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import cl.duoc.medical_records.client.AppointmentsClient;
+import cl.duoc.medical_records.client.DoctorsClient;
 import cl.duoc.medical_records.dto.CreateMedicalVisitRequestDTO;
 import cl.duoc.medical_records.dto.MedicalVisitDetailReponseDTO;
 import cl.duoc.medical_records.dto.MedicalVisitResponseDTO;
@@ -27,6 +29,8 @@ public class MedicalVisitService {
 
     private static final Logger logger = LoggerFactory.getLogger(MedicalVisitService.class);
 
+    private final DoctorsClient doctorsClient;
+    private final AppointmentsClient appointmentsClient;
     private final MedicalVisitRepository medicalVisitRepository;
     private final DiagnosesRepository diagnosesRepository;
     private final VitalSignsRepository vitalSignsRepository;
@@ -55,8 +59,29 @@ public class MedicalVisitService {
                 requestDTO.medicalRecordId());
                 throw new RuntimeException(
                         "No existe un registro médico asociado a ese Id "
-                )
+                );
         }
+
+        if (!appointmentsClient.appointmentIdVerification(requestDTO.appointmentId()))
+        {
+                      logger.warn(
+                    "Creación de visita médica rechazada: ID de la cita no encontrado. appointmentId={}",
+                    requestDTO.appointmentId());
+
+            throw new RuntimeException(
+                    "ID del paciente inexistente");
+        }
+
+        if (!doctorsClient.doctorIdVerification(requestDTO.doctorId()))
+        {
+                      logger.warn(
+                    "Creación de visita médica rechazada: ID del doctor no encontrado. doctorId={}",
+                    requestDTO.doctorId());
+
+            throw new RuntimeException(
+                    "ID del paciente inexistente");
+        }
+
         MedicalRecord medicalRecord = medicalRecordService.findMedicalRecordEntityById(
                 requestDTO.medicalRecordId());
 
