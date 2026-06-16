@@ -1,6 +1,6 @@
 spring:
     application:
-        name: medical-records
+        name: medical-records-service
     datasource:
         url: jdbc:mysql://localhost:3318/medical_records_db
         username: admin
