@@ -1,6 +1,6 @@
 spring:
   application:
-    name: schedule
+    name: schedule-service
   datasource:
     url: jdbc:mysql://localhost:3315/schedules_db
     username: admin

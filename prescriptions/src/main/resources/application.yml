@@ -1,6 +1,6 @@
 spring:
   application:
-    name: prescriptions
+    name: prescriptions-service
   datasource:
     url: jdbc:mysql://localhost:3319/prescriptions_db
     username: admin
