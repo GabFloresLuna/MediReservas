@@ -1,7 +1,7 @@
 # Configuración del microservicio de citas médicas
 spring:
   application:
-    name: appointments
+    name: appointments-service
   datasource:
     url: jdbc:mysql://localhost:3316/appointments_db
     username: admin
@@ -34,7 +34,7 @@ eureka:
 logging:
   level:
     root: INFO
-    "[cl.duoc.appointments]": DEBUG
+    cl.duoc.appointments: DEBUG
   file:
     name: logs/appointments-service.log
   pattern:
