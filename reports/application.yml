@@ -1,6 +1,6 @@
 spring:
     application:
-        name: reports
+        name: reports-service
     datasource:
         url: jdbc:mysql://localhost:3321/reports_db
         username: admin
