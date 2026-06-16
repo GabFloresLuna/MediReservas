@@ -10,7 +10,9 @@ import cl.duoc.schedule.dto.ScheduleSlotResponse;
 import cl.duoc.schedule.model.ScheduleSlot;
 import cl.duoc.schedule.repository.ScheduleSlotRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScheduleSlotService {
@@ -32,9 +34,14 @@ public class ScheduleSlotService {
     }
 
     public ScheduleSlotResponse findById(Long id) {
-        ScheduleSlot slot = scheduleSlotRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Slot no encontrado con ID: " + id));
-        return mapToResponse(slot);
+        try {
+            ScheduleSlot slot = scheduleSlotRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Schedule slot no encontrado con ID: " + id));
+            return mapToResponse(slot);
+        } catch (RuntimeException ex) {
+            log.error("Error finding ScheduleSlot by id: {}", id, ex);
+            throw ex;
+        }
     }
 
     public List<ScheduleSlotResponse> findAll() {
@@ -45,25 +52,35 @@ public class ScheduleSlotService {
     }
 
     public ScheduleSlotResponse update(Long id, ScheduleSlotRequest request) {
-        ScheduleSlot slot = scheduleSlotRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Slot no encontrado con ID: " + id));
+        try {
+            ScheduleSlot slot = scheduleSlotRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Slot no encontrado con ID: " + id));
 
-        slot.setDoctorId(request.getDoctorId());
-        slot.setSlotDate(request.getSlotDate());
-        slot.setStartTime(request.getStartTime());
-        slot.setEndTime(request.getEndTime());
-        slot.setSlotStatus(request.getSlotStatus());
-        slot.setAppointmentId(request.getAppointmentId());
+            slot.setDoctorId(request.getDoctorId());
+            slot.setSlotDate(request.getSlotDate());
+            slot.setStartTime(request.getStartTime());
+            slot.setEndTime(request.getEndTime());
+            slot.setSlotStatus(request.getSlotStatus());
+            slot.setAppointmentId(request.getAppointmentId());
 
-        ScheduleSlot updated = scheduleSlotRepository.save(slot);
-        return mapToResponse(updated);
+            ScheduleSlot updated = scheduleSlotRepository.save(slot);
+            return mapToResponse(updated);
+        } catch (RuntimeException ex) {
+            log.error("Error updating ScheduleSlot with id: {}", id, ex);
+            throw ex;
+        }
     }
 
     public void delete(Long id) {
-        if (!scheduleSlotRepository.existsById(id)) {
-            throw new RuntimeException("Slot no encontrado con ID: " + id);
+        try {
+            if (!scheduleSlotRepository.existsById(id)) {
+                throw new RuntimeException("Schedule slot no encontrado con ID: " + id);
+            }
+            scheduleSlotRepository.deleteById(id);
+        } catch (RuntimeException ex) {
+            log.error("Error deleting ScheduleSlot with id: {}", id, ex);
+            throw ex;
         }
-        scheduleSlotRepository.deleteById(id);
     }
 
     private ScheduleSlotResponse mapToResponse(ScheduleSlot slot) {

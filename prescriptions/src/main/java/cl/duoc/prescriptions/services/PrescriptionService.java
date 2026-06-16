@@ -10,7 +10,9 @@ import cl.duoc.prescriptions.dto.PrescriptionResponse;
 import cl.duoc.prescriptions.model.Prescription;
 import cl.duoc.prescriptions.repository.PrescriptionRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PrescriptionService {
@@ -31,9 +33,14 @@ public class PrescriptionService {
     }
 
     public PrescriptionResponse findById(Long id) {
-        Prescription prescription = prescriptionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Prescripción no encontrada con ID: " + id));
-        return mapToResponse(prescription);
+        try {
+            Prescription prescription = prescriptionRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Prescripción no encontrada con ID: " + id));
+            return mapToResponse(prescription);
+        } catch (RuntimeException ex) {
+            log.error("Error finding Prescription by id: {}", id, ex);
+            throw ex;
+        }
     }
 
     public List<PrescriptionResponse> findAll() {
@@ -44,24 +51,34 @@ public class PrescriptionService {
     }
 
     public PrescriptionResponse update(Long id, PrescriptionRequest request) {
-        Prescription prescription = prescriptionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Prescripción no encontrada con ID: " + id));
+        try {
+            Prescription prescription = prescriptionRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Prescripción no encontrada con ID: " + id));
 
-        prescription.setMedicalVisitId(request.getMedicalVisitId());
-        prescription.setPatientUserId(request.getPatientUserId());
-        prescription.setDoctorId(request.getDoctorId());
-        prescription.setPrescriptionStatus(request.getPrescriptionStatus());
-        prescription.setNotes(request.getNotes());
+            prescription.setMedicalVisitId(request.getMedicalVisitId());
+            prescription.setPatientUserId(request.getPatientUserId());
+            prescription.setDoctorId(request.getDoctorId());
+            prescription.setPrescriptionStatus(request.getPrescriptionStatus());
+            prescription.setNotes(request.getNotes());
 
-        Prescription updated = prescriptionRepository.save(prescription);
-        return mapToResponse(updated);
+            Prescription updated = prescriptionRepository.save(prescription);
+            return mapToResponse(updated);
+        } catch (RuntimeException ex) {
+            log.error("Error updating Prescription with id: {}", id, ex);
+            throw ex;
+        }
     }
 
     public void delete(Long id) {
-        if (!prescriptionRepository.existsById(id)) {
-            throw new RuntimeException("Prescripción no encontrada con ID: " + id);
+        try {
+            if (!prescriptionRepository.existsById(id)) {
+                throw new RuntimeException("Prescripción no encontrada con ID: " + id);
+            }
+            prescriptionRepository.deleteById(id);
+        } catch (RuntimeException ex) {
+            log.error("Error deleting Prescription with id: {}", id, ex);
+            throw ex;
         }
-        prescriptionRepository.deleteById(id);
     }
 
     private PrescriptionResponse mapToResponse(Prescription prescription) {
