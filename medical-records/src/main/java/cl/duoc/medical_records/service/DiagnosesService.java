@@ -25,20 +25,18 @@ public class DiagnosesService {
     private final MedicalVisitService medicalVisitService;
     private final ToDTO toDTO;
 
-    public DiagnosisResponseDTO create(
-            CreateDiagnosisRequestDTO requestDTO) {
+    public DiagnosisResponseDTO create(CreateDiagnosisRequestDTO requestDTO) 
+        {
+                MedicalVisit medicalVisit = medicalVisitService.findMedicalVisitEntityById(requestDTO.medicalVisitId());
 
-        MedicalVisit medicalVisit = medicalVisitService.findMedicalVisitEntityById(
-                requestDTO.medicalVisitId());
+                Diagnoses diagnosis = toDTO.toDiagnoses(requestDTO);
 
-        Diagnoses diagnosis = toDTO.toDiagnoses(requestDTO);
+                diagnosis.setMedicalVisit(medicalVisit);
 
-        diagnosis.setMedicalVisit(medicalVisit);
+                Diagnoses saved = diagnosesRepository.save(diagnosis);
 
-        Diagnoses saved = diagnosesRepository.save(diagnosis);
-
-        return toDTO.toDiagnosisResponseDTO(saved);
-    }
+                return toDTO.toDiagnosisResponseDTO(saved);
+        }
 
     public DiagnosisResponseDTO findById(Long diagnosisId) {
         Diagnoses diagnosis = findDiagnosisEntityById(diagnosisId);

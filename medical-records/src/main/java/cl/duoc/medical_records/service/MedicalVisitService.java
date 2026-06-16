@@ -1,5 +1,6 @@
 package cl.duoc.medical_records.service;
 
+import cl.duoc.medical_records.repository.MedicalRecordRepository;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -21,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class MedicalVisitService {
+
+    private final MedicalRecordRepository medicalRecordRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(MedicalVisitService.class);
 
@@ -44,6 +47,16 @@ public class MedicalVisitService {
                     "Ya existe una visita médica asociada a esa reserva");
         }
 
+        if (!medicalRecordRepository.existsById
+                (requestDTO.medicalRecordId()))
+        {
+                logger.warn(
+                        "Creacion de visita rechazada: medicalRecordID inexistente. medicalRecordId={}",
+                requestDTO.medicalRecordId());
+                throw new RuntimeException(
+                        "No existe un registro médico asociado a ese Id "
+                )
+        }
         MedicalRecord medicalRecord = medicalRecordService.findMedicalRecordEntityById(
                 requestDTO.medicalRecordId());
 
