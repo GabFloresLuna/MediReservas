@@ -31,7 +31,7 @@ spring:
         - id: doctors-service
           uri: lb://doctors-service
           predicates:
-            - Path=/api/v1/doctors/**
+            - Path=/api/v2/doctors/**
 
         # SPECIALTIES SERVICE
         - id: specialties-service
@@ -43,7 +43,7 @@ spring:
         - id: schedule-service
           uri: lb://schedule-service
           predicates:
-            - Path=/api/v1/doctor-schedules/**,/api/v1/doctor-time-offs/**,/api/v1/schedule-slots/**
+            - Path=/api/v1/doctor-schedules/**,/api/v1/doctor-time-off/**,/api/v1/schedule-slots/**
 
         # APPOINTMENTS SERVICE
         - id: appointments-service
@@ -55,7 +55,7 @@ spring:
         - id: payments-service
           uri: lb://payments-service
           predicates:
-            - Path=/api/v1/payments/**,/api/v1/payment-receipts/**,/api/v1/refunds/**
+            - Path=/api/payments/**
 
         # MEDICAL RECORDS SERVICE
         - id: medical-records-service
@@ -79,7 +79,7 @@ spring:
         - id: reports-service
           uri: lb://reports-service
           predicates:
-            - Path=/api/v1/report-requests/**,/api/v1/generated-reports/**
+            - Path=/api/v1/reports-request/**,/api/v1/generated-reports/**
 
 eureka:
   client:
