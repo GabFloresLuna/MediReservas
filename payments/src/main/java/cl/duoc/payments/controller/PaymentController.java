@@ -22,6 +22,7 @@ import cl.duoc.payments.service.PaymentService;
 // IMPORTS DE SWAGGER (OPENAPI)
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -78,7 +79,7 @@ public class PaymentController {
     // POST: Crear un nuevo pago
     @PostMapping
     @Operation(summary = "Crear un nuevo pago", description = "Registra una nueva transacción financiera dentro del microservicio.")
-    public ResponseEntity<PaymentDTO> createPayment(@RequestBody PaymentDTO paymentDTO) {
+    public ResponseEntity<PaymentDTO> createPayment(@Valid @RequestBody PaymentDTO paymentDTO) {
         PaymentDTO createdPayment = paymentService.createPayment(paymentDTO);
         return new ResponseEntity<>(createdPayment, HttpStatus.CREATED);
     }

@@ -5,6 +5,8 @@ import cl.duoc.doctors.exception.GlobalExceptionHandler;
 import cl.duoc.doctors.service.DoctorsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -17,8 +19,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-class DoctorsControllerStandaloneTest {
+@ExtendWith(MockitoExtension.class)
+class DoctorsControllerTest {
 
     private MockMvc mockMvc;
     private DoctorsService doctorsService;
