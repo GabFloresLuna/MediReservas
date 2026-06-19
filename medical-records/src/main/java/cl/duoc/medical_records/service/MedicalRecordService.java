@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import cl.duoc.medical_records.client.UsersClient;
 import cl.duoc.medical_records.dto.CreateMedicalRecordRequestDTO;
 import cl.duoc.medical_records.dto.MedicalRecordDetailResponseDTO;
 import cl.duoc.medical_records.dto.MedicalRecordResponseDTO;
@@ -21,12 +22,23 @@ public class MedicalRecordService {
 
     private static final Logger logger = LoggerFactory.getLogger(MedicalRecordService.class);
 
+    private final UsersClient usersClient;
     private final MedicalRecordRepository medicalRecordRepository;
     private final MedicalVisitRepository medicalVisitRepository;
     private final ToDTO toDTO;
 
     public MedicalRecordResponseDTO create(
             CreateMedicalRecordRequestDTO requestDTO) {
+
+        if (!usersClient.patientIdVerification(requestDTO.patientId()))
+        {
+                logger.warn(
+                    "Creación de ficha médica rechazada: ID del paciente no encontrado. patientId={}",
+                    requestDTO.patientId());
+
+            throw new RuntimeException(
+                    "ID del paciente inexistente");
+        }
 
         if (medicalRecordRepository.existsByPatientId(
                 requestDTO.patientId())) {

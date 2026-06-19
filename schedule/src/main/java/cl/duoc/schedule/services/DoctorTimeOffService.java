@@ -10,7 +10,9 @@ import cl.duoc.schedule.dto.DoctorTimeOffResponse;
 import cl.duoc.schedule.model.DoctorTimeOff;
 import cl.duoc.schedule.repository.DoctorTimeOffRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DoctorTimeOffService {
@@ -31,9 +33,14 @@ public class DoctorTimeOffService {
     }
 
     public DoctorTimeOffResponse findById(Long id) {
-        DoctorTimeOff timeOff = doctorTimeOffRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Time off no encontrado con ID: " + id));
-        return mapToResponse(timeOff);
+        try {
+            DoctorTimeOff timeOff = doctorTimeOffRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Time off no encontrado con ID: " + id));
+            return mapToResponse(timeOff);
+        } catch (RuntimeException ex) {
+            log.error("Error finding DoctorTimeOff by id: {}", id, ex);
+            throw ex;
+        }
     }
 
     public List<DoctorTimeOffResponse> findAll() {
@@ -44,24 +51,34 @@ public class DoctorTimeOffService {
     }
 
     public DoctorTimeOffResponse update(Long id, DoctorTimeOffRequest request) {
-        DoctorTimeOff timeOff = doctorTimeOffRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Time off no encontrado con ID: " + id));
+        try {
+            DoctorTimeOff timeOff = doctorTimeOffRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Time off no encontrado con ID: " + id));
 
-        timeOff.setDoctorId(request.getDoctorId());
-        timeOff.setStartDate(request.getStartDate());
-        timeOff.setEndDate(request.getEndDate());
-        timeOff.setReason(request.getReason());
-        timeOff.setActive(request.getActive());
+            timeOff.setDoctorId(request.getDoctorId());
+            timeOff.setStartDate(request.getStartDate());
+            timeOff.setEndDate(request.getEndDate());
+            timeOff.setReason(request.getReason());
+            timeOff.setActive(request.getActive());
 
-        DoctorTimeOff updated = doctorTimeOffRepository.save(timeOff);
-        return mapToResponse(updated);
+            DoctorTimeOff updated = doctorTimeOffRepository.save(timeOff);
+            return mapToResponse(updated);
+        } catch (RuntimeException ex) {
+            log.error("Error updating DoctorTimeOff with id: {}", id, ex);
+            throw ex;
+        }
     }
 
     public void delete(Long id) {
-        if (!doctorTimeOffRepository.existsById(id)) {
-            throw new RuntimeException("Time off no encontrado con ID: " + id);
+        try {
+            if (!doctorTimeOffRepository.existsById(id)) {
+                throw new RuntimeException("Time off no encontrado con ID: " + id);
+            }
+            doctorTimeOffRepository.deleteById(id);
+        } catch (RuntimeException ex) {
+            log.error("Error deleting DoctorTimeOff with id: {}", id, ex);
+            throw ex;
         }
-        doctorTimeOffRepository.deleteById(id);
     }
 
     private DoctorTimeOffResponse mapToResponse(DoctorTimeOff timeOff) {

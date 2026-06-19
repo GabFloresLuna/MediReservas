@@ -9,7 +9,9 @@ import cl.duoc.schedule.dto.DoctorScheduleResponse;
 import cl.duoc.schedule.model.DoctorSchedule;
 import cl.duoc.schedule.repository.DoctorScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DoctorScheduleService {
@@ -29,9 +31,14 @@ public class DoctorScheduleService {
     }
 
     public DoctorScheduleResponse findById(Long id) {
-        DoctorSchedule schedule = doctorScheduleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Horario de doctor no encontrado con ID: " + id));
-        return mapToResponse(schedule);
+        try {
+            DoctorSchedule schedule = doctorScheduleRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Horario de doctor no encontrado con ID: " + id));
+            return mapToResponse(schedule);
+        } catch (RuntimeException ex) {
+            log.error("Error finding DoctorSchedule by id: {}", id, ex);
+            throw ex;
+        }
     }
 
     public List<DoctorScheduleResponse> findAll() {
@@ -42,24 +49,34 @@ public class DoctorScheduleService {
     }
 
     public DoctorScheduleResponse update(Long id, DoctorScheduleRequest request) {
-        DoctorSchedule schedule = doctorScheduleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Horario de doctor no encontrado con ID: " + id));
+        try {
+            DoctorSchedule schedule = doctorScheduleRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Horario de doctor no encontrado con ID: " + id));
 
-        schedule.setDoctorId(request.getDoctorId());
-        schedule.setDayOfWeek(request.getDayOfWeek());
-        schedule.setStartTime(request.getStartTime());
-        schedule.setEndTime(request.getEndTime());
-        schedule.setActive(request.getActive());
+            schedule.setDoctorId(request.getDoctorId());
+            schedule.setDayOfWeek(request.getDayOfWeek());
+            schedule.setStartTime(request.getStartTime());
+            schedule.setEndTime(request.getEndTime());
+            schedule.setActive(request.getActive());
 
-        DoctorSchedule updated = doctorScheduleRepository.save(schedule);
-        return mapToResponse(updated);
+            DoctorSchedule updated = doctorScheduleRepository.save(schedule);
+            return mapToResponse(updated);
+        } catch (RuntimeException ex) {
+            log.error("Error updating DoctorSchedule with id: {}", id, ex);
+            throw ex;
+        }
     }
 
     public void delete(Long id) {
-        if (!doctorScheduleRepository.existsById(id)) {
-            throw new RuntimeException("Horario de doctor no encontrado con ID: " + id);
+        try {
+            if (!doctorScheduleRepository.existsById(id)) {
+                throw new RuntimeException("Horario de doctor no encontrado con ID: " + id);
+            }
+            doctorScheduleRepository.deleteById(id);
+        } catch (RuntimeException ex) {
+            log.error("Error deleting DoctorSchedule with id: {}", id, ex);
+            throw ex;
         }
-        doctorScheduleRepository.deleteById(id);
     }
 
     private DoctorScheduleResponse mapToResponse(DoctorSchedule schedule) {

@@ -1,7 +1,7 @@
 # Configuración del microservicio de citas médicas
 spring:
   application:
-    name: appointments
+    name: appointments-service
   datasource:
     url: jdbc:mysql://localhost:3316/appointments_db
     username: admin
@@ -10,7 +10,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
   flyway:
     enabled: true
     locations: classpath:db/migration
@@ -24,8 +24,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-      register-with-eureka: true
-      fetch-registry: true
+    register-with-eureka: true
+    fetch-registry: true
   instance:
     lease-renewal-interval-in-seconds: 30
     lease-expiration-duration-in-seconds: 90
@@ -34,7 +34,7 @@ eureka:
 logging:
   level:
     root: INFO
-    "[cl.duoc.appointments]": DEBUG
+    cl.duoc.appointments: DEBUG
   file:
     name: logs/appointments-service.log
   pattern:

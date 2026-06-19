@@ -12,7 +12,9 @@ import cl.duoc.prescriptions.model.PrescriptionItem;
 import cl.duoc.prescriptions.repository.PrescriptionItemRepository;
 import cl.duoc.prescriptions.repository.PrescriptionRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PrescriptionItemService {
@@ -37,9 +39,14 @@ public class PrescriptionItemService {
     }
 
     public PrescriptionItemResponse findById(Long id) {
-        PrescriptionItem item = prescriptionItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ítem de prescripción no encontrado con ID: " + id));
-        return mapToResponse(item);
+        try {
+            PrescriptionItem item = prescriptionItemRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Item de prescripción no encontrado con ID: " + id));
+            return mapToResponse(item);
+        } catch (RuntimeException ex) {
+            log.error("Error finding PrescriptionItem by id: {}", id, ex);
+            throw ex;
+        }
     }
 
     public List<PrescriptionItemResponse> findAll() {
@@ -50,28 +57,38 @@ public class PrescriptionItemService {
     }
 
     public PrescriptionItemResponse update(Long id, PrescriptionItemRequest request) {
-        PrescriptionItem item = prescriptionItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ítem de prescripción no encontrado con ID: " + id));
+        try {
+            PrescriptionItem item = prescriptionItemRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Ítem de prescripción no encontrado con ID: " + id));
 
-        Prescription prescription = prescriptionRepository.findById(request.getPrescriptionId())
-                .orElseThrow(() -> new RuntimeException("Prescripción no encontrada con ID: " + request.getPrescriptionId()));
+            Prescription prescription = prescriptionRepository.findById(request.getPrescriptionId())
+                    .orElseThrow(() -> new RuntimeException("Prescripción no encontrada con ID: " + request.getPrescriptionId()));
 
-        item.setPrescription(prescription);
-        item.setMedicineName(request.getMedicineName());
-        item.setDosage(request.getDosage());
-        item.setFrequency(request.getFrequency());
-        item.setDuration(request.getDuration());
-        item.setInstructions(request.getInstructions());
+            item.setPrescription(prescription);
+            item.setMedicineName(request.getMedicineName());
+            item.setDosage(request.getDosage());
+            item.setFrequency(request.getFrequency());
+            item.setDuration(request.getDuration());
+            item.setInstructions(request.getInstructions());
 
-        PrescriptionItem updated = prescriptionItemRepository.save(item);
-        return mapToResponse(updated);
+            PrescriptionItem updated = prescriptionItemRepository.save(item);
+            return mapToResponse(updated);
+        } catch (RuntimeException ex) {
+            log.error("Error updating PrescriptionItem with id: {}", id, ex);
+            throw ex;
+        }
     }
 
     public void delete(Long id) {
-        if (!prescriptionItemRepository.existsById(id)) {
-            throw new RuntimeException("Ítem de prescripción no encontrado con ID: " + id);
+        try {
+            if (!prescriptionItemRepository.existsById(id)) {
+                throw new RuntimeException("Item de prescripción no encontrado con ID: " + id);
+            }
+            prescriptionItemRepository.deleteById(id);
+        } catch (RuntimeException ex) {
+            log.error("Error deleting PrescriptionItem with id: {}", id, ex);
+            throw ex;
         }
-        prescriptionItemRepository.deleteById(id);
     }
 
     private PrescriptionItemResponse mapToResponse(PrescriptionItem item) {
