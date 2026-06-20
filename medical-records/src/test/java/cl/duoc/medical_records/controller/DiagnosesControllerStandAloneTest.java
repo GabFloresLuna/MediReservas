@@ -11,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import cl.duoc.medical_records.dto.DiagnosisResponseDTO;
+import cl.duoc.medical_records.model.Diagnoses;
+import cl.duoc.medical_records.model.MedicalVisit;
 import cl.duoc.medical_records.service.DiagnosesService;
 
 public class DiagnosesControllerStandAloneTest {
@@ -45,7 +47,10 @@ public class DiagnosesControllerStandAloneTest {
     void testFound() throws Exception {
         Long existingId = 1L;
         DiagnosisResponseDTO dto = new DiagnosisResponseDTO(1L, 1L, "DIAG", "NOTE");
+        MedicalVisit medicalVisit = new MedicalVisit();
+        Diagnoses diagnoses = new Diagnoses(1L,medicalVisit,"DESCRIPCIÓN DEL SISTEMA","NOTAS DEL SISTEMA");
         Mockito.when(diagnosesService.findById(existingId)).thenReturn(dto);
+        Mockito.when(diagnosesService.findDiagnosisEntityById(existingId)).thenReturn(diagnoses);
 
         mockMvc.perform(get("/api/v1/diagnoses/{id}", existingId))
             .andExpect(status().isOk())
