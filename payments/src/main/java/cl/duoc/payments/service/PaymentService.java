@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import cl.duoc.payments.client.AppointmentsClient;
+import cl.duoc.payments.client.UsersClient;
 import cl.duoc.payments.dto.PaymentDTO;
 import cl.duoc.payments.dto.PaymentReceiptDTO;
 import cl.duoc.payments.dto.RefundDTO;
@@ -28,13 +30,19 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final PaymentReceiptRepository paymentReceiptRepository;
     private final RefundRepository refundRepository;
+    private final AppointmentsClient appointmentsClient;
+    private final UsersClient usersClient;
 
     public PaymentService(PaymentRepository paymentRepository, 
                           PaymentReceiptRepository paymentReceiptRepository,
-                          RefundRepository refundRepository) {
+                          RefundRepository refundRepository,
+                          AppointmentsClient appointmentsClient,
+                          UsersClient usersClient) {
         this.paymentRepository = paymentRepository;
         this.paymentReceiptRepository = paymentReceiptRepository;
         this.refundRepository = refundRepository;
+        this.appointmentsClient = appointmentsClient;
+        this.usersClient = usersClient;
     }
 
     // --- OBTENER TODOS LOS PAGOS ---
@@ -85,6 +93,24 @@ public class PaymentService {
     public PaymentDTO createPayment(PaymentDTO paymentDTO) {
         log.info("Iniciando creación de un nuevo pago para la cita ID: {} por un monto de: {}", 
                 paymentDTO.getAppointmentId(), paymentDTO.getAmount());
+        
+        // Validar que la cita existe
+        log.info("Validando existencia de la cita con ID: {}", paymentDTO.getAppointmentId());
+        Boolean appointmentExists = appointmentsClient.appointmentIdVerification(paymentDTO.getAppointmentId());
+        if (!Boolean.TRUE.equals(appointmentExists)) {
+            log.error("Error: La cita con ID: {} no existe", paymentDTO.getAppointmentId());
+            throw new RuntimeException("La cita especificada no existe");
+        }
+        log.info("Cita ID: {} validada correctamente", paymentDTO.getAppointmentId());
+        
+        // Validar que el paciente existe
+        log.info("Validando existencia del paciente con ID: {}", paymentDTO.getPatientUserId());
+        Boolean patientExists = usersClient.patientIdVerification(paymentDTO.getPatientUserId());
+        if (!Boolean.TRUE.equals(patientExists)) {
+            log.error("Error: El paciente con ID: {} no existe", paymentDTO.getPatientUserId());
+            throw new RuntimeException("El paciente especificado no existe");
+        }
+        log.info("Paciente ID: {} validado correctamente", paymentDTO.getPatientUserId());
         
         Payment payment = new Payment();
         payment.setAppointmentId(paymentDTO.getAppointmentId());
