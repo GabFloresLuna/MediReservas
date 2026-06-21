@@ -1,24 +1,26 @@
 package cl.duoc.schedule.services;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 
+import cl.duoc.schedule.client.DoctorsClient;
 import cl.duoc.schedule.dto.DoctorScheduleRequest;
 import cl.duoc.schedule.dto.DoctorScheduleResponse;
 import cl.duoc.schedule.model.DoctorSchedule;
 import cl.duoc.schedule.repository.DoctorScheduleRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DoctorScheduleService {
 
     private final DoctorScheduleRepository doctorScheduleRepository;
+    private final DoctorsClient doctorsClient;
 
     public DoctorScheduleResponse create(DoctorScheduleRequest request) {
+        
+        doctorsClient.validateDoctor(request.getDoctorId());
+
         DoctorSchedule schedule = new DoctorSchedule();
         schedule.setDoctorId(request.getDoctorId());
         schedule.setDayOfWeek(request.getDayOfWeek());
@@ -31,14 +33,9 @@ public class DoctorScheduleService {
     }
 
     public DoctorScheduleResponse findById(Long id) {
-        try {
-            DoctorSchedule schedule = doctorScheduleRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Horario de doctor no encontrado con ID: " + id));
-            return mapToResponse(schedule);
-        } catch (RuntimeException ex) {
-            log.error("Error finding DoctorSchedule by id: {}", id, ex);
-            throw ex;
-        }
+        DoctorSchedule schedule = doctorScheduleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Horario de doctor no encontrado con ID: " + id));
+        return mapToResponse(schedule);
     }
 
     public List<DoctorScheduleResponse> findAll() {
@@ -49,34 +46,26 @@ public class DoctorScheduleService {
     }
 
     public DoctorScheduleResponse update(Long id, DoctorScheduleRequest request) {
-        try {
-            DoctorSchedule schedule = doctorScheduleRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Horario de doctor no encontrado con ID: " + id));
+        doctorsClient.validateDoctor(request.getDoctorId());
 
-            schedule.setDoctorId(request.getDoctorId());
-            schedule.setDayOfWeek(request.getDayOfWeek());
-            schedule.setStartTime(request.getStartTime());
-            schedule.setEndTime(request.getEndTime());
-            schedule.setActive(request.getActive());
+        DoctorSchedule schedule = doctorScheduleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Horario de doctor no encontrado con ID: " + id));
 
-            DoctorSchedule updated = doctorScheduleRepository.save(schedule);
-            return mapToResponse(updated);
-        } catch (RuntimeException ex) {
-            log.error("Error updating DoctorSchedule with id: {}", id, ex);
-            throw ex;
-        }
+        schedule.setDoctorId(request.getDoctorId());
+        schedule.setDayOfWeek(request.getDayOfWeek());
+        schedule.setStartTime(request.getStartTime());
+        schedule.setEndTime(request.getEndTime());
+        schedule.setActive(request.getActive());
+
+        DoctorSchedule updated = doctorScheduleRepository.save(schedule);
+        return mapToResponse(updated);
     }
 
     public void delete(Long id) {
-        try {
-            if (!doctorScheduleRepository.existsById(id)) {
-                throw new RuntimeException("Horario de doctor no encontrado con ID: " + id);
-            }
-            doctorScheduleRepository.deleteById(id);
-        } catch (RuntimeException ex) {
-            log.error("Error deleting DoctorSchedule with id: {}", id, ex);
-            throw ex;
+        if (!doctorScheduleRepository.existsById(id)) {
+            throw new RuntimeException("Horario de doctor no encontrado con ID: " + id);
         }
+        doctorScheduleRepository.deleteById(id);
     }
 
     private DoctorScheduleResponse mapToResponse(DoctorSchedule schedule) {
