@@ -21,20 +21,18 @@ import lombok.RequiredArgsConstructor;
 public class ReportRequestService {
     private final ToDTO toDTO;
     private static final Logger logger = LoggerFactory.getLogger(ReportRequestService.class);
-
     private final UsersClient usersClient;
-
     private final ReportRequestRepository reportRequestRepository;
 
     public ReportRequestResponseDTO create(CreateReportRequestDTO requestDTO) {
-        if (!usersClient.requestedByUserIdVerification(requestDTO.requestByUserId()))
+        if (!usersClient.byUserIdVerification(requestDTO.requestByUserId()))
         {
                 logger.warn(
-                    "Creación de ficha médica rechazada: ID del paciente no encontrado. patientId={}",
+                    "Solicitud de reporte rechazada: ID del usuario no encontrado. userId={}",
                     requestDTO.requestByUserId());
 
             throw new RuntimeException(
-                    "ID del paciente inexistente");
+                    "ID del usuario inexistente");
         }
  
         ReportRequest reportRequest = toDTO.toReportRequest(requestDTO);

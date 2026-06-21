@@ -16,7 +16,7 @@ public class UsersClient
 {
     private final WebClient.Builder webClientBuilder;
 
-    public Boolean requestedByUserIdVerification(Long requestedByUserId) {
+    public Boolean byUserIdVerification(Long requestedByUserId) {
         try {
             ApiResponse<Boolean> response = webClientBuilder.build()
                     .patch()
