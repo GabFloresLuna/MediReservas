@@ -1,5 +1,6 @@
 package cl.duoc.notifications.service;
 
+import cl.duoc.notifications.client.UsersClient;
 import cl.duoc.notifications.dto.NotificationResponseDTO;
 import cl.duoc.notifications.dto.NotificationSendRequestDTO;
 import cl.duoc.notifications.dto.NotificationStatusUpdateRequestDTO;
@@ -25,8 +26,16 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final NotificationTemplateRepository templateRepository;
+    // Cambio: cliente para validar userId contra users-service.
+    private final UsersClient usersClient;
 
     public NotificationResponseDTO createNotification(NotificationSendRequestDTO dto) {
+        // Cambio: valida que el usuario destinatario exista en users-service antes de crear la notificación.
+        if (!usersClient.userExists(dto.getUserId())) {
+            log.warn("Usuario destinatario no encontrado en users-service: {}", dto.getUserId());
+            throw new RuntimeException("Usuario no encontrado con ID: " + dto.getUserId());
+        }
+
         Notification notification = new Notification();
         notification.setUserId(dto.getUserId());
         notification.setNotificationChannel(dto.getNotificationChannel());
