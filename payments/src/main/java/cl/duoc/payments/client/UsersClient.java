@@ -1,45 +1,44 @@
 package cl.duoc.payments.client;
 
-import cl.duoc.payments.dto.ApiResponse;
-import cl.duoc.payments.dto.IdVerificationRequestDTO;
-
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import cl.duoc.payments.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class UsersClient 
-{
+public class UsersClient {
+
     private final WebClient.Builder webClientBuilder;
 
-    public Boolean patientIdVerification(Long patientId) {
+    public Boolean patientIdVerification(Long patientUserId) {
         try {
             ApiResponse<Boolean> response = webClientBuilder.build()
-                    .patch()
+                    .get()
                     .uri(
-                            "http://users-service/api/v1/patient-profile/{patientProfileId}",
-                            patientId
-                    )
-                    .bodyValue(new IdVerificationRequestDTO(patientId))
+                            "http://users-service/api/v1/patient-profiles/user/{userId}/exists",
+                            patientUserId)
                     .retrieve()
-                    .bodyToMono(new ParameterizedTypeReference<ApiResponse<Boolean>>() {})
+                    .bodyToMono(new ParameterizedTypeReference<ApiResponse<Boolean>>() {
+                    })
                     .block();
+
             return response != null && Boolean.TRUE.equals(response.getData());
 
         } catch (WebClientResponseException.NotFound ex) {
             throw new RuntimeException(
-                    "ID de Paciente no encontrado"
-            );
-
+                    "Paciente no encontrado con ID de usuario: " + patientUserId);
 
         } catch (WebClientResponseException ex) {
             throw new RuntimeException(
-                    "Error al asignar el verificar la existencia de ID del Paciente"
-            );
+                    "Error al verificar la existencia del paciente en Users Service");
+
+        } catch (Exception ex) {
+            throw new RuntimeException(
+                    "No se pudo conectar con Users Service");
         }
     }
 }
