@@ -1,5 +1,6 @@
 package cl.duoc.appointments.service;
 
+import cl.duoc.appointments.client.UsersClient;
 import cl.duoc.appointments.dto.AppointmentCancelRequestDTO;
 import cl.duoc.appointments.dto.AppointmentCreateRequestDTO;
 import cl.duoc.appointments.dto.AppointmentResponseDTO;
@@ -29,8 +30,16 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final AppointmentStatusHistoryRepository statusHistoryRepository;
     private final AppointmentCancellationRepository cancellationRepository;
+    // Cambio: cliente para validar patientUserId contra users-service.
+    private final UsersClient usersClient;
 
     public AppointmentResponseDTO createAppointment(AppointmentCreateRequestDTO dto) {
+
+        // Cambio: valida que el paciente exista en users-service antes de crear la cita.
+        if (!usersClient.userExists(dto.getPatientUserId())) {
+            log.warn("Usuario paciente no encontrado en users-service: {}", dto.getPatientUserId());
+            throw new RuntimeException("Usuario no encontrado con ID: " + dto.getPatientUserId());
+        }
 
         Appointment appointment = new Appointment();
         appointment.setPatientUserId(dto.getPatientUserId());
