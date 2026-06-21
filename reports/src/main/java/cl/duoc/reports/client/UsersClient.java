@@ -1,29 +1,30 @@
-package cl.duoc.medical_records.client;
+package cl.duoc.reports.client;
+
+import cl.duoc.reports.dto.ApiResponse;
+import cl.duoc.reports.dto.IdVerificationRequestDTO;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-import cl.duoc.medical_records.dto.ApiResponse;
-import cl.duoc.medical_records.dto.IdVerificationRequestDTO;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class AppointmentsClient 
+public class UsersClient 
 {
     private final WebClient.Builder webClientBuilder;
 
-    public Boolean appointmentIdVerification(Long appointmentId) {
+    public Boolean byUserIdVerification(Long requestedByUserId) {
         try {
             ApiResponse<Boolean> response = webClientBuilder.build()
                     .patch()
                     .uri(
-                            "http://appointments-service/api/v1/appointments/{appointmentId}",
-                            appointmentId
+                            "http://users-service/api/v1/users/{userId}/exists",
+                            requestedByUserId
                     )
-                    .bodyValue(new IdVerificationRequestDTO(appointmentId))
+                    .bodyValue(new IdVerificationRequestDTO(requestedByUserId))
                     .retrieve()
                     .bodyToMono(new ParameterizedTypeReference<ApiResponse<Boolean>>() {})
                     .block();
@@ -37,7 +38,7 @@ public class AppointmentsClient
 
         } catch (WebClientResponseException ex) {
             throw new RuntimeException(
-                    "Error al verificar la existencia de ID de la cita"
+                    "Error al verificar la existencia de ID del Usuario"
             );
         }
     }

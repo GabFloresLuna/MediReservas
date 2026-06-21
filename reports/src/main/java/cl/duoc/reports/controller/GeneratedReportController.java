@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,7 @@ public class GeneratedReportController
     {
         try
         {
+            
             List<GeneratedReportResponseDTO> generatedReports = generatedReportService.listAll();
             ApiResponse<List<GeneratedReportResponseDTO>> response =
                 new ApiResponse<>
@@ -60,10 +62,11 @@ public class GeneratedReportController
 
     @PostMapping()
     @Operation(summary = "Registra la metadata de un reporte generado",description = "Permite crear la metadata de un reporte generado en formato json")
-    public ResponseEntity<ApiResponse<GeneratedReportResponseDTO>> createGeneratedReport(@Valid @RequestBody CreateGeneratedReportRequestDTO requestDTO)
+    public ResponseEntity<ApiResponse<GeneratedReportResponseDTO>> createGeneratedReport(@Valid @RequestBody CreateGeneratedReportRequestDTO requestDTO, @PathVariable Long patientId)
     {
         try
         {
+
             GeneratedReportResponseDTO generatedReport = generatedReportService.create(requestDTO);
             ApiResponse<GeneratedReportResponseDTO> response =
                 new ApiResponse<>
