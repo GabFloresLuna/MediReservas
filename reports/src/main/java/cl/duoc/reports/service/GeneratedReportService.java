@@ -15,10 +15,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class GeneratedReportService {
+
     private final ToDTO toDTO;
     private final GeneratedReportRepository generatedReportsRepository;
 
-    public GeneratedReportResponseDTO create(CreateGeneratedReportRequestDTO requestDTO) {
+    public GeneratedReportResponseDTO create(CreateGeneratedReportRequestDTO requestDTO) 
+    {
         GeneratedReport generatedReport = toDTO.toGeneratedReport(requestDTO);
         generatedReportsRepository.save(generatedReport);
         return toDTO.toGeneratedReportResponseDTO(generatedReport);
