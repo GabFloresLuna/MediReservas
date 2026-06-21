@@ -1,7 +1,8 @@
 # Configuración de la aplicación de notificaciones
 spring:
   application:
-    name: notifications
+    # Cambio: nombre alineado con la ruta lb://notifications-service del gateway.
+    name: notifications-service
   datasource:
     url: jdbc:mysql://localhost:3320/notifications_db
     username: admin
