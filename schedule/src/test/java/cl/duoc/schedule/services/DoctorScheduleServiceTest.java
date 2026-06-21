@@ -1,19 +1,19 @@
 package cl.duoc.schedule.services;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.time.LocalTime;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import cl.duoc.schedule.client.DoctorsClient;
 import cl.duoc.schedule.dto.DoctorScheduleRequest;
 import cl.duoc.schedule.dto.DoctorScheduleResponse;
 import cl.duoc.schedule.model.DayOfWeek;
@@ -29,6 +29,9 @@ class DoctorScheduleServiceTest {
     @InjectMocks
     private DoctorScheduleService doctorScheduleService;
 
+    @Mock
+    private DoctorsClient doctorsClient;
+
     @Test
     void createShouldSaveScheduleAndReturnResponse() {
         DoctorScheduleRequest request = new DoctorScheduleRequest(
@@ -36,8 +39,7 @@ class DoctorScheduleServiceTest {
                 DayOfWeek.LUNES,
                 LocalTime.of(8, 0),
                 LocalTime.of(12, 0),
-                true
-        );
+                true);
 
         DoctorSchedule saved = new DoctorSchedule(
                 1L,
@@ -45,8 +47,7 @@ class DoctorScheduleServiceTest {
                 DayOfWeek.LUNES,
                 LocalTime.of(8, 0),
                 LocalTime.of(12, 0),
-                true
-        );
+                true);
 
         when(doctorScheduleRepository.save(any(DoctorSchedule.class))).thenReturn(saved);
 
@@ -70,8 +71,7 @@ class DoctorScheduleServiceTest {
                 DayOfWeek.VIERNES,
                 LocalTime.of(14, 0),
                 LocalTime.of(18, 0),
-                false
-        );
+                false);
 
         when(doctorScheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
 
