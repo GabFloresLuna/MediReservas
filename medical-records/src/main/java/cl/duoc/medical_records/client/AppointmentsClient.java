@@ -37,7 +37,7 @@ public class AppointmentsClient
 
         } catch (WebClientResponseException ex) {
             throw new RuntimeException(
-                    "Error al asignar el verificar la existencia de ID del Paciente"
+                    "Error al verificar la existencia de ID de la cita"
             );
         }
     }
