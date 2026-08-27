@@ -9,10 +9,9 @@ El sistema utiliza una arquitectura distribuida donde cada microservicio posee s
 ## Integrantes
 
 * Benjamín Cubillos
-* Gabriel Flores
 * Renato Troncoso
 * Cristóbal Pardo
-* Antonio Cayulen
+
 
 ## Microservicios implementados
 
@@ -258,5 +257,5 @@ Eureka Server → Microservicios → API Gateway
 Repositorio oficial del proyecto:
 
 ```bash
-https://github.com/GabFloresLuna/MediReservas
+https://github.com/Hanrol/MediReservasApp
 ```
