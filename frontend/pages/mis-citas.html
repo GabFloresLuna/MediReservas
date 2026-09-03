@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis citas</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>MediSalud</h1>
+
+        <nav>
+            <a href="../dashboard.html">Inicio</a>
+            <a href="buscar-medicos.html">Buscar médicos</a>
+            <a href="solicitar-cita.html">Solicitar cita</a>
+            <a href="historial-clinico.html">Historial clínico</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section>
+            <h2>Mis citas médicas</h2>
+
+            <p>
+                Consulte el estado de sus citas médicas y cancele las que estén pendientes.
+            </p>
+        </section>
+
+        <section>
+
+            <div>
+                <label for="buscarCita">Buscar por médico</label>
+
+                <br>
+
+                <input
+                    type="text"
+                    id="buscarCita"
+                    placeholder="Ej: Juan Pérez"
+                >
+            </div>
+
+            <br>
+
+            <div>
+                <label for="estadoCita">Filtrar por estado</label>
+
+                <br>
+
+                <select id="estadoCita">
+                    <option value="">Todas</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Confirmada">Confirmada</option>
+                    <option value="Cancelada">Cancelada</option>
+                </select>
+            </div>
+
+        </section>
+
+        <br>
+
+        <section id="listaCitas">
+
+            <div class="cita">
+                <h3>Cardiología</h3>
+
+                <p><strong>Médico:</strong> Dr. Juan Pérez</p>
+                <p><strong>Fecha:</strong> 12/09/2026</p>
+                <p><strong>Hora:</strong> 10:00</p>
+                <p><strong>Estado:</strong> <span class="estado">Confirmada</span></p>
+
+                <button type="button" class="cancelarCita">
+                    Cancelar cita
+                </button>
+            </div>
+
+            <hr>
+
+            <div class="cita">
+                <h3>Pediatría</h3>
+
+                <p><strong>Médico:</strong> Dra. Laura Gómez</p>
+                <p><strong>Fecha:</strong> 15/09/2026</p>
+                <p><strong>Hora:</strong> 09:30</p>
+                <p><strong>Estado:</strong> <span class="estado">Pendiente</span></p>
+
+                <button type="button" class="cancelarCita">
+                    Cancelar cita
+                </button>
+            </div>
+
+            <hr>
+
+            <div class="cita">
+                <h3>Dermatología</h3>
+
+                <p><strong>Médico:</strong> Dr. Carlos Rodríguez</p>
+                <p><strong>Fecha:</strong> 20/09/2026</p>
+                <p><strong>Hora:</strong> 15:00</p>
+                <p><strong>Estado:</strong> <span class="estado">Cancelada</span></p>
+
+                <button type="button" class="cancelarCita" disabled>
+                    Cancelada
+                </button>
+            </div>
+
+        </section>
+
+        <br>
+
+        <section id="mensajeSinCitas" style="display: none;">
+            <p>No se encontraron citas médicas.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>MediSalud</p>
+    </footer>
+
+    <script src="../assets/js/mis-citas.js"></script>
+
+</body>
+</html>
