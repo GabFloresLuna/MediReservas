@@ -10,59 +10,60 @@
         <title>Mi perfil | MediReservas</title>
         <link rel="stylesheet" href="../assets/css/style.css">
     </head>
-    <body>
-        <header>
-            <nav aria-label="Barra superior del perfil">
-                <a href="dashboard.html" aria-label="Ir al panel principal de MediReservas">
-                    MediReservas
+    <body class="flex min-h-screen flex-col bg-page text-ink antialiased">
+        <header class="border-b border-line bg-white">
+            <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8" aria-label="Barra superior del perfil">
+                <a class="flex items-center gap-2 text-lg font-bold text-primary-dark sm:text-xl" href="dashboard.html" aria-label="Ir al panel principal de MediReservas">
+                    <span class="grid size-10 place-items-center rounded-xl bg-primary text-xl text-white" aria-hidden="true">+</span>
+                    <span class="hidden sm:inline">MediReservas</span>
                 </a>
-                <a href="dashboard.html">Volver al panel</a>
+                <a class="inline-flex rounded-xl border border-line px-4 py-2.5 text-sm font-semibold text-primary-dark transition hover:border-primary hover:bg-primary-light" href="dashboard.html">← Volver al panel</a>
             </nav>
         </header>
 
-        <main>
-            <section aria-labelledby="profile-title">
-                <div>
-                    <p>Cuenta personal</p>
-                    <h1 id="profile-title">Mi perfil</h1>
-                    <p>Consulta la información asociada a tu cuenta.</p>
+        <main class="flex-1 px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+            <section class="mx-auto max-w-4xl" aria-labelledby="profile-title">
+                <div class="mb-8">
+                    <p class="text-sm font-bold uppercase tracking-widest text-primary">Cuenta personal</p>
+                    <h1 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl" id="profile-title">Mi perfil</h1>
+                    <p class="mt-3 text-muted">Consulta la información asociada a tu cuenta.</p>
                 </div>
 
-                <article aria-labelledby="personal-data-title">
-                    <header>
-                        <div id="profile-initials" aria-hidden="true">MR</div>
+                <article class="overflow-hidden rounded-3xl border border-line bg-white shadow-sm" aria-labelledby="personal-data-title">
+                    <header class="flex items-center gap-5 bg-primary-dark p-6 text-white sm:p-8">
+                        <div class="grid size-16 shrink-0 place-items-center rounded-2xl bg-white/15 text-xl font-bold sm:size-20 sm:text-2xl" id="profile-initials" aria-hidden="true">MR</div>
                         <div>
-                            <h2 id="profile-name">Nombre del usuario</h2>
-                            <p id="profile-role">Perfil</p>
+                            <h2 class="text-xl font-bold sm:text-2xl" id="profile-name">Nombre del usuario</h2>
+                            <p class="mt-1 text-sm text-emerald-100" id="profile-role">Perfil</p>
                         </div>
                     </header>
 
-                    <section aria-labelledby="personal-data-title">
-                        <h2 id="personal-data-title">Datos personales</h2>
-                        <dl>
-                            <div>
-                                <dt>RUN</dt>
-                                <dd id="profile-run">Sin información</dd>
+                    <section class="p-6 sm:p-8" aria-labelledby="personal-data-title">
+                        <h2 class="text-xl font-bold" id="personal-data-title">Datos personales</h2>
+                        <dl class="mt-6 grid gap-x-8 sm:grid-cols-2">
+                            <div class="border-b border-line py-4">
+                                <dt class="text-sm font-medium text-muted">RUN</dt>
+                                <dd class="mt-1 font-semibold" id="profile-run">Sin información</dd>
                             </div>
-                            <div>
-                                <dt>Correo electrónico</dt>
-                                <dd id="profile-email">Sin información</dd>
+                            <div class="border-b border-line py-4">
+                                <dt class="text-sm font-medium text-muted">Correo electrónico</dt>
+                                <dd class="mt-1 break-words font-semibold" id="profile-email">Sin información</dd>
                             </div>
-                            <div>
-                                <dt>Teléfono</dt>
-                                <dd id="profile-phone">Sin información</dd>
+                            <div class="border-b border-line py-4">
+                                <dt class="text-sm font-medium text-muted">Teléfono</dt>
+                                <dd class="mt-1 font-semibold" id="profile-phone">Sin información</dd>
                             </div>
-                            <div>
-                                <dt>Fecha de nacimiento</dt>
-                                <dd id="profile-birth-date">Sin información</dd>
+                            <div class="border-b border-line py-4">
+                                <dt class="text-sm font-medium text-muted">Fecha de nacimiento</dt>
+                                <dd class="mt-1 font-semibold" id="profile-birth-date">Sin información</dd>
                             </div>
-                            <div>
-                                <dt>Dirección</dt>
-                                <dd id="profile-address">Sin información</dd>
+                            <div class="border-b border-line py-4">
+                                <dt class="text-sm font-medium text-muted">Dirección</dt>
+                                <dd class="mt-1 font-semibold" id="profile-address">Sin información</dd>
                             </div>
-                            <div>
-                                <dt>Estado de la cuenta</dt>
-                                <dd id="profile-status">Sin información</dd>
+                            <div class="border-b border-line py-4">
+                                <dt class="text-sm font-medium text-muted">Estado de la cuenta</dt>
+                                <dd class="mt-1 inline-flex rounded-full bg-primary-light px-3 py-1 text-sm font-semibold text-primary-dark" id="profile-status">Sin información</dd>
                             </div>
                         </dl>
                     </section>
@@ -70,7 +71,7 @@
             </section>
         </main>
 
-        <footer>
+        <footer class="border-t border-line bg-white px-4 py-5 text-center text-sm text-muted">
             <p>&copy; 2026 MediReservas. Todos los derechos reservados.</p>
         </footer>
     </body>
