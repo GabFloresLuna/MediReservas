@@ -1,6 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { authenticate, createSession, getRoleDestination } from "../assets/js/auth.js";
+import {
+    authenticate,
+    createSession,
+    getRoleDestination,
+    logout
+} from "../assets/js/auth.js";
 import {
     getSession,
     getUsers,
@@ -18,6 +23,10 @@ class LocalStorageMock {
 
     setItem(key, value) {
         this.#data.set(key, String(value));
+    }
+
+    removeItem(key) {
+        this.#data.delete(key);
     }
 
     clear() {
@@ -69,6 +78,17 @@ test("crea una sesión sin incluir la contraseña", () => {
     assert.equal(session.role, "PACIENTE");
     assert.equal(getSession().email, "paciente@medireservas.cl");
     assert.equal("password" in getSession(), false);
+});
+
+test("cierra la sesión sin eliminar las cuentas almacenadas", () => {
+    const user = authenticate("paciente@medireservas.cl", "Paciente123");
+    createSession(user);
+    const usersBeforeLogout = getUsers();
+
+    logout();
+
+    assert.equal(getSession(), null);
+    assert.deepEqual(getUsers(), usersBeforeLogout);
 });
 
 test("dirige los roles reconocidos al dashboard compartido", () => {
