@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta
+            name="description"
+            content="Inicia sesión en MediReservas para acceder a tus funciones y gestionar atenciones médicas."
+        >
+        <title>Iniciar sesión | MediReservas</title>
+        <link rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    <body>
+        <header>
+            <nav aria-label="Navegación de inicio de sesión">
+                <a href="../index.html" aria-label="Volver al inicio de MediReservas">
+                    MediReservas
+                </a>
+                <p>¿No tienes una cuenta? <a href="registro.html">Regístrate</a></p>
+            </nav>
+        </header>
+
+        <main>
+            <section aria-labelledby="login-title">
+                <div>
+                    <p>Acceso a MediReservas</p>
+                    <h1 id="login-title">Inicia sesión</h1>
+                    <p>Ingresa tus credenciales para acceder a las funciones disponibles para tu perfil.</p>
+                </div>
+
+                <form id="login-form" novalidate>
+                    <div>
+                        <label for="email">Correo electrónico</label>
+                        <input id="email" name="email" type="email" autocomplete="email">
+                        <p id="email-error" role="alert"></p>
+                    </div>
+
+                    <div>
+                        <label for="password">Contraseña</label>
+                        <input id="password" name="password" type="password" autocomplete="current-password">
+                        <p id="password-error" role="alert"></p>
+                    </div>
+
+                    <button type="submit">Iniciar sesión</button>
+                    <p id="login-message" role="status"></p>
+                </form>
+
+                <aside aria-labelledby="demo-access-title">
+                    <h2 id="demo-access-title">Acceso de demostración</h2>
+                    <p>En esta entrega podrás ingresar con cuentas simuladas para revisar cada tipo de usuario.</p>
+                </aside>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 MediReservas. Proyecto académico.</p>
+            <a href="../index.html">Volver al inicio</a>
+        </footer>
+    </body>
+</html>
