@@ -89,3 +89,7 @@ export function getSession() {
         return null;
     }
 }
+
+export function removeSession() {
+    localStorage.removeItem(SESSION_KEY);
+}

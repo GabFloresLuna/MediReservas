@@ -1,4 +1,4 @@
-import { getUsers, saveSession } from "./storage.js";
+import { getUsers, removeSession, saveSession } from "./storage.js";
 
 const ROLE_DESTINATIONS = {
     ADMINISTRADOR: "dashboard.html",
@@ -34,4 +34,8 @@ export function createSession(user) {
 
 export function getRoleDestination(role) {
     return ROLE_DESTINATIONS[role] ?? "login.html";
+}
+
+export function logout() {
+    removeSession();
 }
