@@ -40,6 +40,7 @@ function createActionLink(action, compact = false) {
 function renderDashboard() {
     if (!session || !config) return;
 
+    document.title = `Panel de ${config.label} | MediReservas`;
     document.querySelector("#header-user-name").textContent = `${session.firstName} ${session.lastName}`.trim();
     document.querySelector("#header-user-role").textContent = config.label;
     document.querySelector("#welcome-label").textContent = `Panel de ${config.label.toLowerCase()}`;
