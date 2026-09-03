@@ -1,0 +1,13 @@
+{
+    "name": "medireservas-frontend",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "build:css": "tailwindcss -i ./assets/src/style.css -o ./assets/css/style.css --minify",
+        "watch:css": "tailwindcss -i ./assets/src/style.css -o ./assets/css/style.css --watch"
+    },
+    "devDependencies": {
+        "@tailwindcss/cli": "^4.3.3",
+        "tailwindcss": "^4.3.3"
+    }
+}
