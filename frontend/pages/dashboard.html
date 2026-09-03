@@ -10,7 +10,7 @@
         <title>Panel principal | MediReservas</title>
         <link rel="stylesheet" href="../assets/css/style.css">
     </head>
-    <body class="min-h-screen bg-page text-ink antialiased">
+    <body class="flex min-h-screen flex-col bg-page text-ink antialiased">
         <header class="border-b border-line bg-white">
             <nav class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8" aria-label="Barra superior del panel">
                 <a class="flex items-center gap-2 text-lg font-bold text-primary-dark sm:text-xl" href="dashboard.html" aria-label="Ir al panel principal de MediReservas">
@@ -31,41 +31,52 @@
             </nav>
         </header>
 
-        <div>
-            <aside aria-label="Menú del panel">
-                <nav>
-                    <ul id="dashboard-menu">
-                        <li><a href="dashboard.html" aria-current="page">Inicio</a></li>
+        <div class="mx-auto grid w-full max-w-7xl flex-1 lg:grid-cols-[16rem_1fr]">
+            <aside class="border-b border-line bg-white px-4 py-4 sm:px-6 lg:border-r lg:border-b-0 lg:px-5 lg:py-8" aria-label="Menú del panel">
+                <nav class="lg:sticky lg:top-8">
+                    <p class="mb-3 hidden px-3 text-xs font-bold uppercase tracking-widest text-muted lg:block">Navegación</p>
+                    <ul class="flex gap-2 overflow-x-auto lg:flex-col" id="dashboard-menu">
+                        <li class="shrink-0">
+                            <a class="flex items-center gap-3 rounded-xl bg-primary-light px-4 py-3 text-sm font-semibold text-primary-dark" href="dashboard.html" aria-current="page">
+                                <span class="grid size-7 place-items-center rounded-lg bg-primary text-xs text-white" aria-hidden="true">⌂</span>
+                                Inicio
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             </aside>
 
-            <main>
-                <section aria-labelledby="welcome-title">
-                    <p id="welcome-label">Panel principal</p>
-                    <h1 id="welcome-title">Hola, <span id="welcome-user-name">usuario</span></h1>
-                    <p id="welcome-description">
+            <main class="min-w-0 px-4 py-8 sm:px-6 sm:py-10 lg:px-10 lg:py-12">
+                <section class="rounded-3xl bg-primary-dark p-6 text-white shadow-lg sm:p-8" aria-labelledby="welcome-title">
+                    <p class="text-sm font-bold uppercase tracking-widest text-emerald-200" id="welcome-label">Panel principal</p>
+                    <h1 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl" id="welcome-title">Hola, <span id="welcome-user-name">usuario</span></h1>
+                    <p class="mt-3 max-w-2xl leading-7 text-emerald-50" id="welcome-description">
                         Desde aquí puedes acceder a las funciones disponibles para tu perfil.
                     </p>
                 </section>
 
-                <section aria-labelledby="quick-access-title">
-                    <h2 id="quick-access-title">Accesos principales</h2>
-                    <div id="dashboard-actions">
-                        <p>Cargando opciones...</p>
+                <section class="mt-10" aria-labelledby="quick-access-title">
+                    <div class="flex items-end justify-between gap-4">
+                        <div>
+                            <p class="text-sm font-bold uppercase tracking-widest text-primary">Funciones</p>
+                            <h2 class="mt-2 text-2xl font-bold" id="quick-access-title">Accesos principales</h2>
+                        </div>
+                    </div>
+                    <div class="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3" id="dashboard-actions">
+                        <p class="rounded-2xl border border-line bg-white p-6 text-muted shadow-sm">Cargando opciones...</p>
                     </div>
                 </section>
 
-                <section aria-labelledby="summary-title">
-                    <h2 id="summary-title">Resumen</h2>
-                    <div id="dashboard-summary">
-                        <p>La información de tu actividad aparecerá en esta sección.</p>
+                <section class="mt-10" aria-labelledby="summary-title">
+                    <h2 class="text-2xl font-bold" id="summary-title">Resumen</h2>
+                    <div class="mt-6 rounded-2xl border border-line bg-white p-6 shadow-sm" id="dashboard-summary">
+                        <p class="text-muted">La información de tu actividad aparecerá en esta sección.</p>
                     </div>
                 </section>
             </main>
         </div>
 
-        <footer>
+        <footer class="border-t border-line bg-white px-4 py-5 text-center text-sm text-muted">
             <p>&copy; 2026 MediReservas. Todos los derechos reservados.</p>
         </footer>
         <script type="module" src="../assets/js/logout.js"></script>
