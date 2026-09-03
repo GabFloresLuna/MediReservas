@@ -90,3 +90,18 @@ export function validateRegistration(values) {
 
     return errors;
 }
+
+export function validateLogin(values) {
+    const errors = {};
+
+    if (!values.email) errors.email = "El correo electrónico es obligatorio.";
+    else if (values.email.length > 100) errors.email = "El correo no puede superar 100 caracteres.";
+    else if (!isValidEmail(values.email)) errors.email = "Ingresa un correo electrónico válido.";
+
+    if (!values.password) errors.password = "La contraseña es obligatoria.";
+    else if (values.password.length < 6 || values.password.length > 100) {
+        errors.password = "La contraseña debe tener entre 6 y 100 caracteres.";
+    }
+
+    return errors;
+}
