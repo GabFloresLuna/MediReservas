@@ -64,3 +64,35 @@ function filtrarMedicos() {
 
 buscarMedico.addEventListener("input", filtrarMedicos);
 filtroEspecialidad.addEventListener("change", filtrarMedicos);
+
+const botonesDetalle = document.querySelectorAll(".verDetalle");
+
+const detalleMedico = document.getElementById("detalleMedico");
+const detalleNombre = document.getElementById("detalleNombre");
+const detalleEspecialidad = document.getElementById("detalleEspecialidad");
+const detalleRegistro = document.getElementById("detalleRegistro");
+const detalleDescripcion = document.getElementById("detalleDescripcion");
+const cerrarDetalle = document.getElementById("cerrarDetalle");
+
+botonesDetalle.forEach(function (boton) {
+    boton.addEventListener("click", function () {
+        const medico = boton.closest(".medico");
+
+        const nombre = medico.querySelector("h3").textContent;
+        const datos = medico.querySelectorAll("p");
+        const especialidad = datos[0].textContent.replace("Especialidad: ", "").trim();
+        const registro = datos[1].textContent.replace("Registro médico: ", "").trim();
+        const descripcion = medico.querySelector(".descripcion").textContent.trim();
+
+        detalleNombre.textContent = nombre;
+        detalleEspecialidad.textContent = especialidad;
+        detalleRegistro.textContent = registro;
+        detalleDescripcion.textContent = descripcion;
+
+        detalleMedico.style.display = "block";
+    });
+});
+
+cerrarDetalle.addEventListener("click", function () {
+    detalleMedico.style.display = "none";
+});
