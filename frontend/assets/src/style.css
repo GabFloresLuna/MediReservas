@@ -21,4 +21,9 @@
         outline: 3px solid var(--color-secondary);
         outline-offset: 3px;
     }
+
+    dialog::backdrop {
+        background: rgb(17 24 39 / 55%);
+        backdrop-filter: blur(3px);
+    }
 }
