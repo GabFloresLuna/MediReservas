@@ -35,6 +35,14 @@ export function isValidName(value) {
     return /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ' -]+$/.test(value);
 }
 
+export function getLocalDateString(date = new Date()) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
 export function validateRegistration(values) {
     const errors = {};
 
@@ -49,7 +57,7 @@ export function validateRegistration(values) {
     else if (values.lastName.length > 80) errors.lastName = "Los apellidos no pueden superar 80 caracteres.";
     else if (!isValidName(values.lastName)) errors.lastName = "Los apellidos contienen caracteres no permitidos.";
 
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getLocalDateString();
     if (values.birthDate && values.birthDate >= today) {
         errors.birthDate = "La fecha de nacimiento debe ser anterior a hoy.";
     }

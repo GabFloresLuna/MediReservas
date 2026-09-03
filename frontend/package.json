@@ -5,7 +5,8 @@
     "type": "module",
     "scripts": {
         "build:css": "tailwindcss -i ./assets/src/style.css -o ./assets/css/style.css --minify",
-        "watch:css": "tailwindcss -i ./assets/src/style.css -o ./assets/css/style.css --watch"
+        "watch:css": "tailwindcss -i ./assets/src/style.css -o ./assets/css/style.css --watch",
+        "test": "node --test"
     },
     "devDependencies": {
         "@tailwindcss/cli": "^4.3.3",

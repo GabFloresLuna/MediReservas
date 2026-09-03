@@ -39,20 +39,20 @@
                         <div class="grid gap-x-6 gap-y-5 sm:grid-cols-2">
                             <div>
                                 <label class="mb-2 block text-sm font-semibold" for="run">RUN</label>
-                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="run" name="run" type="text" autocomplete="off" aria-describedby="run-help run-error">
+                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="run" name="run" type="text" autocomplete="off" maxlength="12" aria-describedby="run-help run-error">
                                 <p class="mt-1.5 text-xs text-muted" id="run-help">Escríbelo sin puntos y con guion.</p>
                                 <p class="mt-1.5 min-h-5 text-sm text-red-600" id="run-error" role="alert"></p>
                             </div>
 
                             <div>
                                 <label class="mb-2 block text-sm font-semibold" for="first-name">Nombre</label>
-                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="first-name" name="firstName" type="text" autocomplete="given-name" aria-describedby="first-name-error">
+                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="first-name" name="firstName" type="text" autocomplete="given-name" maxlength="80" aria-describedby="first-name-error">
                                 <p class="mt-1.5 min-h-5 text-sm text-red-600" id="first-name-error" role="alert"></p>
                             </div>
 
                             <div>
                                 <label class="mb-2 block text-sm font-semibold" for="last-name">Apellidos</label>
-                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="last-name" name="lastName" type="text" autocomplete="family-name" aria-describedby="last-name-error">
+                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="last-name" name="lastName" type="text" autocomplete="family-name" maxlength="80" aria-describedby="last-name-error">
                                 <p class="mt-1.5 min-h-5 text-sm text-red-600" id="last-name-error" role="alert"></p>
                             </div>
 
@@ -64,13 +64,13 @@
 
                             <div>
                                 <label class="mb-2 block text-sm font-semibold" for="phone">Teléfono</label>
-                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+56 9 1234 5678" aria-describedby="phone-error">
+                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="phone" name="phone" type="tel" autocomplete="tel" maxlength="20" placeholder="+56 9 1234 5678" aria-describedby="phone-error">
                                 <p class="mt-1.5 min-h-5 text-sm text-red-600" id="phone-error" role="alert"></p>
                             </div>
 
                             <div>
                                 <label class="mb-2 block text-sm font-semibold" for="address">Dirección</label>
-                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="address" name="address" type="text" autocomplete="street-address" aria-describedby="address-error">
+                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="address" name="address" type="text" autocomplete="street-address" maxlength="150" aria-describedby="address-error">
                                 <p class="mt-1.5 min-h-5 text-sm text-red-600" id="address-error" role="alert"></p>
                             </div>
                         </div>
@@ -84,19 +84,19 @@
                         <div class="grid gap-x-6 gap-y-5 sm:grid-cols-2">
                             <div class="sm:col-span-2">
                                 <label class="mb-2 block text-sm font-semibold" for="email">Correo electrónico</label>
-                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="email" name="email" type="email" autocomplete="email" placeholder="nombre@correo.cl" aria-describedby="email-error">
+                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="email" name="email" type="email" autocomplete="email" maxlength="100" placeholder="nombre@correo.cl" aria-describedby="email-error">
                                 <p class="mt-1.5 min-h-5 text-sm text-red-600" id="email-error" role="alert"></p>
                             </div>
 
                             <div>
                                 <label class="mb-2 block text-sm font-semibold" for="password">Contraseña</label>
-                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="password" name="password" type="password" autocomplete="new-password" aria-describedby="password-error">
+                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="password" name="password" type="password" autocomplete="new-password" minlength="6" maxlength="100" aria-describedby="password-error">
                                 <p class="mt-1.5 min-h-5 text-sm text-red-600" id="password-error" role="alert"></p>
                             </div>
 
                             <div>
                                 <label class="mb-2 block text-sm font-semibold" for="password-confirmation">Confirmar contraseña</label>
-                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="password-confirmation" name="passwordConfirmation" type="password" autocomplete="new-password" aria-describedby="password-confirmation-error">
+                                <input class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100" id="password-confirmation" name="passwordConfirmation" type="password" autocomplete="new-password" minlength="6" maxlength="100" aria-describedby="password-confirmation-error">
                                 <p class="mt-1.5 min-h-5 text-sm text-red-600" id="password-confirmation-error" role="alert"></p>
                             </div>
                         </div>

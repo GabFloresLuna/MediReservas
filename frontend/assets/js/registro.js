@@ -1,9 +1,10 @@
-import { normalizeRun, validateRegistration } from "./validaciones.js";
+import { getLocalDateString, normalizeRun, validateRegistration } from "./validaciones.js";
 import { saveUser, userExists } from "./storage.js";
 
 const form = document.querySelector("#register-form");
 const message = document.querySelector("#register-message");
 const submitButton = form?.querySelector('button[type="submit"]');
+const birthDateInput = form?.elements.namedItem("birthDate");
 const fieldNames = [
     "run",
     "firstName",
@@ -69,6 +70,8 @@ fieldNames.forEach((fieldName) => {
 getInput("run")?.addEventListener("blur", (event) => {
     event.target.value = normalizeRun(event.target.value);
 });
+
+if (birthDateInput) birthDateInput.max = getLocalDateString();
 
 form?.addEventListener("submit", (event) => {
     event.preventDefault();
