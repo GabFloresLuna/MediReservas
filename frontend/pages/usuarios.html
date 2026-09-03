@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta
+            name="description"
+            content="Administración de usuarios registrados en MediReservas."
+        >
+        <title>Gestión de usuarios | MediReservas</title>
+        <link rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    <body>
+        <header>
+            <nav aria-label="Barra superior de gestión de usuarios">
+                <a href="dashboard.html" aria-label="Ir al panel principal de MediReservas">
+                    MediReservas
+                </a>
+                <a href="dashboard.html">Volver al panel</a>
+            </nav>
+        </header>
+
+        <main>
+            <section aria-labelledby="users-title">
+                <header>
+                    <div>
+                        <p>Administración</p>
+                        <h1 id="users-title">Gestión de usuarios</h1>
+                        <p>Consulta, crea y actualiza las cuentas registradas en MediReservas.</p>
+                    </div>
+                    <button id="new-user-button" type="button">Crear usuario</button>
+                </header>
+
+                <form id="user-filters" role="search">
+                    <div>
+                        <label for="user-search">Buscar usuario</label>
+                        <input
+                            id="user-search"
+                            name="search"
+                            type="search"
+                            placeholder="Nombre, RUN o correo"
+                        >
+                    </div>
+
+                    <div>
+                        <label for="status-filter">Estado</label>
+                        <select id="status-filter" name="status">
+                            <option value="all">Todos</option>
+                            <option value="active">Activos</option>
+                            <option value="inactive">Inactivos</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div aria-live="polite">
+                    <p id="users-result-count">Cargando usuarios...</p>
+                </div>
+
+                <div>
+                    <table>
+                        <caption>Usuarios registrados en MediReservas</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Usuario</th>
+                                <th scope="col">RUN</th>
+                                <th scope="col">Correo</th>
+                                <th scope="col">Rol</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <tr>
+                                <td colspan="6">Cargando información...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p id="users-empty-message" hidden>No se encontraron usuarios con los filtros seleccionados.</p>
+            </section>
+        </main>
+
+        <dialog id="user-dialog" aria-labelledby="user-dialog-title">
+            <form id="user-form" method="dialog" novalidate>
+                <header>
+                    <div>
+                        <p>Cuenta de usuario</p>
+                        <h2 id="user-dialog-title">Crear usuario</h2>
+                    </div>
+                    <button id="close-user-dialog" type="button" aria-label="Cerrar formulario">×</button>
+                </header>
+
+                <input id="user-id" name="userId" type="hidden">
+
+                <div>
+                    <label for="user-run">RUN</label>
+                    <input id="user-run" name="run" type="text" maxlength="12" autocomplete="off">
+                    <p id="user-run-error" role="alert"></p>
+                </div>
+
+                <div>
+                    <label for="user-first-name">Nombre</label>
+                    <input id="user-first-name" name="firstName" type="text" maxlength="80" autocomplete="given-name">
+                    <p id="user-first-name-error" role="alert"></p>
+                </div>
+
+                <div>
+                    <label for="user-last-name">Apellidos</label>
+                    <input id="user-last-name" name="lastName" type="text" maxlength="80" autocomplete="family-name">
+                    <p id="user-last-name-error" role="alert"></p>
+                </div>
+
+                <div>
+                    <label for="user-email">Correo electrónico</label>
+                    <input id="user-email" name="email" type="email" maxlength="100" autocomplete="email">
+                    <p id="user-email-error" role="alert"></p>
+                </div>
+
+                <div>
+                    <label for="user-phone">Teléfono</label>
+                    <input id="user-phone" name="phone" type="tel" maxlength="20" autocomplete="tel">
+                    <p id="user-phone-error" role="alert"></p>
+                </div>
+
+                <div>
+                    <label for="user-address">Dirección</label>
+                    <input id="user-address" name="address" type="text" maxlength="150" autocomplete="street-address">
+                    <p id="user-address-error" role="alert"></p>
+                </div>
+
+                <footer>
+                    <button id="cancel-user-button" type="button">Cancelar</button>
+                    <button type="submit">Guardar usuario</button>
+                </footer>
+                <p id="user-form-message" role="status"></p>
+            </form>
+        </dialog>
+
+        <footer>
+            <p>&copy; 2026 MediReservas. Todos los derechos reservados.</p>
+        </footer>
+    </body>
+</html>
