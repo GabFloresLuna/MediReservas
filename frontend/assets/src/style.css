@@ -2,6 +2,7 @@
 
 @source "../../*.html";
 @source "../../pages/*.html";
+@source inline("border-red-500");
 
 @theme {
     --color-primary: #059669;
