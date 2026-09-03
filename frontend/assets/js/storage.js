@@ -60,6 +60,10 @@ export function userExists(run, email) {
     );
 }
 
+export function getUserById(userId) {
+    return getUsers().find((user) => user.id === userId) ?? null;
+}
+
 export function saveUser(user) {
     const users = getUsers();
     users.push(user);
