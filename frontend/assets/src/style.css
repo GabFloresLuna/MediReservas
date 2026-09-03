@@ -12,3 +12,10 @@
     --color-muted: #6b7280;
     --color-line: #e5e7eb;
 }
+
+@layer base {
+    :focus-visible {
+        outline: 3px solid var(--color-secondary);
+        outline-offset: 3px;
+    }
+}

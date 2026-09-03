@@ -28,6 +28,13 @@ mobileMenu?.addEventListener("click", (event) => {
     if (event.target.closest("a")) closeMobileMenu();
 });
 
+document.addEventListener("click", (event) => {
+    const clickedOutsideMenu = !mobileMenu?.contains(event.target);
+    const clickedOutsideButton = !menuButton?.contains(event.target);
+
+    if (clickedOutsideMenu && clickedOutsideButton) closeMobileMenu();
+});
+
 document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") closeMobileMenu();
 });

@@ -11,6 +11,9 @@
         <link rel="stylesheet" href="assets/css/style.css">
     </head>
     <body class="bg-page text-ink antialiased">
+        <a class="fixed left-4 top-4 z-20 -translate-y-24 rounded-lg bg-white px-4 py-2 font-semibold text-primary-dark shadow-xl transition focus:translate-y-0" href="#main-content">
+            Saltar al contenido principal
+        </a>
         <header class="relative border-b border-line bg-white">
             <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8" aria-label="Navegación principal">
                 <a class="flex items-center gap-2 text-xl font-bold text-primary-dark" href="index.html" aria-label="Ir al inicio de MediReservas">
@@ -57,7 +60,7 @@
             </nav>
         </header>
 
-        <main>
+        <main id="main-content" tabindex="-1">
             <section class="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-2 lg:px-8 lg:py-28" aria-labelledby="hero-title">
                 <div>
                     <p class="mb-4 text-sm font-bold uppercase tracking-widest text-primary">Atención médica más cerca de ti</p>
