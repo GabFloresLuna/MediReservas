@@ -71,11 +71,11 @@ test("crea una sesión sin incluir la contraseña", () => {
     assert.equal("password" in getSession(), false);
 });
 
-test("asigna un dashboard diferente a cada rol", () => {
-    assert.equal(getRoleDestination("ADMINISTRADOR"), "dashboard-administrador.html");
-    assert.equal(getRoleDestination("RECEPCIONISTA"), "dashboard-recepcionista.html");
-    assert.equal(getRoleDestination("MEDICO"), "dashboard-medico.html");
-    assert.equal(getRoleDestination("PACIENTE"), "dashboard-paciente.html");
+test("dirige los roles reconocidos al dashboard compartido", () => {
+    assert.equal(getRoleDestination("ADMINISTRADOR"), "dashboard.html");
+    assert.equal(getRoleDestination("RECEPCIONISTA"), "dashboard.html");
+    assert.equal(getRoleDestination("MEDICO"), "dashboard.html");
+    assert.equal(getRoleDestination("PACIENTE"), "dashboard.html");
     assert.equal(getRoleDestination("ROL_DESCONOCIDO"), "login.html");
 });
 

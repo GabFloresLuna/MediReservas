@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta
+            name="description"
+            content="Panel principal de MediReservas para gestionar las funciones disponibles según el perfil del usuario."
+        >
+        <title>Panel principal | MediReservas</title>
+        <link rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    <body>
+        <header>
+            <nav aria-label="Barra superior del panel">
+                <a href="dashboard.html" aria-label="Ir al panel principal de MediReservas">
+                    MediReservas
+                </a>
+
+                <div>
+                    <p id="header-user-name">Usuario</p>
+                    <p id="header-user-role">Perfil</p>
+                </div>
+            </nav>
+        </header>
+
+        <div>
+            <aside aria-label="Menú del panel">
+                <nav>
+                    <ul id="dashboard-menu">
+                        <li><a href="dashboard.html" aria-current="page">Inicio</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <main>
+                <section aria-labelledby="welcome-title">
+                    <p id="welcome-label">Panel principal</p>
+                    <h1 id="welcome-title">Hola, <span id="welcome-user-name">usuario</span></h1>
+                    <p id="welcome-description">
+                        Desde aquí puedes acceder a las funciones disponibles para tu perfil.
+                    </p>
+                </section>
+
+                <section aria-labelledby="quick-access-title">
+                    <h2 id="quick-access-title">Accesos principales</h2>
+                    <div id="dashboard-actions">
+                        <p>Cargando opciones...</p>
+                    </div>
+                </section>
+
+                <section aria-labelledby="summary-title">
+                    <h2 id="summary-title">Resumen</h2>
+                    <div id="dashboard-summary">
+                        <p>La información de tu actividad aparecerá en esta sección.</p>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 MediReservas. Todos los derechos reservados.</p>
+        </footer>
+    </body>
+</html>
