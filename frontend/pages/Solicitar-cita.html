@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar cita médica</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>MediSalud</h1>
+
+        <nav>
+            <a href="../dashboard.html">Inicio</a>
+            <a href="buscar-medicos.html">Buscar médicos</a>
+            <a href="mis-citas.html">Mis citas</a>
+            <a href="historial-clinico.html">Historial clínico</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section>
+            <h2>Solicitar cita médica</h2>
+
+            <p>
+                Complete el formulario para solicitar una cita médica.
+            </p>
+        </section>
+
+        <section>
+
+            <form id="formularioCita">
+
+                <div>
+                    <label for="especialidad">Especialidad médica</label>
+
+                    <br>
+
+                    <select id="especialidad" name="especialidad">
+                        <option value="">Seleccione una especialidad</option>
+                        <option value="Cardiología">Cardiología</option>
+                        <option value="Pediatría">Pediatría</option>
+                        <option value="Dermatología">Dermatología</option>
+                        <option value="Neurología">Neurología</option>
+                        <option value="Traumatología">Traumatología</option>
+                        <option value="Ginecología">Ginecología</option>
+                    </select>
+                </div>
+
+                <br>
+
+                <div>
+                    <label for="medico">Médico</label>
+
+                    <br>
+
+                    <select id="medico" name="medico">
+                        <option value="">Seleccione un médico</option>
+                        <option value="Juan Pérez">Dr. Juan Pérez</option>
+                        <option value="Laura Gómez">Dra. Laura Gómez</option>
+                        <option value="Carlos Rodríguez">Dr. Carlos Rodríguez</option>
+                        <option value="Ana Martínez">Dra. Ana Martínez</option>
+                        <option value="Andrés López">Dr. Andrés López</option>
+                        <option value="María Torres">Dra. María Torres</option>
+                    </select>
+                </div>
+
+                <br>
+
+                <div>
+                    <label for="fecha">Fecha de la cita</label>
+
+                    <br>
+
+                    <input
+                        type="date"
+                        id="fecha"
+                        name="fecha"
+                    >
+                </div>
+
+                <br>
+
+                <div>
+                    <label for="hora">Hora disponible</label>
+
+                    <br>
+
+                    <select id="hora" name="hora">
+                        <option value="">Seleccione una hora</option>
+                        <option value="08:00">08:00</option>
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                    </select>
+                </div>
+
+                <br>
+
+                <div>
+                    <label for="motivo">Motivo de la consulta</label>
+
+                    <br>
+
+                    <textarea
+                        id="motivo"
+                        name="motivo"
+                        rows="4"
+                        placeholder="Describa el motivo de la consulta."
+                    ></textarea>
+                </div>
+
+                <br>
+
+                <div>
+                    <p>Modalidad de atención</p>
+
+                    <input
+                        type="radio"
+                        id="presencial"
+                        name="modalidad"
+                        value="Presencial"
+                    >
+
+                    <label for="presencial">Presencial</label>
+
+                    <br>
+
+                    <input
+                        type="radio"
+                        id="virtual"
+                        name="modalidad"
+                        value="Virtual"
+                    >
+
+                    <label for="virtual">Virtual</label>
+                </div>
+
+                <br>
+
+                <div>
+                    <button type="submit">
+                        Solicitar cita
+                    </button>
+
+                    <button type="reset">
+                        Limpiar formulario
+                    </button>
+                </div>
+
+            </form>
+
+        </section>
+
+        <br>
+
+        <section id="mensajeSolicitud" style="display: none;">
+            <h3>Solicitud registrada</h3>
+
+            <p>
+                La cita médica fue solicitada correctamente.
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>MediSalud</p>
+    </footer>
+
+    <script src="../assets/js/solicitar-cita.js"></script>
+
+</body>
+</html>
