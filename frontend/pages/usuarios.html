@@ -12,6 +12,7 @@
         <script type="module" src="../assets/js/route-guard.js"></script>
     </head>
     <body class="flex min-h-screen flex-col bg-page text-ink antialiased" data-page-name="Gestión de usuarios" data-auth-required data-allowed-roles="ADMINISTRADOR">
+        <a class="fixed left-4 top-4 z-60 -translate-y-24 rounded-lg bg-white px-4 py-2 font-semibold text-primary-dark shadow-xl transition focus:translate-y-0" href="#main-content">Saltar al contenido principal</a>
         <header class="relative z-30 border-b border-line bg-white">
             <nav class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8" aria-label="Barra superior de MediReservas">
                 <div class="flex items-center gap-3">
@@ -37,7 +38,7 @@
             </nav>
         </header>
 
-        <main class="flex-1 px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+        <main class="flex-1 px-4 py-8 sm:px-6 sm:py-12 lg:px-8" id="main-content" tabindex="-1">
             <section class="mx-auto max-w-7xl" aria-labelledby="users-title">
                 <header class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
                     <div>

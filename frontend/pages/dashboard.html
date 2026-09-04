@@ -12,6 +12,7 @@
         <script type="module" src="../assets/js/route-guard.js"></script>
     </head>
     <body class="flex min-h-screen flex-col bg-page text-ink antialiased" data-page-name="Panel principal" data-auth-required data-allowed-roles="ADMINISTRADOR RECEPCIONISTA MEDICO PACIENTE">
+        <a class="fixed left-4 top-4 z-60 -translate-y-24 rounded-lg bg-white px-4 py-2 font-semibold text-primary-dark shadow-xl transition focus:translate-y-0" href="#main-content">Saltar al contenido principal</a>
         <header class="relative z-30 border-b border-line bg-white">
             <nav class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8" aria-label="Barra superior del panel">
                 <div class="flex items-center gap-3">
@@ -51,7 +52,7 @@
                 </nav>
             </aside>
 
-            <main class="min-w-0 px-4 py-8 sm:px-6 sm:py-10 lg:px-10 lg:py-12">
+            <main class="min-w-0 px-4 py-8 sm:px-6 sm:py-10 lg:px-10 lg:py-12" id="main-content" tabindex="-1">
                 <section class="rounded-3xl bg-primary-dark p-6 text-white shadow-lg sm:p-8" aria-labelledby="welcome-title">
                     <p class="text-sm font-bold uppercase tracking-widest text-emerald-200" id="welcome-label">Panel principal</p>
                     <h1 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl" id="welcome-title">Hola, <span id="welcome-user-name">usuario</span></h1>
