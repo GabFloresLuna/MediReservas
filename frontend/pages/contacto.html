@@ -15,16 +15,46 @@
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
-<body class="flex min-h-screen flex-col bg-page text-ink antialiased">
+<body
+    class="flex min-h-screen flex-col bg-page text-ink antialiased"
+    data-page-name="Mapa y contacto"
+>
 
-    <header class="border-b border-line bg-white">
+    <a
+        class="fixed left-4 top-4 z-60 -translate-y-24 rounded-lg bg-white px-4 py-2 font-semibold text-primary-dark shadow-xl transition focus:translate-y-0"
+        href="#main-content"
+    >
+        Saltar al contenido principal
+    </a>
+
+
+    <!-- ENCABEZADO -->
+
+    <header class="relative z-30 border-b border-line bg-white">
 
         <nav
             class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8"
-            aria-label="Barra superior"
+            aria-label="Barra superior del panel"
         >
 
             <div class="flex items-center gap-3">
+
+                <button
+                    class="grid size-10 place-items-center rounded-xl border border-line bg-white text-xl text-primary-dark transition hover:bg-primary-light lg:hidden"
+                    id="mobile-menu-button"
+                    type="button"
+                    aria-controls="dashboard-sidebar"
+                    aria-expanded="false"
+                    aria-label="Abrir menú de navegación"
+                >
+                    <span
+                        class="leading-none"
+                        aria-hidden="true"
+                    >
+                        ☰
+                    </span>
+                </button>
+
 
                 <a
                     class="flex items-center gap-2 text-lg font-bold text-primary-dark sm:text-xl"
@@ -48,170 +78,270 @@
             </div>
 
 
-            <a
-                class="rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-semibold text-primary-dark transition hover:bg-primary-light"
-                href="dashboard.html"
-            >
-                Inicio
-            </a>
+            <div class="flex items-center gap-3 sm:gap-5">
+
+                <a
+                    class="text-right"
+                    href="perfil.html"
+                    aria-label="Ver mi perfil"
+                >
+
+                    <p
+                        class="text-sm font-semibold"
+                        id="header-user-name"
+                    >
+                        Usuario
+                    </p>
+
+                    <p
+                        class="text-xs text-muted"
+                        id="header-user-role"
+                    >
+                        Perfil
+                    </p>
+
+                </a>
+
+
+                <button
+                    class="inline-flex items-center justify-center rounded-xl border border-line bg-white px-3 py-2.5 text-sm font-semibold text-primary-dark transition hover:border-red-200 hover:bg-red-50 hover:text-red-600 sm:px-4"
+                    id="logout-button"
+                    type="button"
+                >
+
+                    <span class="sm:hidden">
+                        Salir
+                    </span>
+
+                    <span class="hidden sm:inline">
+                        Cerrar sesión
+                    </span>
+
+                </button>
+
+            </div>
 
         </nav>
 
     </header>
 
 
-    <main
-        class="min-w-0 flex-1 px-4 py-8 sm:px-6 sm:py-10 lg:px-10 lg:py-12"
+    <!-- FONDO DEL MENÚ MÓVIL -->
+
+    <button
+        class="fixed inset-0 z-40 hidden bg-slate-950/45 lg:hidden"
+        id="sidebar-backdrop"
+        type="button"
+        aria-label="Cerrar menú de navegación"
     >
+    </button>
 
-        <div class="mx-auto max-w-7xl">
+
+    <div class="grid w-full flex-1 lg:grid-cols-[18rem_minmax(0,1fr)]">
 
 
-            <!-- Encabezado -->
+        <!-- MENÚ LATERAL -->
 
-            <section
-                class="rounded-3xl bg-primary-dark p-6 text-white shadow-lg sm:p-8"
-                aria-labelledby="contacto-title"
+        <aside
+            class="fixed inset-y-0 left-0 z-50 w-72 -translate-x-full overflow-y-auto border-r border-line bg-white px-5 py-5 shadow-xl transition-transform duration-300 lg:static lg:z-auto lg:w-auto lg:translate-x-0 lg:overflow-visible lg:px-5 lg:py-8 lg:shadow-none"
+            id="dashboard-sidebar"
+            aria-label="Menú del panel"
+        >
+
+            <header
+                class="mb-6 flex items-center justify-between gap-4 border-b border-line pb-5 lg:hidden"
+                id="mobile-menu-header"
             >
 
-                <p class="text-sm font-bold uppercase tracking-widest text-emerald-200">
-                    MediReservas
+                <p class="font-bold text-primary-dark">
+                    Menú principal
                 </p>
 
-                <h1
-                    class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl"
-                    id="contacto-title"
+                <button
+                    class="grid size-10 place-items-center rounded-xl border border-line text-xl text-muted transition hover:bg-page hover:text-ink"
+                    id="close-mobile-menu"
+                    type="button"
+                    aria-label="Cerrar menú de navegación"
                 >
-                    Mapa y contacto
-                </h1>
+                    ×
+                </button>
 
-                <p class="mt-3 max-w-2xl leading-7 text-emerald-50">
-                    Consulta nuestra ubicación y nuestros medios de contacto.
+            </header>
+
+
+            <nav class="lg:sticky lg:top-8">
+
+                <p class="mb-3 hidden px-3 text-xs font-bold uppercase tracking-widest text-muted lg:block">
+                    Navegación
                 </p>
 
-            </section>
+                <ul
+                    class="flex flex-col gap-2"
+                    id="dashboard-menu"
+                >
+                </ul>
+
+            </nav>
+
+        </aside>
 
 
-            <!-- Información de contacto -->
+        <!-- CONTENIDO PRINCIPAL -->
 
-            <section class="mt-10">
+        <main
+            class="min-w-0 px-4 py-8 sm:px-6 sm:py-10 lg:px-10 lg:py-12"
+            id="main-content"
+            tabindex="-1"
+        >
 
-                <div>
+            <div class="mx-auto max-w-7xl">
 
-                    <p class="text-sm font-bold uppercase tracking-widest text-primary">
-                        Contacto
+
+                <!-- PRESENTACIÓN -->
+
+                <section
+                    class="rounded-3xl bg-primary-dark p-6 text-white shadow-lg sm:p-8"
+                    aria-labelledby="contacto-title"
+                >
+
+                    <p class="text-sm font-bold uppercase tracking-widest text-emerald-200">
+                        MediReservas
                     </p>
 
-                    <h2 class="mt-2 text-2xl font-bold">
-                        Información de contacto
-                    </h2>
-
-                </div>
-
-
-                <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-
-
-                    <div
-                        class="rounded-2xl border border-line bg-white p-6 shadow-sm"
+                    <h1
+                        class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl"
+                        id="contacto-title"
                     >
+                        Mapa y contacto
+                    </h1>
 
-                        <h3 class="text-lg font-bold text-primary-dark">
-                            Dirección
-                        </h3>
+                    <p class="mt-3 max-w-2xl leading-7 text-emerald-50">
+                        Consulta nuestra ubicación y nuestros medios de contacto.
+                    </p>
 
-                        <p class="mt-3 text-muted">
-                            Avenida Principal 123
+                </section>
+
+
+                <!-- INFORMACIÓN DE CONTACTO -->
+
+                <section class="mt-10">
+
+                    <div>
+
+                        <p class="text-sm font-bold uppercase tracking-widest text-primary">
+                            Contacto
                         </p>
 
-                        <p class="text-muted">
-                            Santiago, Chile
-                        </p>
+                        <h2 class="mt-2 text-2xl font-bold">
+                            Información de contacto
+                        </h2>
 
                     </div>
 
 
-                    <div
-                        class="rounded-2xl border border-line bg-white p-6 shadow-sm"
-                    >
+                    <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
 
-                        <h3 class="text-lg font-bold text-primary-dark">
-                            Teléfono
-                        </h3>
 
-                        <p class="mt-3 text-muted">
-                            +56
-                        </p>
+                        <!-- DIRECCIÓN -->
+
+                        <div
+                            class="rounded-2xl border border-line bg-white p-6 shadow-sm"
+                        >
+
+                            <h3 class="text-lg font-bold text-primary-dark">
+                                Dirección
+                            </h3>
+
+                            <p class="mt-3 text-muted">
+                                Avenida Principal 123
+                            </p>
+
+                            <p class="text-muted">
+                                Santiago, Chile
+                            </p>
+
+                        </div>
+
+
+                        <!-- TELÉFONO -->
+
+                        <div
+                            class="rounded-2xl border border-line bg-white p-6 shadow-sm"
+                        >
+
+                            <h3 class="text-lg font-bold text-primary-dark">
+                                Teléfono
+                            </h3>
+
+                            <p class="mt-3 text-muted">
+                                +56
+                            </p>
+
+                        </div>
+
+
+                        <!-- CORREO -->
+
+                        <div
+                            class="rounded-2xl border border-line bg-white p-6 shadow-sm"
+                        >
+
+                            <h3 class="text-lg font-bold text-primary-dark">
+                                Correo electrónico
+                            </h3>
+
+                            <p class="mt-3 break-words text-muted">
+                                contacto@medisalud.cl
+                            </p>
+
+                        </div>
 
                     </div>
 
-
-                    <div
-                        class="rounded-2xl border border-line bg-white p-6 shadow-sm"
-                    >
-
-                        <h3 class="text-lg font-bold text-primary-dark">
-                            Correo electrónico
-                        </h3>
-
-                        <p class="mt-3 break-words text-muted">
-                            contacto@medisalud.cl
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </section>
+                </section>
 
 
-            <!-- Ubicación -->
+                <!-- MAPA -->
 
-            <section class="mt-10">
-
-                <div>
+                <section class="mt-10">
 
                     <p class="text-sm font-bold uppercase tracking-widest text-primary">
                         Ubicación
                     </p>
 
                     <h2 class="mt-2 text-2xl font-bold">
-                        Ubicación
+                        Nuestra ubicación
                     </h2>
 
                     <p class="mt-2 text-muted">
-                        MediSalud se encuentra ubicado cerca de DUOC UC San Joaquín.
+                        MediReservas se encuentra ubicado cerca de DUOC UC San Joaquín.
                     </p>
 
-                </div>
 
+                    <div
+                        class="mt-6 overflow-hidden rounded-2xl border border-line bg-white p-2 shadow-sm"
+                    >
 
-                <div
-                    class="mt-6 overflow-hidden rounded-2xl border border-line bg-white p-2 shadow-sm"
-                >
+                        <div class="h-80 w-full sm:h-96">
 
-                    <div class="h-80 w-full sm:h-96">
+                            <iframe
+                                class="h-full w-full rounded-xl"
+                                src="https://www.google.com/maps?q=Duoc+UC+San+Joaquín,+Santiago,+Chile&output=embed"
+                                title="Mapa de DUOC UC San Joaquín"
+                                loading="lazy"
+                            >
+                            </iframe>
 
-                        <iframe
-                            class="h-full w-full rounded-xl"
-                            src="https://www.google.com/maps?q=Duoc+UC+San+Joaquín,+Santiago,+Chile&output=embed"
-                            title="Mapa de DUOC UC San Joaquín"
-                            loading="lazy"
-                        >
-                        </iframe>
+                        </div>
 
                     </div>
 
-                </div>
-
-            </section>
+                </section>
 
 
-            <!-- Formulario -->
+                <!-- FORMULARIO DE CONTACTO -->
 
-            <section class="mt-10">
-
-                <div>
+                <section class="mt-10">
 
                     <p class="text-sm font-bold uppercase tracking-widest text-primary">
                         Mensaje
@@ -225,159 +355,166 @@
                         Completa el siguiente formulario para comunicarte con nosotros.
                     </p>
 
-                </div>
+
+                    <div
+                        class="mt-6 rounded-2xl border border-line bg-white p-6 shadow-sm sm:p-8"
+                    >
+
+                        <form id="formularioContacto">
 
 
-                <div
-                    class="mt-6 rounded-2xl border border-line bg-white p-6 shadow-sm sm:p-8"
-                >
+                            <!-- NOMBRE -->
 
-                    <form id="formularioContacto">
+                            <div>
+
+                                <label
+                                    for="nombre"
+                                    class="block text-sm font-semibold"
+                                >
+                                    Nombre
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="nombre"
+                                    name="nombre"
+                                    placeholder="Ingresa tu nombre"
+                                    class="mt-2 w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                >
+
+                                <p
+                                    id="errorNombre"
+                                    class="mt-1 text-sm text-red-600"
+                                >
+                                </p>
+
+                            </div>
 
 
-                        <!-- Nombre -->
+                            <!-- CORREO -->
 
-                        <div>
+                            <div class="mt-5">
 
-                            <label
-                                for="nombre"
-                                class="block text-sm font-semibold"
+                                <label
+                                    for="correo"
+                                    class="block text-sm font-semibold"
+                                >
+                                    Correo electrónico
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="correo"
+                                    name="correo"
+                                    placeholder="ejemplo@correo.com"
+                                    class="mt-2 w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                >
+
+                                <p
+                                    id="errorCorreo"
+                                    class="mt-1 text-sm text-red-600"
+                                >
+                                </p>
+
+                            </div>
+
+
+                            <!-- ASUNTO -->
+
+                            <div class="mt-5">
+
+                                <label
+                                    for="asunto"
+                                    class="block text-sm font-semibold"
+                                >
+                                    Asunto
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="asunto"
+                                    name="asunto"
+                                    placeholder="Ingresa el asunto"
+                                    class="mt-2 w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                >
+
+                                <p
+                                    id="errorAsunto"
+                                    class="mt-1 text-sm text-red-600"
+                                >
+                                </p>
+
+                            </div>
+
+
+                            <!-- MENSAJE -->
+
+                            <div class="mt-5">
+
+                                <label
+                                    for="mensaje"
+                                    class="block text-sm font-semibold"
+                                >
+                                    Mensaje
+                                </label>
+
+                                <textarea
+                                    id="mensaje"
+                                    name="mensaje"
+                                    rows="6"
+                                    placeholder="Escribe tu mensaje"
+                                    class="mt-2 w-full resize-y rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                                ></textarea>
+
+                                <p
+                                    id="errorMensaje"
+                                    class="mt-1 text-sm text-red-600"
+                                >
+                                </p>
+
+                            </div>
+
+
+                            <!-- BOTÓN -->
+
+                            <div class="mt-6">
+
+                                <button
+                                    type="submit"
+                                    class="rounded-xl bg-primary px-5 py-3 font-semibold text-white transition hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                                >
+                                    Enviar mensaje
+                                </button>
+
+                            </div>
+
+
+                            <!-- MENSAJE DE ÉXITO -->
+
+                            <div
+                                id="mensajeExito"
+                                class="mt-5 hidden rounded-xl border border-emerald-200 bg-emerald-50 p-4"
                             >
-                                Nombre
-                            </label>
 
-                            <input
-                                type="text"
-                                id="nombre"
-                                name="nombre"
-                                placeholder="Ingresa tu nombre"
-                                class="mt-2 w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                            >
+                                <p class="font-semibold text-emerald-700">
+                                </p>
 
-                            <p
-                                id="errorNombre"
-                                class="mt-1 text-sm text-red-600"
-                            ></p>
+                            </div>
 
-                        </div>
+                        </form>
 
+                    </div>
 
-                        <!-- Correo -->
+                </section>
 
-                        <div class="mt-5">
+            </div>
 
-                            <label
-                                for="correo"
-                                class="block text-sm font-semibold"
-                            >
-                                Correo electrónico
-                            </label>
+        </main>
 
-                            <input
-                                type="email"
-                                id="correo"
-                                name="correo"
-                                placeholder="ejemplo@correo.com"
-                                class="mt-2 w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                            >
-
-                            <p
-                                id="errorCorreo"
-                                class="mt-1 text-sm text-red-600"
-                            ></p>
-
-                        </div>
+    </div>
 
 
-                        <!-- Asunto -->
-
-                        <div class="mt-5">
-
-                            <label
-                                for="asunto"
-                                class="block text-sm font-semibold"
-                            >
-                                Asunto
-                            </label>
-
-                            <input
-                                type="text"
-                                id="asunto"
-                                name="asunto"
-                                placeholder="Ingresa el asunto"
-                                class="mt-2 w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                            >
-
-                            <p
-                                id="errorAsunto"
-                                class="mt-1 text-sm text-red-600"
-                            ></p>
-
-                        </div>
-
-
-                        <!-- Mensaje -->
-
-                        <div class="mt-5">
-
-                            <label
-                                for="mensaje"
-                                class="block text-sm font-semibold"
-                            >
-                                Mensaje
-                            </label>
-
-                            <textarea
-                                id="mensaje"
-                                name="mensaje"
-                                rows="6"
-                                placeholder="Escribe tu mensaje"
-                                class="mt-2 w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-                            ></textarea>
-
-                            <p
-                                id="errorMensaje"
-                                class="mt-1 text-sm text-red-600"
-                            ></p>
-
-                        </div>
-
-
-                        <!-- Botón -->
-
-                        <div class="mt-6">
-
-                            <button
-                                type="submit"
-                                class="rounded-xl bg-primary px-5 py-3 font-semibold text-white transition hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                            >
-                                Enviar mensaje
-                            </button>
-
-                        </div>
-
-
-                        <!-- Mensaje de éxito -->
-
-                        <div
-                            id="mensajeExito"
-                            class="mt-5 hidden rounded-xl border border-emerald-200 bg-emerald-50 p-4"
-                        >
-
-                            <p class="font-semibold text-emerald-700"></p>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </section>
-
-        </div>
-
-    </main>
-
+    <!-- FOOTER -->
 
     <footer
         class="border-t border-line bg-white px-4 py-5 text-center text-sm text-muted"
@@ -390,8 +527,11 @@
     </footer>
 
 
-    <script src="../assets/js/contacto.js"></script>
+    <!-- JAVASCRIPT -->
+
     <script type="module" src="../assets/js/navigation.js"></script>
+
+    <script src="../assets/js/contacto.js"></script>
 
 </body>
 
