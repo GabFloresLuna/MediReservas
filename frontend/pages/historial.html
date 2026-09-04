@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial Clínico</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>MediSalud</h1>
+
+        <nav>
+            <a href="../dashboard.html">Inicio</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section>
+            <h2>Historial clínico</h2>
+
+            <p>
+                Consulta la información clínica básica registrada del paciente.
+            </p>
+        </section>
+
+        <br>
+
+        <section>
+            <h2>Datos del paciente</h2>
+
+            <div>
+                <p>
+                    <strong>Nombre:</strong>
+                    Juan Pérez
+                </p>
+
+                <p>
+                    <strong>Documento:</strong>
+                    12345678
+                </p>
+
+                <p>
+                    <strong>Fecha de nacimiento:</strong>
+                    15/05/1995
+                </p>
+
+                <p>
+                    <strong>Edad:</strong>
+                    31 años
+                </p>
+
+                <p>
+                    <strong>Sexo:</strong>
+                    Masculino
+                </p>
+
+                <p>
+                    <strong>Grupo sanguíneo:</strong>
+                    O+
+                </p>
+            </div>
+        </section>
+
+        <br>
+
+        <section>
+            <h2>Antecedentes médicos</h2>
+
+            <div id="antecedentesMedicos">
+
+                <div>
+                    <h3>Hipertensión arterial</h3>
+
+                    <p>
+                        Antecedente registrado en el historial del paciente.
+                    </p>
+
+                    <p>
+                        <strong>Fecha de registro:</strong>
+                        10/03/2024
+                    </p>
+                </div>
+
+                <br>
+
+                <div>
+                    <h3>Asma</h3>
+
+                    <p>
+                        Antecedente registrado en el historial del paciente.
+                    </p>
+
+                    <p>
+                        <strong>Fecha de registro:</strong>
+                        20/08/2022
+                    </p>
+                </div>
+
+            </div>
+
+            <div id="mensajeSinAntecedentes" style="display: none;">
+                <p>No se encontraron antecedentes médicos registrados.</p>
+            </div>
+        </section>
+
+        <br>
+
+        <section>
+            <h2>Alergias</h2>
+
+            <div id="listaAlergias">
+
+                <div>
+                    <h3>Penicilina</h3>
+
+                    <p>
+                        <strong>Tipo:</strong>
+                        Medicamento
+                    </p>
+
+                    <p>
+                        <strong>Reacción:</strong>
+                        Reacción alérgica en la piel.
+                    </p>
+                </div>
+
+                <br>
+
+                <div>
+                    <h3>Polen</h3>
+
+                    <p>
+                        <strong>Tipo:</strong>
+                        Ambiental
+                    </p>
+
+                    <p>
+                        <strong>Reacción:</strong>
+                        Estornudos y congestión nasal.
+                    </p>
+                </div>
+
+            </div>
+
+            <div id="mensajeSinAlergias" style="display: none;">
+                <p>No se encontraron alergias registradas.</p>
+            </div>
+        </section>
+
+        <br>
+
+        <section>
+            <h2>Medicamentos actuales</h2>
+
+            <div id="listaMedicamentos">
+
+                <div>
+                    <h3>Losartán</h3>
+
+                    <p>
+                        <strong>Dosis:</strong>
+                        50 mg
+                    </p>
+
+                    <p>
+                        <strong>Frecuencia:</strong>
+                        Una vez al día
+                    </p>
+                </div>
+
+                <br>
+
+                <div>
+                    <h3>Salbutamol</h3>
+
+                    <p>
+                        <strong>Dosis:</strong>
+                        100 mcg
+                    </p>
+
+                    <p>
+                        <strong>Frecuencia:</strong>
+                        Según necesidad
+                    </p>
+                </div>
+
+            </div>
+
+            <div id="mensajeSinMedicamentos" style="display: none;">
+                <p>No se encontraron medicamentos registrados.</p>
+            </div>
+        </section>
+
+        <br>
+
+        <section>
+            <h2>Consultas médicas anteriores</h2>
+
+            <div id="listaConsultas">
+
+                <div>
+                    <h3>Consulta de Cardiología</h3>
+
+                    <p>
+                        <strong>Fecha:</strong>
+                        15/07/2026
+                    </p>
+
+                    <p>
+                        <strong>Médico:</strong>
+                        Juan Pérez
+                    </p>
+
+                    <p>
+                        <strong>Motivo:</strong>
+                        Control cardiovascular.
+                    </p>
+
+                    <p>
+                        <strong>Diagnóstico:</strong>
+                        Hipertensión arterial controlada.
+                    </p>
+                </div>
+
+                <br>
+
+                <div>
+                    <h3>Consulta de Medicina General</h3>
+
+                    <p>
+                        <strong>Fecha:</strong>
+                        20/05/2026
+                    </p>
+
+                    <p>
+                        <strong>Médico:</strong>
+                        Laura Gómez
+                    </p>
+
+                    <p>
+                        <strong>Motivo:</strong>
+                        Control general.
+                    </p>
+
+                    <p>
+                        <strong>Diagnóstico:</strong>
+                        Paciente en buen estado general.
+                    </p>
+                </div>
+
+            </div>
+
+            <div id="mensajeSinConsultas" style="display: none;">
+                <p>No se encontraron consultas médicas registradas.</p>
+            </div>
+        </section>
+
+        <br>
+
+        <section>
+            <h2>Observaciones</h2>
+
+            <div>
+                <p id="observaciones">
+                    Se recomienda mantener los controles médicos periódicos
+                    y continuar con el tratamiento indicado por el médico.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>
+            MediSalud
+        </p>
+    </footer>
+
+    <script src="../assets/js/historial.js"></script>
+
+</body>
+</html>
