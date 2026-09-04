@@ -1,6 +1,7 @@
 import { getDashboardConfig } from "./roles.js";
 import {
     getUsers,
+    getUserById,
     initializeBaseUsers,
     isUserDataTaken,
     saveUser,
@@ -16,6 +17,11 @@ const resultCount = document.querySelector("#users-result-count");
 const searchInput = document.querySelector("#user-search");
 const statusFilter = document.querySelector("#status-filter");
 const formMessage = document.querySelector("#user-form-message");
+const statusDialog = document.querySelector("#status-dialog");
+const statusUserId = document.querySelector("#status-user-id");
+const statusDialogTitle = document.querySelector("#status-dialog-title");
+const statusDialogDescription = document.querySelector("#status-dialog-description");
+const confirmStatusButton = document.querySelector("#confirm-status-button");
 const fieldNames = ["run", "firstName", "lastName", "email", "phone", "address", "password"];
 
 initializeBaseUsers();
@@ -148,6 +154,25 @@ function openEditDialog(userId) {
     dialog.showModal();
 }
 
+function openStatusDialog(userId) {
+    const user = getUserById(userId);
+    if (!user) return;
+
+    const nextActiveState = !user.active;
+    const action = nextActiveState ? "activar" : "desactivar";
+    const fullName = `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || "este usuario";
+
+    statusUserId.value = user.id;
+    confirmStatusButton.dataset.nextActive = String(nextActiveState);
+    statusDialogTitle.textContent = `${nextActiveState ? "Activar" : "Desactivar"} usuario`;
+    statusDialogDescription.textContent = `¿Confirmas que deseas ${action} la cuenta de ${fullName}?`;
+    confirmStatusButton.textContent = nextActiveState ? "Activar cuenta" : "Desactivar cuenta";
+    confirmStatusButton.className = nextActiveState
+        ? "rounded-xl bg-primary px-5 py-3 font-semibold text-white transition hover:bg-primary-dark"
+        : "rounded-xl bg-red-600 px-5 py-3 font-semibold text-white transition hover:bg-red-700";
+    statusDialog.showModal();
+}
+
 function validateField(fieldName) {
     const values = getFormValues();
     const errors = validateManagedUser(values, Boolean(values.id));
@@ -165,12 +190,30 @@ fieldNames.forEach((fieldName) => {
 document.querySelector("#new-user-button")?.addEventListener("click", openCreateDialog);
 document.querySelector("#close-user-dialog")?.addEventListener("click", () => dialog.close());
 document.querySelector("#cancel-user-button")?.addEventListener("click", () => dialog.close());
+document.querySelector("#cancel-status-button")?.addEventListener("click", () => statusDialog.close());
 searchInput?.addEventListener("input", renderUsers);
 statusFilter?.addEventListener("change", renderUsers);
 
 tableBody?.addEventListener("click", (event) => {
     const editButton = event.target.closest("[data-edit-user]");
     if (editButton) openEditDialog(editButton.dataset.editUser);
+
+    const statusButton = event.target.closest("[data-change-status]");
+    if (statusButton) openStatusDialog(statusButton.dataset.changeStatus);
+});
+
+confirmStatusButton?.addEventListener("click", () => {
+    const userId = statusUserId.value;
+    const nextActiveState = confirmStatusButton.dataset.nextActive === "true";
+    const updatedUser = updateUser(userId, { active: nextActiveState });
+
+    if (!updatedUser) {
+        statusDialogDescription.textContent = "No fue posible encontrar al usuario seleccionado.";
+        return;
+    }
+
+    statusDialog.close();
+    renderUsers();
 });
 
 getInput("run")?.addEventListener("blur", (event) => {
