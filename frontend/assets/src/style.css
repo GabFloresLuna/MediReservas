@@ -17,6 +17,10 @@
 }
 
 @layer base {
+    [data-auth-required]:not([data-auth-checked]) {
+        visibility: hidden;
+    }
+
     :focus-visible {
         outline: 3px solid var(--color-secondary);
         outline-offset: 3px;
