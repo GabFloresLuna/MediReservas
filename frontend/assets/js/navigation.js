@@ -1,0 +1,128 @@
+import { getDashboardConfig } from "./roles.js";
+import { getSession } from "./storage.js";
+
+const session = getSession();
+const config = getDashboardConfig(session?.role);
+
+export function getNavigationItems(role) {
+    const roleConfig = getDashboardConfig(role);
+    if (!roleConfig) return [];
+
+    return [
+        { title: "Panel principal", href: "dashboard.html", icon: "⌂" },
+        { title: "Mi perfil", href: "perfil.html", icon: "MI" },
+        ...roleConfig.actions,
+    ];
+}
+
+function createLink(item, compact = false) {
+    const currentPage = window.location.pathname.split("/").pop() || "dashboard.html";
+    const link = document.createElement("a");
+    link.href = item.href;
+    link.className = compact
+        ? "rounded-lg px-3 py-2 text-sm font-semibold text-muted transition hover:bg-primary-light hover:text-primary-dark"
+        : "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-muted transition hover:bg-primary-light hover:text-primary-dark";
+
+    if (currentPage === item.href.split("?")[0]) {
+        link.classList.add("bg-primary-light", "text-primary-dark");
+        link.setAttribute("aria-current", "page");
+    }
+
+    if (!compact) {
+        const icon = document.createElement("span");
+        icon.className = "grid size-7 shrink-0 place-items-center rounded-lg bg-page text-xs font-bold text-primary-dark";
+        icon.textContent = item.icon;
+        icon.setAttribute("aria-hidden", "true");
+        link.append(icon);
+    }
+
+    link.append(document.createTextNode(item.title));
+    return link;
+}
+
+function connectMenu(button, sidebar, backdrop, closeButton) {
+    const setOpen = (open) => {
+        sidebar.classList.toggle("translate-x-0", open);
+        sidebar.classList.toggle("-translate-x-full", !open);
+        backdrop.classList.toggle("hidden", !open);
+        button.setAttribute("aria-expanded", String(open));
+        document.body.classList.toggle("overflow-hidden", open);
+    };
+
+    button.addEventListener("click", () => setOpen(true));
+    closeButton.addEventListener("click", () => setOpen(false));
+    backdrop.addEventListener("click", () => setOpen(false));
+    sidebar.addEventListener("click", (event) => {
+        if (event.target.closest("a")) setOpen(false);
+    });
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") setOpen(false);
+    });
+}
+
+function initializeDashboardMenu() {
+    const button = document.querySelector("#mobile-menu-button");
+    const sidebar = document.querySelector("#dashboard-sidebar");
+    const backdrop = document.querySelector("#sidebar-backdrop");
+    const closeButton = document.querySelector("#close-mobile-menu");
+    if (!button || !sidebar || !backdrop || !closeButton) return false;
+
+    connectMenu(button, sidebar, backdrop, closeButton);
+    return true;
+}
+
+function initializeSharedMenu() {
+    const topNav = document.querySelector("body > header nav");
+    if (!topNav || !config) return;
+
+    const items = getNavigationItems(session.role);
+    const previousBackLink = topNav.querySelector('a[href="dashboard.html"]:last-child');
+    if (previousBackLink && previousBackLink !== topNav.firstElementChild) {
+        previousBackLink.classList.add("hidden");
+    }
+
+    const desktopNav = document.createElement("div");
+    desktopNav.className = "ml-auto hidden items-center gap-1 lg:flex";
+    desktopNav.setAttribute("aria-label", "Navegación interna");
+    desktopNav.append(...items.map((item) => createLink(item, true)));
+
+    const button = document.createElement("button");
+    button.className = "ml-auto grid size-10 place-items-center rounded-xl border border-line text-xl text-primary-dark lg:hidden";
+    button.type = "button";
+    button.setAttribute("aria-controls", "shared-mobile-sidebar");
+    button.setAttribute("aria-expanded", "false");
+    button.setAttribute("aria-label", "Abrir menú de navegación");
+    button.textContent = "☰";
+    topNav.append(desktopNav, button);
+
+    const backdrop = document.createElement("button");
+    backdrop.className = "fixed inset-0 z-40 hidden bg-slate-950/45 lg:hidden";
+    backdrop.type = "button";
+    backdrop.setAttribute("aria-label", "Cerrar menú de navegación");
+
+    const sidebar = document.createElement("aside");
+    sidebar.className = "fixed inset-y-0 left-0 z-50 w-72 -translate-x-full overflow-y-auto border-r border-line bg-white p-5 shadow-xl transition-transform duration-300 lg:hidden";
+    sidebar.id = "shared-mobile-sidebar";
+    sidebar.setAttribute("aria-label", "Menú principal");
+    const menuHeader = document.createElement("header");
+    menuHeader.className = "mb-6 flex items-center justify-between border-b border-line pb-5";
+    const title = document.createElement("p");
+    title.className = "font-bold text-primary-dark";
+    title.textContent = "Menú principal";
+    const closeButton = document.createElement("button");
+    closeButton.className = "grid size-10 place-items-center rounded-xl border border-line text-xl text-muted";
+    closeButton.type = "button";
+    closeButton.setAttribute("aria-label", "Cerrar menú de navegación");
+    closeButton.textContent = "×";
+    menuHeader.append(title, closeButton);
+    const nav = document.createElement("nav");
+    nav.className = "flex flex-col gap-2";
+    nav.append(...items.map((item) => createLink(item)));
+    sidebar.append(menuHeader, nav);
+    document.body.append(backdrop, sidebar);
+    connectMenu(button, sidebar, backdrop, closeButton);
+}
+
+if (typeof document !== "undefined") {
+    if (!initializeDashboardMenu()) initializeSharedMenu();
+}
