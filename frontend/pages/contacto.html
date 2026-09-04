@@ -1,193 +1,398 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa y Contacto</title>
+
+    <meta
+        name="description"
+        content="Información de contacto y ubicación de MediReservas."
+    >
+
+    <title>Mapa y Contacto | MediReservas</title>
+
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
-<body>
+<body class="flex min-h-screen flex-col bg-page text-ink antialiased">
 
-    <header>
-        <h1>MediSalud</h1>
+    <header class="border-b border-line bg-white">
 
-        <nav>
-            <a href="../dashboard.html">Inicio</a>
+        <nav
+            class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8"
+            aria-label="Barra superior"
+        >
+
+            <div class="flex items-center gap-3">
+
+                <a
+                    class="flex items-center gap-2 text-lg font-bold text-primary-dark sm:text-xl"
+                    href="dashboard.html"
+                    aria-label="Ir al panel principal de MediReservas"
+                >
+
+                    <span
+                        class="grid size-10 place-items-center rounded-xl bg-primary text-xl text-white"
+                        aria-hidden="true"
+                    >
+                        +
+                    </span>
+
+                    <span class="hidden sm:inline">
+                        MediReservas
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <a
+                class="rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-semibold text-primary-dark transition hover:bg-primary-light"
+                href="dashboard.html"
+            >
+                Inicio
+            </a>
+
         </nav>
+
     </header>
 
-    <main>
 
-        <section>
-            <h2>Mapa y contacto</h2>
+    <main
+        class="min-w-0 flex-1 px-4 py-8 sm:px-6 sm:py-10 lg:px-10 lg:py-12"
+    >
 
-            <p>
-                Consulta nuestra ubicación y nuestros medios de contacto.
-            </p>
-        </section>
+        <div class="mx-auto max-w-7xl">
 
-        <br>
 
-        <section>
-            <h2>Información de contacto</h2>
+            <!-- Encabezado -->
 
-            <div>
-                <h3>Dirección</h3>
+            <section
+                class="rounded-3xl bg-primary-dark p-6 text-white shadow-lg sm:p-8"
+                aria-labelledby="contacto-title"
+            >
 
-                <p>
-                    Avenida Principal 123
+                <p class="text-sm font-bold uppercase tracking-widest text-emerald-200">
+                    MediReservas
                 </p>
 
-                <p>
-                    Santiago, Chile
+                <h1
+                    class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl"
+                    id="contacto-title"
+                >
+                    Mapa y contacto
+                </h1>
+
+                <p class="mt-3 max-w-2xl leading-7 text-emerald-50">
+                    Consulta nuestra ubicación y nuestros medios de contacto.
                 </p>
-            </div>
 
-            <div>
-                <h3>Teléfono</h3>
+            </section>
 
-                <p>
-                    +56
-                </p>
-            </div>
 
-            <div>
-                <h3>Correo electrónico</h3>
+            <!-- Información de contacto -->
 
-                <p>
-                    contacto@medisalud.cl
-                </p>
-            </div>
-        </section>
-
-        <br>
-
-        <section>
-            <h2>Ubicación</h2>
-
-            <p>
-                MediSalud se encuentra ubicado cerca de DUOC UC San Joaquín.
-            </p>
-
-            <div>
-                <iframe
-                    src="https://www.google.com/maps?q=Duoc+UC+San+Joaquín,+Santiago,+Chile&output=embed"
-                    width="600"
-                    height="400"
-                    title="Mapa de DUOC UC San Joaquín">
-                </iframe>
-            </div>
-        </section>
-
-        <br>
-
-        <section>
-            <h2>Formulario de contacto</h2>
-
-            <p>
-                Completa el siguiente formulario para comunicarte con nosotros.
-            </p>
-
-            <form id="formularioContacto">
+            <section class="mt-10">
 
                 <div>
-                    <label for="nombre">
-                        Nombre
-                    </label>
 
-                    <br>
+                    <p class="text-sm font-bold uppercase tracking-widest text-primary">
+                        Contacto
+                    </p>
 
-                    <input
-                        type="text"
-                        id="nombre"
-                        name="nombre"
-                        placeholder="Ingresa tu nombre"
-                    >
+                    <h2 class="mt-2 text-2xl font-bold">
+                        Información de contacto
+                    </h2>
 
-                    <p id="errorNombre"></p>
                 </div>
 
-                <br>
 
-                <div>
-                    <label for="correo">
-                        Correo electrónico
-                    </label>
+                <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
 
-                    <br>
 
-                    <input
-                        type="email"
-                        id="correo"
-                        name="correo"
-                        placeholder="ejemplo@correo.com"
+                    <div
+                        class="rounded-2xl border border-line bg-white p-6 shadow-sm"
                     >
 
-                    <p id="errorCorreo"></p>
-                </div>
+                        <h3 class="text-lg font-bold text-primary-dark">
+                            Dirección
+                        </h3>
 
-                <br>
+                        <p class="mt-3 text-muted">
+                            Avenida Principal 123
+                        </p>
 
-                <div>
-                    <label for="asunto">
-                        Asunto
-                    </label>
+                        <p class="text-muted">
+                            Santiago, Chile
+                        </p>
 
-                    <br>
+                    </div>
 
-                    <input
-                        type="text"
-                        id="asunto"
-                        name="asunto"
-                        placeholder="Ingresa el asunto"
+
+                    <div
+                        class="rounded-2xl border border-line bg-white p-6 shadow-sm"
                     >
 
-                    <p id="errorAsunto"></p>
+                        <h3 class="text-lg font-bold text-primary-dark">
+                            Teléfono
+                        </h3>
+
+                        <p class="mt-3 text-muted">
+                            +56
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="rounded-2xl border border-line bg-white p-6 shadow-sm"
+                    >
+
+                        <h3 class="text-lg font-bold text-primary-dark">
+                            Correo electrónico
+                        </h3>
+
+                        <p class="mt-3 break-words text-muted">
+                            contacto@medisalud.cl
+                        </p>
+
+                    </div>
+
                 </div>
 
-                <br>
+            </section>
+
+
+            <!-- Ubicación -->
+
+            <section class="mt-10">
 
                 <div>
-                    <label for="mensaje">
+
+                    <p class="text-sm font-bold uppercase tracking-widest text-primary">
+                        Ubicación
+                    </p>
+
+                    <h2 class="mt-2 text-2xl font-bold">
+                        Ubicación
+                    </h2>
+
+                    <p class="mt-2 text-muted">
+                        MediSalud se encuentra ubicado cerca de DUOC UC San Joaquín.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="mt-6 overflow-hidden rounded-2xl border border-line bg-white p-2 shadow-sm"
+                >
+
+                    <div class="h-80 w-full sm:h-96">
+
+                        <iframe
+                            class="h-full w-full rounded-xl"
+                            src="https://www.google.com/maps?q=Duoc+UC+San+Joaquín,+Santiago,+Chile&output=embed"
+                            title="Mapa de DUOC UC San Joaquín"
+                            loading="lazy"
+                        >
+                        </iframe>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Formulario -->
+
+            <section class="mt-10">
+
+                <div>
+
+                    <p class="text-sm font-bold uppercase tracking-widest text-primary">
                         Mensaje
-                    </label>
+                    </p>
 
-                    <br>
+                    <h2 class="mt-2 text-2xl font-bold">
+                        Formulario de contacto
+                    </h2>
 
-                    <textarea
-                        id="mensaje"
-                        name="mensaje"
-                        rows="6"
-                        cols="50"
-                        placeholder="Escribe tu mensaje"
-                    ></textarea>
+                    <p class="mt-2 text-muted">
+                        Completa el siguiente formulario para comunicarte con nosotros.
+                    </p>
 
-                    <p id="errorMensaje"></p>
                 </div>
 
-                <br>
 
-                <button type="submit">
-                    Enviar mensaje
-                </button>
+                <div
+                    class="mt-6 rounded-2xl border border-line bg-white p-6 shadow-sm sm:p-8"
+                >
 
-            </form>
+                    <form id="formularioContacto">
 
-            <div id="mensajeExito">
-                <p></p>
-            </div>
 
-        </section>
+                        <!-- Nombre -->
+
+                        <div>
+
+                            <label
+                                for="nombre"
+                                class="block text-sm font-semibold"
+                            >
+                                Nombre
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nombre"
+                                name="nombre"
+                                placeholder="Ingresa tu nombre"
+                                class="mt-2 w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                            >
+
+                            <p
+                                id="errorNombre"
+                                class="mt-1 text-sm text-red-600"
+                            ></p>
+
+                        </div>
+
+
+                        <!-- Correo -->
+
+                        <div class="mt-5">
+
+                            <label
+                                for="correo"
+                                class="block text-sm font-semibold"
+                            >
+                                Correo electrónico
+                            </label>
+
+                            <input
+                                type="email"
+                                id="correo"
+                                name="correo"
+                                placeholder="ejemplo@correo.com"
+                                class="mt-2 w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                            >
+
+                            <p
+                                id="errorCorreo"
+                                class="mt-1 text-sm text-red-600"
+                            ></p>
+
+                        </div>
+
+
+                        <!-- Asunto -->
+
+                        <div class="mt-5">
+
+                            <label
+                                for="asunto"
+                                class="block text-sm font-semibold"
+                            >
+                                Asunto
+                            </label>
+
+                            <input
+                                type="text"
+                                id="asunto"
+                                name="asunto"
+                                placeholder="Ingresa el asunto"
+                                class="mt-2 w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                            >
+
+                            <p
+                                id="errorAsunto"
+                                class="mt-1 text-sm text-red-600"
+                            ></p>
+
+                        </div>
+
+
+                        <!-- Mensaje -->
+
+                        <div class="mt-5">
+
+                            <label
+                                for="mensaje"
+                                class="block text-sm font-semibold"
+                            >
+                                Mensaje
+                            </label>
+
+                            <textarea
+                                id="mensaje"
+                                name="mensaje"
+                                rows="6"
+                                placeholder="Escribe tu mensaje"
+                                class="mt-2 w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                            ></textarea>
+
+                            <p
+                                id="errorMensaje"
+                                class="mt-1 text-sm text-red-600"
+                            ></p>
+
+                        </div>
+
+
+                        <!-- Botón -->
+
+                        <div class="mt-6">
+
+                            <button
+                                type="submit"
+                                class="rounded-xl bg-primary px-5 py-3 font-semibold text-white transition hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                            >
+                                Enviar mensaje
+                            </button>
+
+                        </div>
+
+
+                        <!-- Mensaje de éxito -->
+
+                        <div
+                            id="mensajeExito"
+                            class="mt-5 hidden rounded-xl border border-emerald-200 bg-emerald-50 p-4"
+                        >
+
+                            <p class="font-semibold text-emerald-700"></p>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+        </div>
 
     </main>
 
-    <footer>
+
+    <footer
+        class="border-t border-line bg-white px-4 py-5 text-center text-sm text-muted"
+    >
+
         <p>
-            MediSalud
+            &copy; 2026 MediReservas. Todos los derechos reservados.
         </p>
+
     </footer>
 
+
     <script src="../assets/js/contacto.js"></script>
+    <script type="module" src="../assets/js/navigation.js"></script>
 
 </body>
+
 </html>
