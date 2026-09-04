@@ -53,11 +53,7 @@ export function getUsers() {
 }
 
 export function userExists(run, email) {
-    const normalizedEmail = email.toLowerCase();
-
-    return getUsers().some(
-        (user) => user.run === run || user.email.toLowerCase() === normalizedEmail
-    );
+    return isUserDataTaken(run, email);
 }
 
 export function getUserById(userId) {
@@ -68,6 +64,27 @@ export function saveUser(user) {
     const users = getUsers();
     users.push(user);
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
+}
+
+export function isUserDataTaken(run, email, excludedUserId = null) {
+    const normalizedEmail = email.toLowerCase();
+
+    return getUsers().some(
+        (user) =>
+            user.id !== excludedUserId &&
+            (user.run === run || user.email.toLowerCase() === normalizedEmail)
+    );
+}
+
+export function updateUser(userId, changes) {
+    const users = getUsers();
+    const userIndex = users.findIndex((user) => user.id === userId);
+
+    if (userIndex < 0) return null;
+
+    users[userIndex] = { ...users[userIndex], ...changes, id: userId };
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    return users[userIndex];
 }
 
 export function initializeBaseUsers() {
