@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa y Contacto</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>MediSalud</h1>
+
+        <nav>
+            <a href="../dashboard.html">Inicio</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <section>
+            <h2>Mapa y contacto</h2>
+
+            <p>
+                Consulta nuestra ubicación y nuestros medios de contacto.
+            </p>
+        </section>
+
+        <br>
+
+        <section>
+            <h2>Información de contacto</h2>
+
+            <div>
+                <h3>Dirección</h3>
+
+                <p>
+                    Avenida Principal 123
+                </p>
+
+                <p>
+                    Santiago, Chile
+                </p>
+            </div>
+
+            <div>
+                <h3>Teléfono</h3>
+
+                <p>
+                    +56
+                </p>
+            </div>
+
+            <div>
+                <h3>Correo electrónico</h3>
+
+                <p>
+                    contacto@medisalud.cl
+                </p>
+            </div>
+        </section>
+
+        <br>
+
+        <section>
+            <h2>Ubicación</h2>
+
+            <p>
+                MediSalud se encuentra ubicado cerca de DUOC UC San Joaquín.
+            </p>
+
+            <div>
+                <iframe
+                    src="https://www.google.com/maps?q=Duoc+UC+San+Joaquín,+Santiago,+Chile&output=embed"
+                    width="600"
+                    height="400"
+                    title="Mapa de DUOC UC San Joaquín">
+                </iframe>
+            </div>
+        </section>
+
+        <br>
+
+        <section>
+            <h2>Formulario de contacto</h2>
+
+            <p>
+                Completa el siguiente formulario para comunicarte con nosotros.
+            </p>
+
+            <form id="formularioContacto">
+
+                <div>
+                    <label for="nombre">
+                        Nombre
+                    </label>
+
+                    <br>
+
+                    <input
+                        type="text"
+                        id="nombre"
+                        name="nombre"
+                        placeholder="Ingresa tu nombre"
+                    >
+
+                    <p id="errorNombre"></p>
+                </div>
+
+                <br>
+
+                <div>
+                    <label for="correo">
+                        Correo electrónico
+                    </label>
+
+                    <br>
+
+                    <input
+                        type="email"
+                        id="correo"
+                        name="correo"
+                        placeholder="ejemplo@correo.com"
+                    >
+
+                    <p id="errorCorreo"></p>
+                </div>
+
+                <br>
+
+                <div>
+                    <label for="asunto">
+                        Asunto
+                    </label>
+
+                    <br>
+
+                    <input
+                        type="text"
+                        id="asunto"
+                        name="asunto"
+                        placeholder="Ingresa el asunto"
+                    >
+
+                    <p id="errorAsunto"></p>
+                </div>
+
+                <br>
+
+                <div>
+                    <label for="mensaje">
+                        Mensaje
+                    </label>
+
+                    <br>
+
+                    <textarea
+                        id="mensaje"
+                        name="mensaje"
+                        rows="6"
+                        cols="50"
+                        placeholder="Escribe tu mensaje"
+                    ></textarea>
+
+                    <p id="errorMensaje"></p>
+                </div>
+
+                <br>
+
+                <button type="submit">
+                    Enviar mensaje
+                </button>
+
+            </form>
+
+            <div id="mensajeExito">
+                <p></p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>
+            MediSalud
+        </p>
+    </footer>
+
+    <script src="../assets/js/contacto.js"></script>
+
+</body>
+</html>
