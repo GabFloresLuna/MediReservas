@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="../assets/css/style.css" rel="stylesheet">
+        <title>Administración Médica</title>
+    </head>
+    <body>
+        <header>
+            <p>Panel de administración</p>
+            <nav>
+                <a href="../dashboard.html">← Inicio</a>
+            </nav>
+        </header>
+
+        <main>
+            <h1>Gestión de médicos</h1>
+
+            <!-- =========================== -->
+            <!-- Formulario edición médicos -->
+            <!-- =========================== -->
+            <section id="creacion_medico">
+                <h2>Registrar médico</h2>
+
+                <form id="form_medico" data-mode="create" novalidate>
+                    <input type="hidden" id="doctor_id" name="doctorId">
+
+                    <fieldset>
+                        <legend>Datos personales</legend>
+
+                        <div>
+                            <label for="user_id">Usuario asociado *</label>
+                            <select id="user_id" name="userId" required>
+                                <option value="">Seleccione un usuario</option>
+                                <option value="101">Ana Rojas — ana.rojas@medireservas.cl</option>
+                                <option value="102">Luis Pérez — luis.perez@medireservas.cl</option>
+                                <option value="103">María Soto — maria.soto@medireservas.cl</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="nombre_med">Nombre *</label>
+                            <input type="text" id="nombre_med" name="nombreMed" required maxlength="50"
+                                   placeholder="Ej.: Ana">
+                        </div>
+
+                        <div>
+                            <label for="apellido_med">Apellido *</label>
+                            <input type="text" id="apellido_med" name="apellidoMed" required maxlength="50"
+                                   placeholder="Ej.: Rojas">
+                        </div>
+
+                        <div>
+                            <label for="run_med">RUN *</label>
+                            <input type="text" id="run_med" name="runMed" required
+                                   pattern="\d{1,2}\.\d{3}\.\d{3}-[0-9Kk]"
+                                   placeholder="Ej.: 12.345.678-5">
+                        </div>
+
+                        <div>
+                            <label for="correo_med">Correo *</label>
+                            <input type="email" id="correo_med" name="correoMed" required
+                                   placeholder="Ej.: ana.rojas@medireservas.cl">
+                        </div>
+
+                        <div>
+                            <label for="fono_med">Teléfono</label>
+                            <input type="tel" id="fono_med" name="fonoMed"
+                                   pattern="\+56 9 \d{4} \d{4}"
+                                   placeholder="Ej.: +56 9 1234 5678">
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Datos médicos</legend>
+
+                        <div>
+                            <label for="licencia_med">N° registro médico *</label>
+                            <input type="text" id="licencia_med" name="licenciaMed" required
+                                   pattern="[A-Za-z0-9-]{5,20}"
+                                   maxlength="20"
+                                   placeholder="Ej.: RUM-12345">
+                        </div>
+
+                        <div>
+                            <label for="especialidad_med1">Especialidad principal *</label>
+                            <select id="especialidad_med1" name="especialidadMed1" required>
+                                <option value="">Seleccione una especialidad</option>
+                                <option value="1">Cardiología</option>
+                                <option value="2">Pediatría</option>
+                                <option value="3">Traumatología</option>
+                                <option value="4">Dermatología</option>
+                                <option value="5">Neurología</option>
+                                <option value="6" disabled>Medicina General (inactiva)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="especialidad_med2">Especialidades adicionales *</label>
+                            <select id="especialidad_med2" name="especialidadMed2" multiple>
+                                <option value="1">Cardiología</option>
+                                <option value="2">Pediatría</option>
+                                <option value="3">Traumatología</option>
+                                <option value="4">Dermatología</option>
+                                <option value="5">Neurología</option>
+                            </select>
+                            <small>Use Ctrl para seleccionar varias.</small>
+                        </div>
+
+                        <div>
+                            <label for="fecha_ingreso">Fecha de ingreso</label>
+                            <input type="date" id="fecha_ingreso" name="fechaIngreso">
+                        </div>
+
+                        <div>
+                            <input type="checkbox" id="activo" name="activo" checked>
+                            <label for="activo">Médico activo</label>
+                        </div>
+                    </fieldset>
+
+                    <div>
+                        <button type="submit">Guardar médico</button>
+                        <button type="reset">Limpiar</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- ================ -->
+            <!-- Tabla de médicos -->
+            <!-- ================ -->
+            <section id="tabla-medicos">
+                <h2>Médicos registrados</h2>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Médico</th>
+                        <th scope="col">RUN</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">N° registro</th>
+                        <th scope="col">Especialidad</th>
+                        <th scope="col">Fecha ingreso</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Ana Rojas</td>
+                        <td>12.345.678-5</td>
+                        <td>ana.rojas@medireservas.cl</td>
+                        <td>RUM-12345</td>
+                        <td>Cardiología</td>
+                        <td>2024-03-15</td>
+                        <td>Activo</td>
+                        <td>
+                            <button type="button" data-action="edit" data-id="1">Editar</button>
+                            <button type="button" data-action="toggle" data-id="1">Desactivar</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Luis Pérez</td>
+                        <td>23.456.789-1</td>
+                        <td>luis.perez@medireservas.cl</td>
+                        <td>RUM-67890</td>
+                        <td>Pediatría, Dermatología</td>
+                        <td>2023-08-02</td>
+                        <td>Activo</td>
+                        <td>
+                            <button type="button" data-action="edit" data-id="2">Editar</button>
+                            <button type="button" data-action="toggle" data-id="2">Desactivar</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>María Soto</td>
+                        <td>34.567.890-7</td>
+                        <td>maria.soto@medireservas.cl</td>
+                        <td>RUM-11223</td>
+                        <td>Traumatología</td>
+                        <td>2022-01-10</td>
+                        <td>Inactivo</td>
+                        <td>
+                            <button type="button" data-action="edit" data-id="3">Editar</button>
+                            <button type="button" data-action="toggle" data-id="3">Activar</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </body>
+</html>
