@@ -6,7 +6,8 @@ import {
     initializeBaseUsers,
     isUserDataTaken,
     saveUser,
-    updateUser
+    updateUser,
+    updateUserStatus
 } from "../assets/js/storage.js";
 import { validateManagedUser } from "../assets/js/validaciones.js";
 
@@ -97,4 +98,22 @@ test("rechaza datos administrativos inválidos", () => {
     assert.ok(errors.firstName);
     assert.ok(errors.email);
     assert.ok(errors.phone);
+});
+
+test("desactiva y reactiva una cuenta sin modificar sus datos", () => {
+    saveUser(newUser);
+
+    const inactiveUser = updateUserStatus(newUser.id, false);
+    assert.equal(inactiveUser.active, false);
+    assert.equal(inactiveUser.email, newUser.email);
+    assert.equal(inactiveUser.password, newUser.password);
+    assert.equal(inactiveUser.role, newUser.role);
+
+    const activeUser = updateUserStatus(newUser.id, true);
+    assert.equal(activeUser.active, true);
+});
+
+test("rechaza estados inválidos y usuarios inexistentes", () => {
+    assert.equal(updateUserStatus(newUser.id, "inactive"), null);
+    assert.equal(updateUserStatus("missing-user", false), null);
 });

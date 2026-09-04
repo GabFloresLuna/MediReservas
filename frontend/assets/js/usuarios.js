@@ -5,7 +5,8 @@ import {
     initializeBaseUsers,
     isUserDataTaken,
     saveUser,
-    updateUser
+    updateUser,
+    updateUserStatus
 } from "./storage.js";
 import { normalizeRun, validateManagedUser } from "./validaciones.js";
 
@@ -205,7 +206,7 @@ tableBody?.addEventListener("click", (event) => {
 confirmStatusButton?.addEventListener("click", () => {
     const userId = statusUserId.value;
     const nextActiveState = confirmStatusButton.dataset.nextActive === "true";
-    const updatedUser = updateUser(userId, { active: nextActiveState });
+    const updatedUser = updateUserStatus(userId, nextActiveState);
 
     if (!updatedUser) {
         statusDialogDescription.textContent = "No fue posible encontrar al usuario seleccionado.";

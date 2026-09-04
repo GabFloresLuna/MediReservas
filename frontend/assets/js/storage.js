@@ -87,6 +87,11 @@ export function updateUser(userId, changes) {
     return users[userIndex];
 }
 
+export function updateUserStatus(userId, active) {
+    if (typeof active !== "boolean") return null;
+    return updateUser(userId, { active });
+}
+
 export function initializeBaseUsers() {
     const users = getUsers();
     const existingEmails = new Set(users.map((user) => user.email.toLowerCase()));
