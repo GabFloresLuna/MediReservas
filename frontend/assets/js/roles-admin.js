@@ -1,4 +1,4 @@
-import { getDashboardConfig, isValidRole } from "./roles.js";
+import { getDashboardConfig, validateRoleChange } from "./roles.js";
 import { getUserById, getUsers, initializeBaseUsers, updateUser } from "./storage.js";
 
 const dialog = document.querySelector("#role-dialog");
@@ -98,20 +98,16 @@ form?.addEventListener("submit", (event) => {
     const selectedRole = roleSelect.value;
     const user = getUserById(userId);
 
-    if (!isValidRole(selectedRole)) {
-        showRoleError("Selecciona un rol válido.");
-        roleSelect.focus();
-        return;
-    }
-
     if (!user) {
         formMessage.className = "mt-4 text-center text-sm font-medium text-red-600";
         formMessage.textContent = "No fue posible encontrar al usuario.";
         return;
     }
 
-    if (user.role === selectedRole) {
-        showRoleError("Selecciona un rol diferente al actual.");
+    const validationError = validateRoleChange(user.role, selectedRole);
+
+    if (validationError) {
+        showRoleError(validationError);
         roleSelect.focus();
         return;
     }

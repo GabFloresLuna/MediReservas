@@ -66,3 +66,15 @@ export function getDashboardConfig(role) {
 export function isValidRole(role) {
     return Object.hasOwn(DASHBOARD_CONFIG, role);
 }
+
+export function validateRoleChange(currentRole, newRole) {
+    if (!isValidRole(newRole)) {
+        return "Selecciona un rol válido.";
+    }
+
+    if (currentRole === newRole) {
+        return "Selecciona un rol diferente al actual.";
+    }
+
+    return "";
+}

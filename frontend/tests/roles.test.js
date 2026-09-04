@@ -1,6 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { getDashboardConfig } from "../assets/js/roles.js";
+import {
+    getDashboardConfig,
+    isValidRole,
+    validateRoleChange,
+} from "../assets/js/roles.js";
 
 const roles = ["ADMINISTRADOR", "RECEPCIONISTA", "MEDICO", "PACIENTE"];
 
@@ -49,4 +53,26 @@ test("administrador y paciente reciben sus accesos principales", () => {
     assert.ok(patientActions.includes("Reservar una hora"));
     assert.ok(patientActions.includes("Mis citas"));
     assert.equal(patientActions.includes("Gestionar usuarios"), false);
+});
+
+test("acepta únicamente los cuatro roles definidos", () => {
+    roles.forEach((role) => assert.equal(isValidRole(role), true));
+    assert.equal(isValidRole("SUPERUSUARIO"), false);
+    assert.equal(isValidRole(""), false);
+});
+
+test("rechaza una selección vacía o desconocida", () => {
+    assert.equal(validateRoleChange("PACIENTE", ""), "Selecciona un rol válido.");
+    assert.equal(
+        validateRoleChange("PACIENTE", "SUPERUSUARIO"),
+        "Selecciona un rol válido."
+    );
+});
+
+test("exige cambiar a un rol diferente", () => {
+    assert.equal(
+        validateRoleChange("MEDICO", "MEDICO"),
+        "Selecciona un rol diferente al actual."
+    );
+    assert.equal(validateRoleChange("PACIENTE", "MEDICO"), "");
 });
