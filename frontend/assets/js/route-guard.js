@@ -1,4 +1,5 @@
-import { getSession } from "./storage.js";
+import { isSessionValid } from "./auth.js";
+import { getSession, getUserById, removeSession } from "./storage.js";
 import { getAllowedRolesForRoute, isValidRole } from "./roles.js";
 
 export function evaluateRouteAccess({ authRequired, allowedRoles, session }) {
@@ -13,10 +14,16 @@ function protectCurrentRoute() {
     const authRequired = body.hasAttribute("data-auth-required");
     const routeName = window.location.pathname.split("/").pop();
     const allowedRoles = getAllowedRolesForRoute(routeName) ?? [];
+    const storedSession = getSession();
+    const currentUser = storedSession?.userId ? getUserById(storedSession.userId) : null;
+    const session = isSessionValid(storedSession, currentUser) ? storedSession : null;
+
+    if (storedSession && !session) removeSession();
+
     const decision = evaluateRouteAccess({
         authRequired,
         allowedRoles,
-        session: getSession(),
+        session,
     });
 
     if (decision === "login") {

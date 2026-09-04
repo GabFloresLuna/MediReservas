@@ -36,6 +36,16 @@ export function getRoleDestination(role) {
     return ROLE_DESTINATIONS[role] ?? "login.html";
 }
 
+export function isSessionValid(session, user) {
+    return Boolean(
+        typeof session?.token === "string" &&
+        session.token.trim() &&
+        user?.active === true &&
+        session.userId === user.id &&
+        session.role === user.role
+    );
+}
+
 export function logout() {
     removeSession();
 }
