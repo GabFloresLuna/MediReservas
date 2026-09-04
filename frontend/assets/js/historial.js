@@ -1,29 +1,30 @@
-document.addEventListener("DOMContentLoaded", function () {
+const antecedentes = document.querySelectorAll("#antecedentesMedicos > div");
+const alergias = document.querySelectorAll("#listaAlergias > div");
+const medicamentos = document.querySelectorAll("#listaMedicamentos > div");
+const consultas = document.querySelectorAll("#listaConsultas > div");
 
-    const antecedentes = document.querySelectorAll("#antecedentesMedicos > div");
-    const alergias = document.querySelectorAll("#listaAlergias > div");
-    const medicamentos = document.querySelectorAll("#listaMedicamentos > div");
-    const consultas = document.querySelectorAll("#listaConsultas > div");
+const mensajeSinAntecedentes = document.getElementById("mensajeSinAntecedentes");
+const mensajeSinAlergias = document.getElementById("mensajeSinAlergias");
+const mensajeSinMedicamentos = document.getElementById("mensajeSinMedicamentos");
+const mensajeSinConsultas = document.getElementById("mensajeSinConsultas");
 
-    const mensajeSinAntecedentes = document.getElementById("mensajeSinAntecedentes");
-    const mensajeSinAlergias = document.getElementById("mensajeSinAlergias");
-    const mensajeSinMedicamentos = document.getElementById("mensajeSinMedicamentos");
-    const mensajeSinConsultas = document.getElementById("mensajeSinConsultas");
+function verificarSeccion(lista, mensaje) {
+    let visibles = 0;
 
-    if (antecedentes.length === 0) {
-        mensajeSinAntecedentes.style.display = "block";
+    lista.forEach((elemento) => {
+        if (elemento.style.display !== "none") {
+            visibles++;
+        }
+    });
+
+    if (visibles === 0) {
+        mensaje.classList.remove("hidden");
+    } else {
+        mensaje.classList.add("hidden");
     }
+}
 
-    if (alergias.length === 0) {
-        mensajeSinAlergias.style.display = "block";
-    }
-
-    if (medicamentos.length === 0) {
-        mensajeSinMedicamentos.style.display = "block";
-    }
-
-    if (consultas.length === 0) {
-        mensajeSinConsultas.style.display = "block";
-    }
-
-});
+verificarSeccion(antecedentes, mensajeSinAntecedentes);
+verificarSeccion(alergias, mensajeSinAlergias);
+verificarSeccion(medicamentos, mensajeSinMedicamentos);
+verificarSeccion(consultas, mensajeSinConsultas);
