@@ -44,6 +44,33 @@ function createMenuItems(items) {
     });
 }
 
+function addPageLocation(main) {
+    const pageName = document.body.dataset.pageName;
+    if (!main || !pageName || pageName === "Panel principal") return;
+
+    const location = document.createElement("nav");
+    location.className = "mb-6 overflow-x-auto text-sm";
+    location.setAttribute("aria-label", "Ruta de navegación");
+    const list = document.createElement("ol");
+    list.className = "flex min-w-max items-center gap-2 text-muted";
+    const dashboardItem = document.createElement("li");
+    const dashboardLink = document.createElement("a");
+    dashboardLink.className = "font-semibold text-primary-dark transition hover:underline";
+    dashboardLink.href = "dashboard.html";
+    dashboardLink.textContent = "Panel principal";
+    dashboardItem.append(dashboardLink);
+    const separator = document.createElement("li");
+    separator.textContent = "/";
+    separator.setAttribute("aria-hidden", "true");
+    const currentItem = document.createElement("li");
+    currentItem.className = "font-semibold text-ink";
+    currentItem.textContent = pageName;
+    currentItem.setAttribute("aria-current", "page");
+    list.append(dashboardItem, separator, currentItem);
+    location.append(list);
+    main.prepend(location);
+}
+
 function connectMenu(button, sidebar, backdrop, closeButton) {
     const setOpen = (open) => {
         sidebar.classList.toggle("translate-x-0", open);
@@ -125,6 +152,7 @@ function initializeSharedMenu() {
 
     if (main) {
         main.classList.add("min-w-0");
+        addPageLocation(main);
         main.before(layout);
         layout.append(sidebar, main);
     } else {
