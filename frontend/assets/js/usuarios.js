@@ -68,6 +68,18 @@ function createCell(text, className = "px-5 py-4") {
     return cell;
 }
 
+function createStatusCell(isActive) {
+    const cell = document.createElement("td");
+    cell.className = "px-5 py-4";
+    const badge = document.createElement("span");
+    badge.className = isActive
+        ? "inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-primary-dark"
+        : "inline-flex rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700";
+    badge.textContent = isActive ? "Activo" : "Inactivo";
+    cell.append(badge);
+    return cell;
+}
+
 function renderUsers() {
     const users = getFilteredUsers();
     const rows = users.map((user) => {
@@ -81,17 +93,27 @@ function renderUsers() {
             createCell(user.run ?? "Sin información"),
             createCell(user.email),
             createCell(role),
-            createCell(user.active ? "Activo" : "Inactivo")
+            createStatusCell(user.active)
         );
 
         const actionsCell = document.createElement("td");
         actionsCell.className = "px-5 py-4 text-right";
+        const actions = document.createElement("div");
+        actions.className = "flex flex-wrap justify-end gap-2";
         const editButton = document.createElement("button");
-        editButton.className = "rounded-lg border border-line px-3 py-2 text-sm font-semibold text-primary-dark hover:bg-primary-light";
+        editButton.className = "rounded-lg border border-line px-3 py-2 text-sm font-semibold text-primary-dark transition hover:bg-primary-light";
         editButton.type = "button";
         editButton.dataset.editUser = user.id;
         editButton.textContent = "Editar";
-        actionsCell.append(editButton);
+        const statusButton = document.createElement("button");
+        statusButton.className = user.active
+            ? "rounded-lg border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50"
+            : "rounded-lg border border-emerald-200 px-3 py-2 text-sm font-semibold text-primary-dark transition hover:bg-emerald-50";
+        statusButton.type = "button";
+        statusButton.dataset.changeStatus = user.id;
+        statusButton.textContent = user.active ? "Desactivar" : "Activar";
+        actions.append(editButton, statusButton);
+        actionsCell.append(actions);
         row.append(actionsCell);
         return row;
     });
