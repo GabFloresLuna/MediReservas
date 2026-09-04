@@ -59,12 +59,25 @@ const DASHBOARD_CONFIG = {
     }
 };
 
+const ALL_ROLES = Object.freeze(["ADMINISTRADOR", "RECEPCIONISTA", "MEDICO", "PACIENTE"]);
+
+const ROUTE_PERMISSIONS = Object.freeze({
+    "dashboard.html": ALL_ROLES,
+    "perfil.html": ALL_ROLES,
+    "usuarios.html": Object.freeze(["ADMINISTRADOR"]),
+    "roles.html": Object.freeze(["ADMINISTRADOR"]),
+});
+
 export function getDashboardConfig(role) {
     return DASHBOARD_CONFIG[role] ?? null;
 }
 
 export function isValidRole(role) {
     return Object.hasOwn(DASHBOARD_CONFIG, role);
+}
+
+export function getAllowedRolesForRoute(routeName) {
+    return ROUTE_PERMISSIONS[routeName] ?? null;
 }
 
 export function validateRoleChange(currentRole, newRole) {

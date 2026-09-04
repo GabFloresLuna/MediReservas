@@ -1,5 +1,5 @@
 import { getSession } from "./storage.js";
-import { isValidRole } from "./roles.js";
+import { getAllowedRolesForRoute, isValidRole } from "./roles.js";
 
 export function evaluateRouteAccess({ authRequired, allowedRoles, session }) {
     if (!authRequired) return "allowed";
@@ -11,9 +11,8 @@ export function evaluateRouteAccess({ authRequired, allowedRoles, session }) {
 function protectCurrentRoute() {
     const { body } = document;
     const authRequired = body.hasAttribute("data-auth-required");
-    const allowedRoles = (body.dataset.allowedRoles ?? "")
-        .split(/\s+/)
-        .filter(Boolean);
+    const routeName = window.location.pathname.split("/").pop();
+    const allowedRoles = getAllowedRolesForRoute(routeName) ?? [];
     const decision = evaluateRouteAccess({
         authRequired,
         allowedRoles,
