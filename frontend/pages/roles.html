@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta
+            name="description"
+            content="Asignación de roles y permisos para usuarios de MediReservas."
+        >
+        <title>Roles y permisos | MediReservas</title>
+        <link rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    <body>
+        <header>
+            <nav aria-label="Barra superior de roles y permisos">
+                <a href="dashboard.html" aria-label="Ir al panel principal de MediReservas">
+                    MediReservas
+                </a>
+                <a href="dashboard.html">Volver al panel</a>
+            </nav>
+        </header>
+
+        <main>
+            <section aria-labelledby="roles-title">
+                <header>
+                    <p>Administración</p>
+                    <h1 id="roles-title">Roles y permisos</h1>
+                    <p>Asigna a cada usuario el perfil que corresponda a sus funciones.</p>
+                </header>
+
+                <aside aria-labelledby="roles-information-title">
+                    <h2 id="roles-information-title">Perfiles disponibles</h2>
+                    <ul>
+                        <li><strong>Administrador:</strong> acceso a la configuración y gestión completa.</li>
+                        <li><strong>Recepcionista:</strong> gestión de solicitudes y estados de citas.</li>
+                        <li><strong>Médico:</strong> acceso a agenda, pacientes y observaciones clínicas.</li>
+                        <li><strong>Paciente:</strong> reserva y consulta de sus propias atenciones.</li>
+                    </ul>
+                </aside>
+
+                <form id="role-search-form" role="search">
+                    <label for="role-user-search">Buscar usuario</label>
+                    <input
+                        id="role-user-search"
+                        name="search"
+                        type="search"
+                        placeholder="Nombre, RUN o correo"
+                    >
+                </form>
+
+                <div aria-live="polite">
+                    <p id="roles-result-count">Cargando usuarios...</p>
+                </div>
+
+                <div>
+                    <table>
+                        <caption>Roles asignados a usuarios de MediReservas</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Usuario</th>
+                                <th scope="col">RUN</th>
+                                <th scope="col">Correo</th>
+                                <th scope="col">Rol actual</th>
+                                <th scope="col">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="roles-table-body">
+                            <tr>
+                                <td colspan="5">Cargando información...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p id="roles-empty-message" hidden>No se encontraron usuarios con ese criterio.</p>
+            </section>
+        </main>
+
+        <dialog id="role-dialog" aria-labelledby="role-dialog-title">
+            <form id="role-form" method="dialog" novalidate>
+                <header>
+                    <div>
+                        <p>Permisos del usuario</p>
+                        <h2 id="role-dialog-title">Asignar rol</h2>
+                    </div>
+                    <button id="close-role-dialog" type="button" aria-label="Cerrar formulario">×</button>
+                </header>
+
+                <input id="role-user-id" name="userId" type="hidden">
+
+                <dl>
+                    <div>
+                        <dt>Usuario</dt>
+                        <dd id="role-user-name">Sin información</dd>
+                    </div>
+                    <div>
+                        <dt>Correo</dt>
+                        <dd id="role-user-email">Sin información</dd>
+                    </div>
+                </dl>
+
+                <div>
+                    <label for="role-select">Nuevo rol</label>
+                    <select id="role-select" name="role">
+                        <option value="">Selecciona un rol</option>
+                        <option value="ADMINISTRADOR">Administrador</option>
+                        <option value="RECEPCIONISTA">Recepcionista</option>
+                        <option value="MEDICO">Médico</option>
+                        <option value="PACIENTE">Paciente</option>
+                    </select>
+                    <p id="role-error" role="alert"></p>
+                </div>
+
+                <p>El cambio modificará las funciones disponibles para este usuario.</p>
+
+                <footer>
+                    <button id="cancel-role-button" type="button">Cancelar</button>
+                    <button type="submit">Guardar rol</button>
+                </footer>
+                <p id="role-form-message" role="status"></p>
+            </form>
+        </dialog>
+
+        <footer>
+            <p>&copy; 2026 MediReservas. Todos los derechos reservados.</p>
+        </footer>
+    </body>
+</html>
