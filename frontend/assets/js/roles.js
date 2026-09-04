@@ -62,3 +62,7 @@ const DASHBOARD_CONFIG = {
 export function getDashboardConfig(role) {
     return DASHBOARD_CONFIG[role] ?? null;
 }
+
+export function isValidRole(role) {
+    return Object.hasOwn(DASHBOARD_CONFIG, role);
+}
