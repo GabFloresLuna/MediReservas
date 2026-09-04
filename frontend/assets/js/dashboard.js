@@ -47,14 +47,6 @@ function renderDashboard() {
     document.querySelector("#welcome-user-name").textContent = session.firstName;
     document.querySelector("#welcome-description").textContent = config.description;
 
-    const menu = document.querySelector("#dashboard-menu");
-    config.actions.forEach((action) => {
-        const item = document.createElement("li");
-        item.className = "shrink-0";
-        item.append(createActionLink(action, true));
-        menu.append(item);
-    });
-
     const actions = document.querySelector("#dashboard-actions");
     actions.replaceChildren(...config.actions.map((action) => createActionLink(action)));
 

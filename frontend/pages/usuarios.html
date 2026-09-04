@@ -11,13 +11,28 @@
         <link rel="stylesheet" href="../assets/css/style.css">
     </head>
     <body class="flex min-h-screen flex-col bg-page text-ink antialiased">
-        <header class="border-b border-line bg-white">
-            <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8" aria-label="Barra superior de gestión de usuarios">
-                <a class="flex items-center gap-2 text-lg font-bold text-primary-dark sm:text-xl" href="dashboard.html" aria-label="Ir al panel principal de MediReservas">
-                    <span class="grid size-10 place-items-center rounded-xl bg-primary text-xl text-white" aria-hidden="true">+</span>
-                    <span class="hidden sm:inline">MediReservas</span>
-                </a>
-                <a class="inline-flex rounded-xl border border-line px-4 py-2.5 text-sm font-semibold text-primary-dark transition hover:border-primary hover:bg-primary-light" href="dashboard.html">← Volver al panel</a>
+        <header class="relative z-30 border-b border-line bg-white">
+            <nav class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8" aria-label="Barra superior de MediReservas">
+                <div class="flex items-center gap-3">
+                    <button class="grid size-10 place-items-center rounded-xl border border-line bg-white text-xl text-primary-dark transition hover:bg-primary-light lg:hidden" id="mobile-menu-button" type="button" aria-controls="shared-mobile-sidebar" aria-expanded="false" aria-label="Abrir menú de navegación">
+                        <span class="leading-none" aria-hidden="true">☰</span>
+                    </button>
+                    <a class="flex items-center gap-2 text-lg font-bold text-primary-dark sm:text-xl" href="dashboard.html" aria-label="Ir al panel principal de MediReservas">
+                        <span class="grid size-10 place-items-center rounded-xl bg-primary text-xl text-white" aria-hidden="true">+</span>
+                        <span class="hidden sm:inline">MediReservas</span>
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-3 sm:gap-5">
+                    <a class="text-right" href="perfil.html" aria-label="Ver mi perfil">
+                        <p class="text-sm font-semibold" id="header-user-name">Usuario</p>
+                        <p class="text-xs text-muted" id="header-user-role">Perfil</p>
+                    </a>
+                    <button class="inline-flex items-center justify-center rounded-xl border border-line bg-white px-3 py-2.5 text-sm font-semibold text-primary-dark transition hover:border-red-200 hover:bg-red-50 hover:text-red-600 sm:px-4" id="logout-button" type="button">
+                        <span class="sm:hidden">Salir</span>
+                        <span class="hidden sm:inline">Cerrar sesión</span>
+                    </button>
+                </div>
             </nav>
         </header>
 
@@ -172,5 +187,6 @@
         </footer>
         <script type="module" src="../assets/js/usuarios.js"></script>
         <script type="module" src="../assets/js/navigation.js"></script>
+        <script type="module" src="../assets/js/logout.js"></script>
     </body>
 </html>

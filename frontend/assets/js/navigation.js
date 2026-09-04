@@ -15,29 +15,33 @@ export function getNavigationItems(role) {
     ];
 }
 
-function createLink(item, compact = false) {
+function createLink(item) {
     const currentPage = window.location.pathname.split("/").pop() || "dashboard.html";
     const link = document.createElement("a");
     link.href = item.href;
-    link.className = compact
-        ? "rounded-lg px-3 py-2 text-sm font-semibold text-muted transition hover:bg-primary-light hover:text-primary-dark"
-        : "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-muted transition hover:bg-primary-light hover:text-primary-dark";
+    link.className = "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-muted transition hover:bg-primary-light hover:text-primary-dark";
 
     if (currentPage === item.href.split("?")[0]) {
         link.classList.add("bg-primary-light", "text-primary-dark");
         link.setAttribute("aria-current", "page");
     }
 
-    if (!compact) {
-        const icon = document.createElement("span");
-        icon.className = "grid size-7 shrink-0 place-items-center rounded-lg bg-page text-xs font-bold text-primary-dark";
-        icon.textContent = item.icon;
-        icon.setAttribute("aria-hidden", "true");
-        link.append(icon);
-    }
+    const icon = document.createElement("span");
+    icon.className = "grid size-7 shrink-0 place-items-center rounded-lg bg-page text-xs font-bold text-primary-dark";
+    icon.textContent = item.icon;
+    icon.setAttribute("aria-hidden", "true");
+    link.append(icon);
 
     link.append(document.createTextNode(item.title));
     return link;
+}
+
+function createMenuItems(items) {
+    return items.map((item) => {
+        const listItem = document.createElement("li");
+        listItem.append(createLink(item));
+        return listItem;
+    });
 }
 
 function connectMenu(button, sidebar, backdrop, closeButton) {
@@ -65,8 +69,10 @@ function initializeDashboardMenu() {
     const sidebar = document.querySelector("#dashboard-sidebar");
     const backdrop = document.querySelector("#sidebar-backdrop");
     const closeButton = document.querySelector("#close-mobile-menu");
-    if (!button || !sidebar || !backdrop || !closeButton) return false;
+    const menu = document.querySelector("#dashboard-menu");
+    if (!button || !sidebar || !backdrop || !closeButton || !menu || !config) return false;
 
+    menu.replaceChildren(...createMenuItems(getNavigationItems(session.role)));
     connectMenu(button, sidebar, backdrop, closeButton);
     return true;
 }
@@ -76,24 +82,11 @@ function initializeSharedMenu() {
     if (!topNav || !config) return;
 
     const items = getNavigationItems(session.role);
-    const previousBackLink = topNav.querySelector('a[href="dashboard.html"]:last-child');
-    if (previousBackLink && previousBackLink !== topNav.firstElementChild) {
-        previousBackLink.classList.add("hidden");
-    }
+    const button = document.querySelector("#mobile-menu-button");
+    if (!button) return;
 
-    const desktopNav = document.createElement("div");
-    desktopNav.className = "ml-auto hidden items-center gap-1 lg:flex";
-    desktopNav.setAttribute("aria-label", "Navegación interna");
-    desktopNav.append(...items.map((item) => createLink(item, true)));
-
-    const button = document.createElement("button");
-    button.className = "ml-auto grid size-10 place-items-center rounded-xl border border-line text-xl text-primary-dark lg:hidden";
-    button.type = "button";
-    button.setAttribute("aria-controls", "shared-mobile-sidebar");
-    button.setAttribute("aria-expanded", "false");
-    button.setAttribute("aria-label", "Abrir menú de navegación");
-    button.textContent = "☰";
-    topNav.append(desktopNav, button);
+    document.querySelector("#header-user-name").textContent = `${session.firstName} ${session.lastName}`.trim();
+    document.querySelector("#header-user-role").textContent = config.label;
 
     const backdrop = document.createElement("button");
     backdrop.className = "fixed inset-0 z-40 hidden bg-slate-950/45 lg:hidden";
@@ -101,11 +94,11 @@ function initializeSharedMenu() {
     backdrop.setAttribute("aria-label", "Cerrar menú de navegación");
 
     const sidebar = document.createElement("aside");
-    sidebar.className = "fixed inset-y-0 left-0 z-50 w-72 -translate-x-full overflow-y-auto border-r border-line bg-white p-5 shadow-xl transition-transform duration-300 lg:hidden";
+    sidebar.className = "fixed inset-y-0 left-0 z-50 w-72 -translate-x-full overflow-y-auto border-r border-line bg-white px-5 py-5 shadow-xl transition-transform duration-300 lg:static lg:z-auto lg:w-auto lg:translate-x-0 lg:overflow-visible lg:px-5 lg:py-8 lg:shadow-none";
     sidebar.id = "shared-mobile-sidebar";
     sidebar.setAttribute("aria-label", "Menú principal");
     const menuHeader = document.createElement("header");
-    menuHeader.className = "mb-6 flex items-center justify-between border-b border-line pb-5";
+    menuHeader.className = "mb-6 flex items-center justify-between border-b border-line pb-5 lg:hidden";
     const title = document.createElement("p");
     title.className = "font-bold text-primary-dark";
     title.textContent = "Menú principal";
@@ -116,10 +109,28 @@ function initializeSharedMenu() {
     closeButton.textContent = "×";
     menuHeader.append(title, closeButton);
     const nav = document.createElement("nav");
-    nav.className = "flex flex-col gap-2";
-    nav.append(...items.map((item) => createLink(item)));
+    const navLabel = document.createElement("p");
+    navLabel.className = "mb-3 hidden px-3 text-xs font-bold uppercase tracking-widest text-muted lg:block";
+    navLabel.textContent = "Navegación";
+    const menu = document.createElement("ul");
+    menu.className = "flex flex-col gap-2";
+    menu.append(...createMenuItems(items));
+    nav.append(navLabel, menu);
     sidebar.append(menuHeader, nav);
-    document.body.append(backdrop, sidebar);
+
+    const main = document.querySelector("body > main");
+    const layout = document.createElement("div");
+    layout.className = "grid w-full flex-1 lg:grid-cols-[18rem_minmax(0,1fr)]";
+    document.body.append(backdrop);
+
+    if (main) {
+        main.classList.add("min-w-0");
+        main.before(layout);
+        layout.append(sidebar, main);
+    } else {
+        document.body.append(sidebar);
+    }
+
     connectMenu(button, sidebar, backdrop, closeButton);
 }
 
