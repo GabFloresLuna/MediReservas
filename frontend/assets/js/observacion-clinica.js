@@ -1,4 +1,4 @@
-import {getAppointmentById, initializeBaseAppointments} from "./storage.js";
+import {getAppointmentById, getSession, initializeBaseAppointments, updateAppointment} from "./storage.js";
 
 const form = document.querySelector("#observation-form");
 const formMessage = document.querySelector("#observation-form-message");
@@ -11,6 +11,8 @@ initializeBaseAppointments();
 
 const appointmentId = new URLSearchParams(window.location.search).get("id");
 const appointment = appointmentId ? getAppointmentById(appointmentId) : null;
+const session = getSession();
+const canEditAppointment = appointment?.doctorId === session?.userId && appointment.status === "CONFIRMADA";
 
 function showFieldError(input, errorElementId, error = "") {
     const errorElement = document.querySelector(`#${errorElementId}`);
@@ -41,7 +43,7 @@ function validateObservation(values) {
     return errors;
 }
 
-if (!appointment) {
+if (!appointment || !canEditAppointment) {
     notFoundMessage.hidden = false;
     summaryCard.hidden = true;
     form.hidden = true;
@@ -66,7 +68,17 @@ form?.addEventListener("submit", (event) => {
         return;
     }
 
+    updateAppointment(appointment.id, {
+        diagnosis: values.diagnosis,
+        clinicalNotes: values.notes,
+        completedAt: new Date().toISOString(),
+        status: "COMPLETADA"
+    });
+
     formMessage.className = "mt-4 text-center text-sm font-medium text-primary-dark";
     formMessage.textContent = "Observación registrada correctamente.";
     form.reset();
+    diagnosisInput.disabled = true;
+    notesInput.disabled = true;
+    form.querySelector('button[type="submit"]').disabled = true;
 });

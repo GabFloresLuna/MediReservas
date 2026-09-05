@@ -42,7 +42,8 @@ test("guarda una cita sin reemplazar las solicitudes existentes", () => {
         patientId: "patient-1",
         patientName: "Paula Contreras",
         patientRun: "44444444-4",
-        doctorId: 1,
+        doctorId: "doctor-1",
+        doctorRecordId: 1,
         doctorName: "Ana Rojas",
         specialtyId: 1,
         specialtyName: "Cardiología",
@@ -68,4 +69,18 @@ test("guarda la cancelación de una cita", () => {
 
     assert.equal(cancelled.status, "CANCELADA");
     assert.equal(getAppointmentById("cita-1").status, "CANCELADA");
+});
+
+test("guarda la observación clínica y completa la cita", () => {
+    updateAppointment("cita-3", {
+        diagnosis: "Dolor lumbar",
+        clinicalNotes: "Se indica reposo y control médico.",
+        completedAt: "2026-09-05T15:00:00.000Z",
+        status: "COMPLETADA"
+    });
+
+    const completed = getAppointmentById("cita-3");
+    assert.equal(completed.status, "COMPLETADA");
+    assert.equal(completed.diagnosis, "Dolor lumbar");
+    assert.equal(completed.clinicalNotes, "Se indica reposo y control médico.");
 });

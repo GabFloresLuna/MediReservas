@@ -86,127 +86,21 @@
                         <h2 class="text-2xl font-bold">Datos del paciente</h2>
 
                         <div class="mt-5 grid gap-4 md:grid-cols-2">
-                            <div>
-                                <p><strong>Nombre:</strong> Juan Pérez</p>
-                                <p><strong>Documento:</strong> 12345678</p>
-                                <p><strong>Fecha de nacimiento:</strong> 15/05/1995</p>
-                            </div>
-
-                            <div>
-                                <p><strong>Edad:</strong> 31 años</p>
-                                <p><strong>Sexo:</strong> Masculino</p>
-                                <p><strong>Grupo sanguíneo:</strong> O+</p>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="mt-8 rounded-2xl border border-line bg-white p-6 shadow-sm">
-                        <h2 class="text-2xl font-bold">Antecedentes médicos</h2>
-
-                        <div id="antecedentesMedicos" class="mt-5 space-y-4">
-                            <div class="rounded-xl border border-line p-4">
-                                <h3 class="font-semibold">Hipertensión arterial</h3>
-
-                                <p class="mt-2">Antecedente registrado en el historial del paciente.</p>
-
-                                <p class="mt-2 text-sm"><strong>Fecha de registro:</strong> 10/03/2024</p>
-                            </div>
-
-                            <div class="rounded-xl border border-line p-4">
-                                <h3 class="font-semibold">Asma</h3>
-
-                                <p class="mt-2">Antecedente registrado en el historial del paciente.</p>
-
-                                <p class="mt-2 text-sm"><strong>Fecha de registro:</strong> 20/08/2022</p>
-                            </div>
-                        </div>
-
-                        <div id="mensajeSinAntecedentes" class="mt-4 hidden rounded-xl border border-yellow-300 bg-yellow-50 p-4">
-                            <p>No se encontraron antecedentes médicos registrados.</p>
-                        </div>
-                    </section>
-
-                    <section class="mt-8 rounded-2xl border border-line bg-white p-6 shadow-sm">
-                        <h2 class="text-2xl font-bold">Alergias</h2>
-
-                        <div id="listaAlergias" class="mt-5 space-y-4">
-                            <div class="rounded-xl border border-line p-4">
-                                <h3 class="font-semibold">Penicilina</h3>
-
-                                <p class="mt-2"><strong>Tipo:</strong> Medicamento.</p>
-                                <p><strong>Reacción:</strong> Reacción alérgica en la piel.</p>
-                            </div>
-
-                            <div class="rounded-xl border border-line p-4">
-                                <h3 class="font-semibold">Polen</h3>
-
-                                <p class="mt-2"><strong>Tipo:</strong> Ambiental.</p>
-                                <p><strong>Reacción:</strong> Estornudos y congestión nasal.</p>
-                            </div>
-                        </div>
-
-                        <div id="mensajeSinAlergias" class="mt-4 hidden rounded-xl border border-yellow-300 bg-yellow-50 p-4">
-                            <p>No se encontraron alergias registradas.</p>
-                        </div>
-                    </section>
-
-                    <section class="mt-8 rounded-2xl border border-line bg-white p-6 shadow-sm">
-                        <h2 class="text-2xl font-bold">Medicamentos actuales</h2>
-
-                        <div id="listaMedicamentos" class="mt-5 space-y-4">
-                            <div class="rounded-xl border border-line p-4">
-                                <h3 class="font-semibold">Losartán</h3>
-
-                                <p class="mt-2"><strong>Dosis:</strong> 50 mg.</p>
-                                <p><strong>Frecuencia:</strong> Una vez al día.</p>
-                            </div>
-
-                            <div class="rounded-xl border border-line p-4">
-                                <h3 class="font-semibold">Salbutamol</h3>
-
-                                <p class="mt-2"><strong>Dosis:</strong> 100 mcg.</p>
-                                <p><strong>Frecuencia:</strong> Según necesidad.</p>
-                            </div>
-                        </div>
-
-                        <div id="mensajeSinMedicamentos" class="mt-4 hidden rounded-xl border border-yellow-300 bg-yellow-50 p-4">
-                            <p>No se encontraron medicamentos registrados.</p>
+                            <p><strong>Nombre:</strong> <span id="patient-name">Sin información</span></p>
+                            <p><strong>RUN:</strong> <span id="patient-run">Sin información</span></p>
                         </div>
                     </section>
 
                     <section class="mt-8 rounded-2xl border border-line bg-white p-6 shadow-sm">
                         <h2 class="text-2xl font-bold">Consultas médicas anteriores</h2>
 
-                        <div id="listaConsultas" class="mt-5 space-y-4">
-                            <div class="rounded-xl border border-line p-4">
-                                <h3 class="font-semibold">Consulta de Cardiología</h3>
-
-                                <p class="mt-2"><strong>Fecha:</strong> 15/07/2026</p>
-                                <p><strong>Médico:</strong> Dr. Juan Pérez</p>
-                                <p><strong>Motivo:</strong> Control cardiovascular.</p>
-                                <p><strong>Diagnóstico:</strong> Hipertensión arterial controlada.</p>
-                            </div>
-
-                            <div class="rounded-xl border border-line p-4">
-                                <h3 class="font-semibold">Consulta de Medicina General</h3>
-
-                                <p class="mt-2"><strong>Fecha:</strong> 20/05/2026</p>
-                                <p><strong>Médico:</strong> Dra. Laura Gómez</p>
-                                <p><strong>Motivo:</strong> Control general.</p>
-                                <p><strong>Diagnóstico:</strong> Paciente en buen estado general.</p>
-                            </div>
-                        </div>
+                        <div id="listaConsultas" class="mt-5 space-y-4"></div>
 
                         <div id="mensajeSinConsultas" class="mt-4 hidden rounded-xl border border-yellow-300 bg-yellow-50 p-4">
                             <p>No se encontraron consultas médicas registradas.</p>
                         </div>
                     </section>
 
-                    <section class="mt-8 rounded-2xl border border-line bg-white p-6 shadow-sm">
-                        <h2 class="text-2xl font-bold">Observaciones</h2>
-
-                        <p id="observaciones" class="mt-4">Se recomienda mantener los controles médicos periódicos y continuar con el tratamiento indicado por el médico.</p>
-                    </section>
                 </div>
             </main>
         </div>
@@ -216,6 +110,6 @@
         </footer>
 
         <script type="module" src="../assets/js/navigation.js"></script>
-        <script src="../assets/js/historial.js"></script>
+        <script type="module" src="../assets/js/historial.js"></script>
     </body>
 </html>
