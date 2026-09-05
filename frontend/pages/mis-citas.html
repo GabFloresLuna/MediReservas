@@ -6,9 +6,10 @@
         <title>Mis citas | MediReservas</title>
 
         <link rel="stylesheet" href="../assets/css/style.css" />
+        <script type="module" src="../assets/js/route-guard.js"></script>
     </head>
 
-    <body class="flex min-h-screen flex-col bg-page text-ink antialiased" data-page-name="Mis citas">
+    <body class="flex min-h-screen flex-col bg-page text-ink antialiased" data-page-name="Mis citas" data-auth-required>
         <a
             class="fixed left-4 top-4 z-60 -translate-y-24 rounded-lg bg-white px-4 py-2 font-semibold text-primary-dark shadow-xl transition focus:translate-y-0"
             href="#main-content"
@@ -126,5 +127,6 @@
 
         <script type="module" src="../assets/js/navigation.js"></script>
         <script type="module" src="../assets/js/mis-citas.js"></script>
+        <script type="module" src="../assets/js/logout.js"></script>
     </body>
 </html>

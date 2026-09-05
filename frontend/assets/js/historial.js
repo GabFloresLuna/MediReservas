@@ -17,7 +17,7 @@ function formatDate(date) {
     return new Intl.DateTimeFormat("es-CL", {timeZone: "UTC"}).format(new Date(`${date}T00:00:00Z`));
 }
 
-function createConsultationCard(appointment) {
+function createConsultationCard(appointment, showPatient) {
     const card = document.createElement("article");
     card.className = "rounded-xl border border-line p-4";
 
@@ -26,6 +26,9 @@ function createConsultationCard(appointment) {
     title.textContent = `Consulta de ${appointment.specialtyName}`;
     card.append(title);
 
+    if (showPatient) {
+        appendDetail(card, "Paciente", `${appointment.patientName} (${appointment.patientRun})`, "mt-2");
+    }
     appendDetail(card, "Fecha", formatDate(appointment.date), "mt-2");
     appendDetail(card, "Médico", appointment.doctorName);
     appendDetail(card, "Motivo", appointment.reason);
@@ -37,27 +40,34 @@ function createConsultationCard(appointment) {
 
 function renderHistory() {
     const session = getSession();
-    const patient = getUserById(session?.userId);
+    const currentUser = getUserById(session?.userId);
 
-    if (!patient) {
+    if (!currentUser) {
         emptyMessage.classList.remove("hidden");
         return;
     }
 
-    document.querySelector("#patient-name").textContent = `${patient.firstName} ${patient.lastName}`;
-    document.querySelector("#patient-run").textContent = patient.run;
+    const isDoctor = session.role === "MEDICO";
+    document.querySelector("#patient-data-section").hidden = isDoctor;
+
+    if (!isDoctor) {
+        document.querySelector("#patient-name").textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+        document.querySelector("#patient-run").textContent = currentUser.run;
+    }
 
     const consultations = getAppointments()
         .filter(
             (appointment) =>
-                (appointment.patientId === patient.id || appointment.patientRun === patient.run) &&
+                (isDoctor
+                    ? appointment.doctorId === currentUser.id
+                    : appointment.patientId === currentUser.id || appointment.patientRun === currentUser.run) &&
                 appointment.status === "COMPLETADA" &&
                 appointment.diagnosis &&
                 appointment.clinicalNotes
         )
         .sort((first, second) => `${second.date} ${second.time}`.localeCompare(`${first.date} ${first.time}`));
 
-    consultationList.replaceChildren(...consultations.map(createConsultationCard));
+    consultationList.replaceChildren(...consultations.map((appointment) => createConsultationCard(appointment, isDoctor)));
     emptyMessage.classList.toggle("hidden", consultations.length > 0);
 }
 

@@ -71,6 +71,9 @@ const ROUTE_PERMISSIONS = Object.freeze({
     "gestion-citas.html": Object.freeze(["RECEPCIONISTA", "ADMINISTRADOR"]),
     "agenda-medica.html": Object.freeze(["MEDICO"]),
     "observacion-clinica.html": Object.freeze(["MEDICO"]),
+    "solicitar-cita.html": Object.freeze(["PACIENTE"]),
+    "mis-citas.html": Object.freeze(["PACIENTE"]),
+    "historial-clinico.html": Object.freeze(["MEDICO", "PACIENTE"]),
 });
 
 export function getDashboardConfig(role) {

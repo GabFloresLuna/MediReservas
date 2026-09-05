@@ -47,3 +47,14 @@ test("deniega una vista administrativa a roles no autorizados", () => {
         );
     });
 });
+
+test("restringe las vistas personales al rol del paciente", () => {
+    assert.equal(
+        evaluateRouteAccess({authRequired: true, allowedRoles: ["PACIENTE"], session: {role: "PACIENTE"}}),
+        "allowed"
+    );
+    assert.equal(
+        evaluateRouteAccess({authRequired: true, allowedRoles: ["PACIENTE"], session: {role: "MEDICO"}}),
+        "denied"
+    );
+});
