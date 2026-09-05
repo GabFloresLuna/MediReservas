@@ -25,3 +25,7 @@ export function getAppointmentStatusBadgeClass(status) {
 export function canCancelAppointment(status) {
     return ["PENDIENTE", "CONFIRMADA", "REAGENDADA"].includes(status);
 }
+
+export function formatAppointmentDate(date) {
+    return new Intl.DateTimeFormat("es-CL", {timeZone: "UTC"}).format(new Date(`${date}T00:00:00Z`));
+}

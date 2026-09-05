@@ -5,26 +5,13 @@ import {
     initializeBaseAppointments,
     updateAppointment
 } from "./storage.js";
-import {canCancelAppointment, getAppointmentStatusLabel} from "./citas-utils.js";
+import {canCancelAppointment, formatAppointmentDate, getAppointmentStatusLabel} from "./citas-utils.js";
+import {appendLabeledText} from "./ui-utils.js";
 
 const searchInput = document.querySelector("#buscarCita");
 const statusFilter = document.querySelector("#estadoCita");
 const appointmentList = document.querySelector("#listaCitas");
 const emptyMessage = document.querySelector("#mensajeSinCitas");
-
-function appendDetail(container, label, value, className = "") {
-    const paragraph = document.createElement("p");
-    paragraph.className = className;
-
-    const strong = document.createElement("strong");
-    strong.textContent = `${label}: `;
-    paragraph.append(strong, document.createTextNode(value));
-    container.append(paragraph);
-}
-
-function formatDate(date) {
-    return new Intl.DateTimeFormat("es-CL", {timeZone: "UTC"}).format(new Date(`${date}T00:00:00Z`));
-}
 
 function createAppointmentCard(appointment) {
     const card = document.createElement("article");
@@ -35,10 +22,10 @@ function createAppointmentCard(appointment) {
     title.textContent = appointment.specialtyName;
     card.append(title);
 
-    appendDetail(card, "Médico", appointment.doctorName, "mt-2");
-    appendDetail(card, "Fecha", formatDate(appointment.date));
-    appendDetail(card, "Hora", appointment.time);
-    if (appointment.modality) appendDetail(card, "Modalidad", appointment.modality);
+    appendLabeledText(card, "Médico", appointment.doctorName, "mt-2");
+    appendLabeledText(card, "Fecha", formatAppointmentDate(appointment.date));
+    appendLabeledText(card, "Hora", appointment.time);
+    if (appointment.modality) appendLabeledText(card, "Modalidad", appointment.modality);
 
     const status = document.createElement("p");
     status.className = "mt-2";

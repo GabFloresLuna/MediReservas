@@ -1,21 +1,9 @@
 import {getAppointments, getSession, getUserById, initializeBaseAppointments} from "./storage.js";
+import {formatAppointmentDate} from "./citas-utils.js";
+import {appendLabeledText} from "./ui-utils.js";
 
 const consultationList = document.querySelector("#listaConsultas");
 const emptyMessage = document.querySelector("#mensajeSinConsultas");
-
-function appendDetail(container, label, value, className = "") {
-    const paragraph = document.createElement("p");
-    paragraph.className = className;
-
-    const strong = document.createElement("strong");
-    strong.textContent = `${label}: `;
-    paragraph.append(strong, document.createTextNode(value));
-    container.append(paragraph);
-}
-
-function formatDate(date) {
-    return new Intl.DateTimeFormat("es-CL", {timeZone: "UTC"}).format(new Date(`${date}T00:00:00Z`));
-}
 
 function createConsultationCard(appointment, showPatient) {
     const card = document.createElement("article");
@@ -27,13 +15,13 @@ function createConsultationCard(appointment, showPatient) {
     card.append(title);
 
     if (showPatient) {
-        appendDetail(card, "Paciente", `${appointment.patientName} (${appointment.patientRun})`, "mt-2");
+        appendLabeledText(card, "Paciente", `${appointment.patientName} (${appointment.patientRun})`, "mt-2");
     }
-    appendDetail(card, "Fecha", formatDate(appointment.date), "mt-2");
-    appendDetail(card, "Médico", appointment.doctorName);
-    appendDetail(card, "Motivo", appointment.reason);
-    appendDetail(card, "Diagnóstico", appointment.diagnosis);
-    appendDetail(card, "Observación clínica", appointment.clinicalNotes);
+    appendLabeledText(card, "Fecha", formatAppointmentDate(appointment.date), "mt-2");
+    appendLabeledText(card, "Médico", appointment.doctorName);
+    appendLabeledText(card, "Motivo", appointment.reason);
+    appendLabeledText(card, "Diagnóstico", appointment.diagnosis);
+    appendLabeledText(card, "Observación clínica", appointment.clinicalNotes);
 
     return card;
 }
