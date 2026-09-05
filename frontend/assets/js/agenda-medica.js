@@ -10,14 +10,16 @@ const STATUS_LABELS = {
     PENDIENTE: "Pendiente",
     CONFIRMADA: "Confirmada",
     REAGENDADA: "Reagendada",
-    CANCELADA: "Cancelada"
+    CANCELADA: "Cancelada",
+    COMPLETADA: "Completada"
 };
 
 const STATUS_BADGE_CLASSES = {
     PENDIENTE: "inline-flex rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700",
     CONFIRMADA: "inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-primary-dark",
     REAGENDADA: "inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-secondary",
-    CANCELADA: "inline-flex rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700"
+    CANCELADA: "inline-flex rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700",
+    COMPLETADA: "inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700"
 };
 
 initializeBaseAppointments();
