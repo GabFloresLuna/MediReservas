@@ -1,5 +1,6 @@
 import { getLocalDateString, normalizeRun, validateRegistration } from "./validaciones.js";
 import { saveUser, userExists } from "./storage.js";
+import {setFieldError} from "./ui-utils.js";
 
 const form = document.querySelector("#register-form");
 const message = document.querySelector("#register-message");
@@ -45,11 +46,7 @@ function showFieldError(fieldName, error = "") {
         `#${fieldName.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}-error`
     );
 
-    if (!input || !errorElement) return;
-
-    errorElement.textContent = error;
-    input.setAttribute("aria-invalid", String(Boolean(error)));
-    input.classList.toggle("border-red-500", Boolean(error));
+    setFieldError(input, errorElement, error);
 }
 
 function validateField(fieldName) {

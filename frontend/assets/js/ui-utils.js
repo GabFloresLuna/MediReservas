@@ -16,3 +16,11 @@ export function appendLabeledText(container, label, value, className = "") {
 
     return paragraph;
 }
+
+export function setFieldError(input, errorElement, error = "") {
+    if (!input || !errorElement) return;
+
+    input.setAttribute("aria-invalid", String(Boolean(error)));
+    input.classList.toggle("border-red-500", Boolean(error));
+    errorElement.textContent = error;
+}

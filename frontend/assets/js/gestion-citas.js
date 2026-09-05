@@ -5,7 +5,7 @@ import {
     updateAppointment
 } from "./storage.js";
 import {getLocalDateString} from "./validaciones.js";
-import {createTableCell} from "./ui-utils.js";
+import {createTableCell, setFieldError} from "./ui-utils.js";
 import {canCancelAppointment, getAppointmentStatusBadgeClass, getAppointmentStatusLabel} from "./citas-utils.js";
 
 const tableBody = document.querySelector("#appointments-table-body");
@@ -150,10 +150,7 @@ function showRescheduleError(fieldName, error = "") {
     const errorElement = document.querySelector(`#reschedule-${fieldName}-error`);
     const input = rescheduleForm?.elements.namedItem(fieldName);
 
-    if (!input || !errorElement) return;
-    input.setAttribute("aria-invalid", String(Boolean(error)));
-    input.classList.toggle("border-red-500", Boolean(error));
-    errorElement.textContent = error;
+    setFieldError(input, errorElement, error);
 }
 
 function openCancelDialog(appointmentId) {

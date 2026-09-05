@@ -1,6 +1,7 @@
 import { authenticate, createSession, getRoleDestination } from "./auth.js";
 import { initializeBaseUsers } from "./storage.js";
 import { validateLogin } from "./validaciones.js";
+import {setFieldError} from "./ui-utils.js";
 
 const form = document.querySelector("#login-form");
 const message = document.querySelector("#login-message");
@@ -26,11 +27,7 @@ function showFieldError(fieldName, error = "") {
     const input = getInput(fieldName);
     const errorElement = document.querySelector(`#${fieldName}-error`);
 
-    if (!input || !errorElement) return;
-
-    errorElement.textContent = error;
-    input.setAttribute("aria-invalid", String(Boolean(error)));
-    input.classList.toggle("border-red-500", Boolean(error));
+    setFieldError(input, errorElement, error);
 }
 
 function validateField(fieldName) {

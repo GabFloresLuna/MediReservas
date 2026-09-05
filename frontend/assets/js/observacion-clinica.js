@@ -1,4 +1,5 @@
 import {getAppointmentById, getSession, initializeBaseAppointments, updateAppointment} from "./storage.js";
+import {setFieldError} from "./ui-utils.js";
 
 const form = document.querySelector("#observation-form");
 const formMessage = document.querySelector("#observation-form-message");
@@ -17,10 +18,7 @@ const canEditAppointment = appointment?.doctorId === session?.userId && appointm
 function showFieldError(input, errorElementId, error = "") {
     const errorElement = document.querySelector(`#${errorElementId}`);
 
-    if (!input || !errorElement) return;
-    input.setAttribute("aria-invalid", String(Boolean(error)));
-    input.classList.toggle("border-red-500", Boolean(error));
-    errorElement.textContent = error;
+    setFieldError(input, errorElement, error);
 }
 
 function fillSummary() {

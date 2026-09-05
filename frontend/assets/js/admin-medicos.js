@@ -19,7 +19,7 @@ import {
     isValidRun,
     normalizeRun
 } from "./validaciones.js";
-import {createTableCell} from "./ui-utils.js";
+import {createTableCell, setFieldError} from "./ui-utils.js";
 
 const dialog = document.querySelector("#doctor-dialog");
 const form = document.querySelector("#doctor-form");
@@ -78,10 +78,7 @@ function showFieldError(fieldName, error = "") {
     }[fieldName];
     const errorElement = document.querySelector(`#${errorElementId}`);
 
-    if (!input || !errorElement) return;
-    input.setAttribute("aria-invalid", String(Boolean(error)));
-    input.classList.toggle("border-red-500", Boolean(error));
-    errorElement.textContent = error;
+    setFieldError(input, errorElement, error);
 }
 
 function validateDoctor(values) {

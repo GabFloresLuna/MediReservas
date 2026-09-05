@@ -7,7 +7,7 @@ import {
     updateSpecialty,
     getNextSpecialtyId
 } from "./storage.js";
-import {createTableCell} from "./ui-utils.js";
+import {createTableCell, setFieldError} from "./ui-utils.js";
 
 const dialog = document.querySelector("#specialty-dialog");
 const form = document.querySelector("#specialty-form");
@@ -42,10 +42,7 @@ function showFieldError(fieldName, error = "") {
     const input = getInput(fieldName);
     const errorElement = document.querySelector(`#specialty-${fieldName === "specialtyName" ? "name" : "description"}-error`);
 
-    if (!input || !errorElement) return;
-    input.setAttribute("aria-invalid", String(Boolean(error)));
-    input.classList.toggle("border-red-500", Boolean(error));
-    errorElement.textContent = error;
+    setFieldError(input, errorElement, error);
 }
 
 function validateSpecialty(values) {

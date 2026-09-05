@@ -1,6 +1,6 @@
 import { getDashboardConfig, validateRoleChange } from "./roles.js";
 import { getUserById, getUsers, initializeBaseUsers, updateUser } from "./storage.js";
-import {createTableCell} from "./ui-utils.js";
+import {createTableCell, setFieldError} from "./ui-utils.js";
 
 const dialog = document.querySelector("#role-dialog");
 const form = document.querySelector("#role-form");
@@ -56,9 +56,7 @@ function renderRoles() {
 }
 
 function showRoleError(error = "") {
-    roleError.textContent = error;
-    roleSelect.setAttribute("aria-invalid", String(Boolean(error)));
-    roleSelect.classList.toggle("border-red-500", Boolean(error));
+    setFieldError(roleSelect, roleError, error);
 }
 
 function openRoleDialog(userId) {

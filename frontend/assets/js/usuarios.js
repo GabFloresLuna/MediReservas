@@ -9,7 +9,7 @@ import {
     updateUserStatus
 } from "./storage.js";
 import { normalizeRun, validateManagedUser } from "./validaciones.js";
-import {createTableCell} from "./ui-utils.js";
+import {createTableCell, setFieldError} from "./ui-utils.js";
 
 const dialog = document.querySelector("#user-dialog");
 const form = document.querySelector("#user-form");
@@ -51,10 +51,7 @@ function showFieldError(fieldName, error = "") {
     const input = getInput(fieldName);
     const errorElement = document.querySelector(`#user-${fieldName.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}-error`);
 
-    if (!input || !errorElement) return;
-    input.setAttribute("aria-invalid", String(Boolean(error)));
-    input.classList.toggle("border-red-500", Boolean(error));
-    errorElement.textContent = error;
+    setFieldError(input, errorElement, error);
 }
 
 function getFilteredUsers() {
