@@ -386,6 +386,21 @@ export function getAppointmentById(appointmentId) {
     return getAppointments().find((appointment) => appointment.id === appointmentId) ?? null;
 }
 
+export function saveAppointment(appointment) {
+    const appointments = getAppointments();
+    appointments.push(appointment);
+    localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments));
+}
+
+export function getNextAppointmentId() {
+    const highestId = getAppointments().reduce((maxId, appointment) => {
+        const numericId = Number.parseInt(String(appointment.id).replace("cita-", ""), 10);
+        return Number.isNaN(numericId) ? maxId : Math.max(maxId, numericId);
+    }, 0);
+
+    return `cita-${highestId + 1}`;
+}
+
 export function updateAppointment(appointmentId, changes) {
     const appointments = getAppointments();
     const appointmentIndex = appointments.findIndex((appointment) => appointment.id === appointmentId);
