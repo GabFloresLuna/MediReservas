@@ -66,6 +66,11 @@ const ROUTE_PERMISSIONS = Object.freeze({
     "perfil.html": ALL_ROLES,
     "usuarios.html": Object.freeze(["ADMINISTRADOR"]),
     "roles.html": Object.freeze(["ADMINISTRADOR"]),
+    "admin-medicos.html": Object.freeze(["ADMINISTRADOR"]),
+    "admin-especialidades.html": Object.freeze(["ADMINISTRADOR"]),
+    "gestion-citas.html": Object.freeze(["RECEPCIONISTA", "ADMINISTRADOR"]),
+    "agenda-medica.html": Object.freeze(["MEDICO"]),
+    "observacion-clinica.html": Object.freeze(["MEDICO"]),
 });
 
 export function getDashboardConfig(role) {
