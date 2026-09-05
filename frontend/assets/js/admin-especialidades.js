@@ -7,6 +7,7 @@ import {
     updateSpecialty,
     getNextSpecialtyId
 } from "./storage.js";
+import {createTableCell} from "./ui-utils.js";
 
 const dialog = document.querySelector("#specialty-dialog");
 const form = document.querySelector("#specialty-form");
@@ -58,13 +59,6 @@ function validateSpecialty(values) {
     return errors;
 }
 
-function createCell(text, className = "px-5 py-4") {
-    const cell = document.createElement("td");
-    cell.className = className;
-    cell.textContent = text;
-    return cell;
-}
-
 function createStatusCell(isActive) {
     const cell = document.createElement("td");
     cell.className = "px-5 py-4";
@@ -84,8 +78,8 @@ function renderSpecialties() {
         row.className = "border-b border-line last:border-0";
 
         row.append(
-            createCell(specialty.specialtyName, "px-5 py-4 font-semibold"),
-            createCell(specialty.description || "Sin descripción"),
+            createTableCell(specialty.specialtyName, "px-5 py-4 font-semibold"),
+            createTableCell(specialty.description || "Sin descripción"),
             createStatusCell(specialty.active)
         );
 

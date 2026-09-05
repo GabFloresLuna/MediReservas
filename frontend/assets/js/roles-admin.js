@@ -1,5 +1,6 @@
 import { getDashboardConfig, validateRoleChange } from "./roles.js";
 import { getUserById, getUsers, initializeBaseUsers, updateUser } from "./storage.js";
+import {createTableCell} from "./ui-utils.js";
 
 const dialog = document.querySelector("#role-dialog");
 const form = document.querySelector("#role-form");
@@ -22,13 +23,6 @@ function getFilteredUsers() {
     });
 }
 
-function createCell(text, className = "px-5 py-4") {
-    const cell = document.createElement("td");
-    cell.className = className;
-    cell.textContent = text;
-    return cell;
-}
-
 function renderRoles() {
     const users = getFilteredUsers();
     const rows = users.map((user) => {
@@ -38,10 +32,10 @@ function renderRoles() {
         const role = getDashboardConfig(user.role)?.label ?? "Sin rol";
 
         row.append(
-            createCell(fullName, "px-5 py-4 font-semibold"),
-            createCell(user.run ?? "Sin información"),
-            createCell(user.email),
-            createCell(role)
+            createTableCell(fullName, "px-5 py-4 font-semibold"),
+            createTableCell(user.run ?? "Sin información"),
+            createTableCell(user.email),
+            createTableCell(role)
         );
 
         const actionCell = document.createElement("td");

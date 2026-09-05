@@ -5,6 +5,7 @@ import {
     updateAppointment
 } from "./storage.js";
 import {getLocalDateString} from "./validaciones.js";
+import {createTableCell} from "./ui-utils.js";
 
 const tableBody = document.querySelector("#appointments-table-body");
 const emptyMessage = document.querySelector("#appointments-empty-message");
@@ -55,13 +56,6 @@ function getFilteredAppointments() {
         const matchesStatus = status === "all" || appointment.status === status;
         return matchesQuery && matchesStatus;
     });
-}
-
-function createCell(text, className = "px-5 py-4") {
-    const cell = document.createElement("td");
-    cell.className = className;
-    cell.textContent = text;
-    return cell;
 }
 
 function createStatusCell(status) {
@@ -122,12 +116,12 @@ function renderAppointments() {
         row.className = "border-b border-line last:border-0";
 
         row.append(
-            createCell(appointment.patientName, "px-5 py-4 font-semibold"),
-            createCell(appointment.patientRun),
-            createCell(appointment.specialtyName),
-            createCell(appointment.doctorName),
-            createCell(appointment.date),
-            createCell(appointment.time),
+            createTableCell(appointment.patientName, "px-5 py-4 font-semibold"),
+            createTableCell(appointment.patientRun),
+            createTableCell(appointment.specialtyName),
+            createTableCell(appointment.doctorName),
+            createTableCell(appointment.date),
+            createTableCell(appointment.time),
             createStatusCell(appointment.status)
         );
 

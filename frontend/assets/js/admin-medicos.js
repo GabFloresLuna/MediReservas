@@ -19,6 +19,7 @@ import {
     isValidRun,
     normalizeRun
 } from "./validaciones.js";
+import {createTableCell} from "./ui-utils.js";
 
 const dialog = document.querySelector("#doctor-dialog");
 const form = document.querySelector("#doctor-form");
@@ -141,13 +142,6 @@ function getFilteredDoctors() {
     });
 }
 
-function createCell(text, className = "px-5 py-4") {
-    const cell = document.createElement("td");
-    cell.className = className;
-    cell.textContent = text;
-    return cell;
-}
-
 function createStatusCell(isActive) {
     const cell = document.createElement("td");
     cell.className = "px-5 py-4";
@@ -168,12 +162,12 @@ function renderDoctors() {
         const fullName = `${doctor.firstName ?? ""} ${doctor.lastName ?? ""}`.trim() || "Sin nombre";
 
         row.append(
-            createCell(fullName, "px-5 py-4 font-semibold"),
-            createCell(doctor.run ?? "Sin información"),
-            createCell(doctor.email),
-            createCell(doctor.medicalLicenseNumber),
-            createCell(getSpecialtyNames(doctor)),
-            createCell(doctor.admissionDate || "Sin información"),
+            createTableCell(fullName, "px-5 py-4 font-semibold"),
+            createTableCell(doctor.run ?? "Sin información"),
+            createTableCell(doctor.email),
+            createTableCell(doctor.medicalLicenseNumber),
+            createTableCell(getSpecialtyNames(doctor)),
+            createTableCell(doctor.admissionDate || "Sin información"),
             createStatusCell(doctor.active)
         );
 

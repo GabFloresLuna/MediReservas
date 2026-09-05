@@ -9,6 +9,7 @@ import {
     updateUserStatus
 } from "./storage.js";
 import { normalizeRun, validateManagedUser } from "./validaciones.js";
+import {createTableCell} from "./ui-utils.js";
 
 const dialog = document.querySelector("#user-dialog");
 const form = document.querySelector("#user-form");
@@ -68,13 +69,6 @@ function getFilteredUsers() {
     });
 }
 
-function createCell(text, className = "px-5 py-4") {
-    const cell = document.createElement("td");
-    cell.className = className;
-    cell.textContent = text;
-    return cell;
-}
-
 function createStatusCell(isActive) {
     const cell = document.createElement("td");
     cell.className = "px-5 py-4";
@@ -96,10 +90,10 @@ function renderUsers() {
         const role = getDashboardConfig(user.role)?.label ?? "Usuario";
 
         row.append(
-            createCell(fullName, "px-5 py-4 font-semibold"),
-            createCell(user.run ?? "Sin información"),
-            createCell(user.email),
-            createCell(role),
+            createTableCell(fullName, "px-5 py-4 font-semibold"),
+            createTableCell(user.run ?? "Sin información"),
+            createTableCell(user.email),
+            createTableCell(role),
             createStatusCell(user.active)
         );
 
