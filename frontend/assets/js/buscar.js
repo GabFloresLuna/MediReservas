@@ -1,98 +1,135 @@
-const buscarEspecialidad = document.getElementById("buscarEspecialidad");
-const especialidades = document.querySelectorAll("#listaEspecialidades > div");
-const mensajeSinEspecialidades = document.getElementById("mensajeSinEspecialidades");
+import {
+    getDoctors,
+    getSpecialties,
+    initializeBaseDoctors,
+    initializeBaseSpecialties
+} from "./storage.js";
 
-buscarEspecialidad.addEventListener("input", function () {
-    const texto = this.value.toLowerCase().trim();
-    let encontrados = 0;
+const specialtySearch = document.querySelector("#buscarEspecialidad");
+const specialtyList = document.querySelector("#listaEspecialidades");
+const specialtyEmptyMessage = document.querySelector("#mensajeSinEspecialidades");
+const doctorSearch = document.querySelector("#buscarMedico");
+const specialtyFilter = document.querySelector("#filtroEspecialidad");
+const doctorList = document.querySelector("#listaMedicos");
+const doctorEmptyMessage = document.querySelector("#mensajeSinMedicos");
+const doctorDetail = document.querySelector("#detalleMedico");
 
-    especialidades.forEach(function (especialidad) {
-        const nombre = especialidad.querySelector("h3").textContent.toLowerCase();
-
-        if (nombre.includes(texto)) {
-            especialidad.style.display = "block";
-            encontrados++;
-        } else {
-            especialidad.style.display = "none";
-        }
-    });
-
-    if (encontrados === 0) {
-        mensajeSinEspecialidades.style.display = "block";
-    } else {
-        mensajeSinEspecialidades.style.display = "none";
-    }
-});
-
-const buscarMedico = document.getElementById("buscarMedico");
-const filtroEspecialidad = document.getElementById("filtroEspecialidad");
-const medicos = document.querySelectorAll("#listaMedicos .medico");
-const mensajeSinMedicos = document.getElementById("mensajeSinMedicos");
-
-function filtrarMedicos() {
-    const nombreBuscado = buscarMedico.value.toLowerCase().trim();
-    const especialidadSeleccionada = filtroEspecialidad.value;
-    let encontrados = 0;
-
-    medicos.forEach(function (medico) {
-        const nombre = medico.querySelector("h3").textContent.toLowerCase();
-
-        const especialidad = medico.querySelector("p").textContent
-            .replace("Especialidad: ", "")
-            .trim();
-
-        const coincideNombre = nombre.includes(nombreBuscado);
-
-        const coincideEspecialidad =
-            especialidadSeleccionada === "" ||
-            especialidad === especialidadSeleccionada;
-
-        if (coincideNombre && coincideEspecialidad) {
-            medico.style.display = "block";
-            encontrados++;
-        } else {
-            medico.style.display = "none";
-        }
-    });
-
-    if (encontrados === 0) {
-        mensajeSinMedicos.style.display = "block";
-    } else {
-        mensajeSinMedicos.style.display = "none";
-    }
+function getActiveSpecialties() {
+    return getSpecialties().filter((specialty) => specialty.active);
 }
 
-buscarMedico.addEventListener("input", filtrarMedicos);
-filtroEspecialidad.addEventListener("change", filtrarMedicos);
+function getDoctorSpecialties(doctor) {
+    const doctorSpecialtyIds = [doctor.specialtyId, ...(doctor.extraSpecialtyIds ?? [])];
+    return getActiveSpecialties().filter((specialty) => doctorSpecialtyIds.includes(specialty.id));
+}
 
-const botonesDetalle = document.querySelectorAll(".verDetalle");
+function createSpecialtyCard(specialty) {
+    const card = document.createElement("article");
+    const title = document.createElement("h3");
+    const description = document.createElement("p");
+    const button = document.createElement("button");
 
-const detalleMedico = document.getElementById("detalleMedico");
-const detalleNombre = document.getElementById("detalleNombre");
-const detalleEspecialidad = document.getElementById("detalleEspecialidad");
-const detalleRegistro = document.getElementById("detalleRegistro");
-const detalleDescripcion = document.getElementById("detalleDescripcion");
-const cerrarDetalle = document.getElementById("cerrarDetalle");
+    title.textContent = specialty.specialtyName;
+    description.textContent = specialty.description;
+    button.type = "button";
+    button.dataset.specialtyId = specialty.id;
+    button.textContent = "Ver médicos";
+    card.append(title, description, button);
 
-botonesDetalle.forEach(function (boton) {
-    boton.addEventListener("click", function () {
-        const medico = boton.closest(".medico");
+    return card;
+}
 
-        const nombre = medico.querySelector("h3").textContent;
-        const datos = medico.querySelectorAll("p");
-        const especialidad = datos[0].textContent.replace("Especialidad: ", "").trim();
-        const registro = datos[1].textContent.replace("Registro médico: ", "").trim();
-        const descripcion = medico.querySelector(".descripcion").textContent.trim();
+function renderSpecialties() {
+    const search = specialtySearch.value.trim().toLowerCase();
+    const specialties = getActiveSpecialties().filter((specialty) =>
+        specialty.specialtyName.toLowerCase().includes(search)
+    );
 
-        detalleNombre.textContent = nombre;
-        detalleEspecialidad.textContent = especialidad;
-        detalleRegistro.textContent = registro;
-        detalleDescripcion.textContent = descripcion;
+    specialtyList.replaceChildren(...specialties.map(createSpecialtyCard));
+    specialtyEmptyMessage.style.display = specialties.length > 0 ? "none" : "block";
+}
 
-        detalleMedico.style.display = "block";
+function fillSpecialtyFilter() {
+    specialtyFilter.replaceChildren(new Option("Todas las especialidades", ""));
+    getActiveSpecialties().forEach((specialty) => {
+        specialtyFilter.add(new Option(specialty.specialtyName, specialty.id));
     });
+}
+
+function createDoctorCard(doctor) {
+    const specialties = getDoctorSpecialties(doctor);
+    const card = document.createElement("article");
+    const title = document.createElement("h3");
+    const specialty = document.createElement("p");
+    const license = document.createElement("p");
+    const button = document.createElement("button");
+
+    card.className = "medico";
+    title.textContent = `${doctor.firstName} ${doctor.lastName}`;
+    specialty.textContent = `Especialidad: ${specialties.map((item) => item.specialtyName).join(", ")}`;
+    license.textContent = `Registro médico: ${doctor.medicalLicenseNumber}`;
+    button.type = "button";
+    button.className = "verDetalle";
+    button.dataset.doctorId = doctor.doctorId;
+    button.textContent = "Ver detalle";
+    card.append(title, specialty, license, button);
+
+    return card;
+}
+
+function renderDoctors() {
+    const search = doctorSearch.value.trim().toLowerCase();
+    const selectedSpecialtyId = Number(specialtyFilter.value);
+    const doctors = getDoctors()
+        .filter((doctor) => doctor.active)
+        .filter((doctor) => `${doctor.firstName} ${doctor.lastName}`.toLowerCase().includes(search))
+        .filter(
+            (doctor) =>
+                !selectedSpecialtyId ||
+                doctor.specialtyId === selectedSpecialtyId ||
+                (doctor.extraSpecialtyIds ?? []).includes(selectedSpecialtyId)
+        );
+
+    doctorList.replaceChildren(...doctors.map(createDoctorCard));
+    doctorEmptyMessage.style.display = doctors.length > 0 ? "none" : "block";
+}
+
+function showDoctorDetail(doctorId) {
+    const doctor = getDoctors().find((item) => item.doctorId === doctorId && item.active);
+    if (!doctor) return;
+
+    const specialties = getDoctorSpecialties(doctor);
+    document.querySelector("#detalleNombre").textContent = `${doctor.firstName} ${doctor.lastName}`;
+    document.querySelector("#detalleEspecialidad").textContent = specialties.map((item) => item.specialtyName).join(", ");
+    document.querySelector("#detalleRegistro").textContent = doctor.medicalLicenseNumber;
+    document.querySelector("#detalleDescripcion").textContent = specialties.map((item) => item.description).join(" ");
+    doctorDetail.style.display = "block";
+}
+
+specialtySearch?.addEventListener("input", renderSpecialties);
+doctorSearch?.addEventListener("input", renderDoctors);
+specialtyFilter?.addEventListener("change", renderDoctors);
+
+specialtyList?.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-specialty-id]");
+    if (!button) return;
+
+    specialtyFilter.value = button.dataset.specialtyId;
+    renderDoctors();
+    document.querySelector("#medicos").scrollIntoView({behavior: "smooth"});
 });
 
-cerrarDetalle.addEventListener("click", function () {
-    detalleMedico.style.display = "none";
+doctorList?.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-doctor-id]");
+    if (button) showDoctorDetail(Number(button.dataset.doctorId));
 });
+
+document.querySelector("#cerrarDetalle")?.addEventListener("click", () => {
+    doctorDetail.style.display = "none";
+});
+
+initializeBaseSpecialties();
+initializeBaseDoctors();
+fillSpecialtyFilter();
+renderSpecialties();
+renderDoctors();
