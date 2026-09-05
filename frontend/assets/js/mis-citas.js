@@ -5,19 +5,12 @@ import {
     initializeBaseAppointments,
     updateAppointment
 } from "./storage.js";
+import {canCancelAppointment, getAppointmentStatusLabel} from "./citas-utils.js";
 
 const searchInput = document.querySelector("#buscarCita");
 const statusFilter = document.querySelector("#estadoCita");
 const appointmentList = document.querySelector("#listaCitas");
 const emptyMessage = document.querySelector("#mensajeSinCitas");
-
-const STATUS_LABELS = {
-    PENDIENTE: "Pendiente",
-    CONFIRMADA: "Confirmada",
-    REAGENDADA: "Reagendada",
-    CANCELADA: "Cancelada",
-    COMPLETADA: "Completada"
-};
 
 function appendDetail(container, label, value, className = "") {
     const paragraph = document.createElement("p");
@@ -31,10 +24,6 @@ function appendDetail(container, label, value, className = "") {
 
 function formatDate(date) {
     return new Intl.DateTimeFormat("es-CL", {timeZone: "UTC"}).format(new Date(`${date}T00:00:00Z`));
-}
-
-function canCancel(status) {
-    return !["CANCELADA", "COMPLETADA"].includes(status);
 }
 
 function createAppointmentCard(appointment) {
@@ -57,14 +46,14 @@ function createAppointmentCard(appointment) {
     statusLabel.textContent = "Estado: ";
     const statusValue = document.createElement("span");
     statusValue.className = "estado font-semibold";
-    statusValue.textContent = STATUS_LABELS[appointment.status] ?? appointment.status;
+    statusValue.textContent = getAppointmentStatusLabel(appointment.status);
     status.append(statusLabel, statusValue);
     card.append(status);
 
     const cancelButton = document.createElement("button");
     cancelButton.type = "button";
     cancelButton.dataset.appointmentId = appointment.id;
-    cancelButton.disabled = !canCancel(appointment.status);
+    cancelButton.disabled = !canCancelAppointment(appointment.status);
     cancelButton.textContent = appointment.status === "CANCELADA" ? "Cancelada" : "Cancelar cita";
     cancelButton.className = cancelButton.disabled
         ? "mt-4 rounded-xl bg-slate-300 px-4 py-2 font-semibold text-slate-600"

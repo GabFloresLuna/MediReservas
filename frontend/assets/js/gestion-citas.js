@@ -6,6 +6,7 @@ import {
 } from "./storage.js";
 import {getLocalDateString} from "./validaciones.js";
 import {createTableCell} from "./ui-utils.js";
+import {canCancelAppointment, getAppointmentStatusBadgeClass, getAppointmentStatusLabel} from "./citas-utils.js";
 
 const tableBody = document.querySelector("#appointments-table-body");
 const emptyMessage = document.querySelector("#appointments-empty-message");
@@ -19,22 +20,6 @@ const rescheduleSummary = document.querySelector("#reschedule-summary");
 const cancelDialog = document.querySelector("#cancel-dialog");
 const cancelDialogDescription = document.querySelector("#cancel-dialog-description");
 const cancelAppointmentId = document.querySelector("#cancel-appointment-id");
-
-const STATUS_LABELS = {
-    PENDIENTE: "Pendiente",
-    CONFIRMADA: "Confirmada",
-    REAGENDADA: "Reagendada",
-    CANCELADA: "Cancelada",
-    COMPLETADA: "Completada"
-};
-
-const STATUS_BADGE_CLASSES = {
-    PENDIENTE: "inline-flex rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700",
-    CONFIRMADA: "inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-primary-dark",
-    REAGENDADA: "inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-secondary",
-    CANCELADA: "inline-flex rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700",
-    COMPLETADA: "inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700"
-};
 
 initializeBaseAppointments();
 
@@ -62,8 +47,8 @@ function createStatusCell(status) {
     const cell = document.createElement("td");
     cell.className = "px-5 py-4";
     const badge = document.createElement("span");
-    badge.className = STATUS_BADGE_CLASSES[status] ?? STATUS_BADGE_CLASSES.PENDIENTE;
-    badge.textContent = STATUS_LABELS[status] ?? status;
+    badge.className = getAppointmentStatusBadgeClass(status);
+    badge.textContent = getAppointmentStatusLabel(status);
     cell.append(badge);
     return cell;
 }
@@ -90,7 +75,7 @@ function createActionButtons(appointment) {
         actions.append(rescheduleButton);
     }
 
-    if (["PENDIENTE", "CONFIRMADA", "REAGENDADA"].includes(appointment.status)) {
+    if (canCancelAppointment(appointment.status)) {
         const cancelButton = document.createElement("button");
         cancelButton.className = "rounded-lg border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50";
         cancelButton.type = "button";
