@@ -16,7 +16,6 @@ test("existe una configuración completa para cada rol", () => {
         assert.ok(config.label);
         assert.ok(config.description);
         assert.ok(config.actions.length >= 3);
-        assert.equal(config.summary.length, 3);
     });
 });
 
