@@ -48,7 +48,7 @@ const DASHBOARD_CONFIG = {
         actions: [
             { icon: "RE", title: "Reservar una hora", description: "Selecciona especialidad, profesional, fecha y horario.", href: "solicitar-cita.html" },
             { icon: "MC", title: "Mis citas", description: "Consulta, revisa o cancela tus próximas atenciones.", href: "mis-citas.html" },
-            { icon: "ME", title: "Buscar médicos", description: "Encuentra profesionales por nombre o especialidad.", href: "medicos.html" },
+            { icon: "ME", title: "Buscar médicos", description: "Encuentra profesionales por nombre o especialidad.", href: "medicos-especialidades.html" },
             { icon: "HI", title: "Historial clínico", description: "Revisa las observaciones de tus atenciones anteriores.", href: "historial-clinico.html" }
         ],
         summary: [
