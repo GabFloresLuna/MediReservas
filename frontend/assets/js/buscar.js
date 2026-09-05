@@ -29,10 +29,14 @@ function createSpecialtyCard(specialty) {
     const description = document.createElement("p");
     const button = document.createElement("button");
 
+    card.className = "flex flex-col rounded-2xl border border-line bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-primary hover:shadow-lg";
+    title.className = "text-xl font-bold";
     title.textContent = specialty.specialtyName;
+    description.className = "mt-3 flex-1 leading-7 text-muted";
     description.textContent = specialty.description;
     button.type = "button";
     button.dataset.specialtyId = specialty.id;
+    button.className = "mt-5 self-start font-semibold text-primary-dark hover:text-primary";
     button.textContent = "Ver médicos";
     card.append(title, description, button);
 
@@ -46,7 +50,7 @@ function renderSpecialties() {
     );
 
     specialtyList.replaceChildren(...specialties.map(createSpecialtyCard));
-    specialtyEmptyMessage.style.display = specialties.length > 0 ? "none" : "block";
+    specialtyEmptyMessage.classList.toggle("hidden", specialties.length > 0);
 }
 
 function fillSpecialtyFilter() {
@@ -64,12 +68,15 @@ function createDoctorCard(doctor) {
     const license = document.createElement("p");
     const button = document.createElement("button");
 
-    card.className = "medico";
+    card.className = "medico flex flex-col rounded-2xl border border-line bg-white p-6 shadow-sm";
+    title.className = "text-xl font-bold";
     title.textContent = `${doctor.firstName} ${doctor.lastName}`;
+    specialty.className = "mt-3 text-primary-dark";
     specialty.textContent = `Especialidad: ${specialties.map((item) => item.specialtyName).join(", ")}`;
+    license.className = "mt-1 text-sm text-muted";
     license.textContent = `Registro médico: ${doctor.medicalLicenseNumber}`;
     button.type = "button";
-    button.className = "verDetalle";
+    button.className = "verDetalle mt-5 self-start rounded-xl border border-primary px-4 py-2 font-semibold text-primary-dark transition hover:bg-primary-light";
     button.dataset.doctorId = doctor.doctorId;
     button.textContent = "Ver detalle";
     card.append(title, specialty, license, button);
@@ -91,7 +98,7 @@ function renderDoctors() {
         );
 
     doctorList.replaceChildren(...doctors.map(createDoctorCard));
-    doctorEmptyMessage.style.display = doctors.length > 0 ? "none" : "block";
+    doctorEmptyMessage.classList.toggle("hidden", doctors.length > 0);
 }
 
 function showDoctorDetail(doctorId) {
@@ -103,7 +110,7 @@ function showDoctorDetail(doctorId) {
     document.querySelector("#detalleEspecialidad").textContent = specialties.map((item) => item.specialtyName).join(", ");
     document.querySelector("#detalleRegistro").textContent = doctor.medicalLicenseNumber;
     document.querySelector("#detalleDescripcion").textContent = specialties.map((item) => item.description).join(" ");
-    doctorDetail.style.display = "block";
+    doctorDetail.showModal();
 }
 
 specialtySearch?.addEventListener("input", renderSpecialties);
@@ -125,7 +132,11 @@ doctorList?.addEventListener("click", (event) => {
 });
 
 document.querySelector("#cerrarDetalle")?.addEventListener("click", () => {
-    doctorDetail.style.display = "none";
+    doctorDetail.close();
+});
+
+doctorDetail?.addEventListener("click", (event) => {
+    if (event.target === doctorDetail) doctorDetail.close();
 });
 
 initializeBaseSpecialties();
