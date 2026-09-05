@@ -1,64 +1,114 @@
-const buscarCita = document.getElementById("buscarCita");
-const estadoCita = document.getElementById("estadoCita");
-const citas = document.querySelectorAll(".cita");
-const mensajeSinCitas = document.getElementById("mensajeSinCitas");
+import {
+    getAppointments,
+    getSession,
+    getUserById,
+    initializeBaseAppointments,
+    updateAppointment
+} from "./storage.js";
 
-function filtrarCitas() {
+const searchInput = document.querySelector("#buscarCita");
+const statusFilter = document.querySelector("#estadoCita");
+const appointmentList = document.querySelector("#listaCitas");
+const emptyMessage = document.querySelector("#mensajeSinCitas");
 
-    const texto = buscarCita.value.toLowerCase();
-    const estado = estadoCita.value;
+const STATUS_LABELS = {
+    PENDIENTE: "Pendiente",
+    CONFIRMADA: "Confirmada",
+    REAGENDADA: "Reagendada",
+    CANCELADA: "Cancelada",
+    COMPLETADA: "Completada"
+};
 
-    let visibles = 0;
+function appendDetail(container, label, value, className = "") {
+    const paragraph = document.createElement("p");
+    paragraph.className = className;
 
-    citas.forEach((cita) => {
-
-        const medico = cita.querySelector("p").textContent.toLowerCase();
-        const estadoActual = cita.querySelector(".estado").textContent;
-
-        const coincideMedico = medico.includes(texto);
-        const coincideEstado = estado === "" || estadoActual === estado;
-
-        if (coincideMedico && coincideEstado) {
-            cita.style.display = "block";
-            visibles++;
-        } else {
-            cita.style.display = "none";
-        }
-
-    });
-
-    if (visibles === 0) {
-        mensajeSinCitas.style.display = "block";
-    } else {
-        mensajeSinCitas.style.display = "none";
-    }
-
+    const strong = document.createElement("strong");
+    strong.textContent = `${label}: `;
+    paragraph.append(strong, document.createTextNode(value));
+    container.append(paragraph);
 }
 
-buscarCita.addEventListener("input", filtrarCitas);
-estadoCita.addEventListener("change", filtrarCitas);
+function formatDate(date) {
+    return new Intl.DateTimeFormat("es-CL", {timeZone: "UTC"}).format(new Date(`${date}T00:00:00Z`));
+}
 
-const botonesCancelar = document.querySelectorAll(".cancelarCita");
+function canCancel(status) {
+    return !["CANCELADA", "COMPLETADA"].includes(status);
+}
 
-botonesCancelar.forEach((boton) => {
+function createAppointmentCard(appointment) {
+    const card = document.createElement("article");
+    card.className = "cita rounded-xl border border-line p-5";
 
-    boton.addEventListener("click", function () {
+    const title = document.createElement("h3");
+    title.className = "text-lg font-semibold";
+    title.textContent = appointment.specialtyName;
+    card.append(title);
 
-        if (boton.disabled) {
-            return;
-        }
+    appendDetail(card, "Médico", appointment.doctorName, "mt-2");
+    appendDetail(card, "Fecha", formatDate(appointment.date));
+    appendDetail(card, "Hora", appointment.time);
+    if (appointment.modality) appendDetail(card, "Modalidad", appointment.modality);
 
-        const cita = boton.parentElement;
-        const estado = cita.querySelector(".estado");
+    const status = document.createElement("p");
+    status.className = "mt-2";
+    const statusLabel = document.createElement("strong");
+    statusLabel.textContent = "Estado: ";
+    const statusValue = document.createElement("span");
+    statusValue.className = "estado font-semibold";
+    statusValue.textContent = STATUS_LABELS[appointment.status] ?? appointment.status;
+    status.append(statusLabel, statusValue);
+    card.append(status);
 
-        const confirmar = confirm("¿Desea cancelar esta cita médica?");
+    const cancelButton = document.createElement("button");
+    cancelButton.type = "button";
+    cancelButton.dataset.appointmentId = appointment.id;
+    cancelButton.disabled = !canCancel(appointment.status);
+    cancelButton.textContent = appointment.status === "CANCELADA" ? "Cancelada" : "Cancelar cita";
+    cancelButton.className = cancelButton.disabled
+        ? "mt-4 rounded-xl bg-slate-300 px-4 py-2 font-semibold text-slate-600"
+        : "cancelarCita mt-4 rounded-xl bg-red-600 px-4 py-2 font-semibold text-white transition hover:bg-red-700";
+    card.append(cancelButton);
 
-        if (confirmar) {
-            estado.textContent = "Cancelada";
-            boton.textContent = "Cancelada";
-            boton.disabled = true;
-        }
+    return card;
+}
 
-    });
+function getPatientAppointments() {
+    const session = getSession();
+    const patient = getUserById(session?.userId);
 
+    if (!patient) return [];
+
+    return getAppointments().filter(
+        (appointment) => appointment.patientId === patient.id || appointment.patientRun === patient.run
+    );
+}
+
+function renderAppointments() {
+    const search = searchInput.value.trim().toLowerCase();
+    const selectedStatus = statusFilter.value;
+    const appointments = getPatientAppointments()
+        .filter((appointment) => appointment.doctorName.toLowerCase().includes(search))
+        .filter((appointment) => !selectedStatus || appointment.status === selectedStatus)
+        .sort((first, second) => `${first.date} ${first.time}`.localeCompare(`${second.date} ${second.time}`));
+
+    appointmentList.replaceChildren(...appointments.map(createAppointmentCard));
+    emptyMessage.classList.toggle("hidden", appointments.length > 0);
+}
+
+searchInput?.addEventListener("input", renderAppointments);
+statusFilter?.addEventListener("change", renderAppointments);
+
+appointmentList?.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-appointment-id]");
+    if (!button || button.disabled) return;
+
+    if (!window.confirm("¿Desea cancelar esta cita médica?")) return;
+
+    updateAppointment(button.dataset.appointmentId, {status: "CANCELADA"});
+    renderAppointments();
 });
+
+initializeBaseAppointments();
+renderAppointments();

@@ -5,7 +5,8 @@ import {
     getAppointments,
     getNextAppointmentId,
     initializeBaseAppointments,
-    saveAppointment
+    saveAppointment,
+    updateAppointment
 } from "../assets/js/storage.js";
 
 class LocalStorageMock {
@@ -60,4 +61,11 @@ test("guarda una cita sin reemplazar las solicitudes existentes", () => {
 
 test("genera un identificador correlativo para la siguiente cita", () => {
     assert.equal(getNextAppointmentId(), "cita-7");
+});
+
+test("guarda la cancelación de una cita", () => {
+    const cancelled = updateAppointment("cita-1", {status: "CANCELADA"});
+
+    assert.equal(cancelled.status, "CANCELADA");
+    assert.equal(getAppointmentById("cita-1").status, "CANCELADA");
 });
