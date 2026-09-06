@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {getAppointments, getDoctors, initializeBaseAppointments, initializeBaseDoctors} from "../assets/js/storage.js";
+import {getAppointments, getDoctorForUser, getDoctors, initializeBaseAppointments, initializeBaseDoctors} from "../assets/js/storage.js";
 
 class LocalStorageMock {
     #data = new Map();
@@ -43,11 +43,18 @@ test("usa specialtyIds según el contrato del backend", () => {
 
 test("convierte la estructura antigua de especialidades médicas", () => {
     localStorage.setItem("medireservas_doctors", JSON.stringify([
-        {doctorId: 2, userId: "doctor-1", specialtyId: 2, extraSpecialtyIds: [4]}
+        {doctorId: "doctor-2", userId: "doctor-1", specialtyId: 2, extraSpecialtyIds: [4]}
     ]));
 
     assert.deepEqual(getDoctors()[0].specialtyIds, [2, 4]);
+    assert.equal(getDoctors()[0].doctorId, 2);
     assert.equal(getDoctors()[0].userId, 5);
+});
+
+test("encuentra la ficha médica desde los datos de la cuenta", () => {
+    assert.equal(getDoctorForUser({userId: 3})?.doctorId, 1);
+    assert.equal(getDoctorForUser({email: "medico@medireservas.cl"})?.doctorId, 1);
+    assert.equal(getDoctorForUser({run: "33333333-3"})?.doctorId, 1);
 });
 
 test("las citas usan médicos y especialidades coherentes", () => {

@@ -56,12 +56,23 @@ test("guarda una cita sin reemplazar las solicitudes existentes", () => {
 
     saveAppointment(appointment);
 
-    assert.equal(getAppointments().length, 7);
-    assert.deepEqual(getAppointmentById(7), appointment);
+    assert.equal(getAppointments().length, 8);
+    assert.deepEqual(getAppointmentById(8), appointment);
 });
 
 test("genera un identificador correlativo para la siguiente cita", () => {
-    assert.equal(getNextAppointmentId(), 7);
+    assert.equal(getNextAppointmentId(), 8);
+});
+
+test("incorpora citas base nuevas sin borrar las almacenadas", () => {
+    localStorage.setItem("medireservas_appointments", JSON.stringify([
+        {...getAppointmentById(1), appointmentStatus: "CANCELLED"}
+    ]));
+
+    initializeBaseAppointments();
+
+    assert.equal(getAppointmentById(1).appointmentStatus, "CANCELLED");
+    assert.equal(getAppointmentById(7).date, "2026-09-06");
 });
 
 test("adapta estados antiguos guardados al contrato del backend", () => {
@@ -71,9 +82,20 @@ test("adapta estados antiguos guardados al contrato del backend", () => {
     ]));
 
     assert.deepEqual(
-        getAppointments().map(({appointmentStatus}) => appointmentStatus),
-        ["CONFIRMED", "PENDING"]
+        getAppointments().map(({doctorId, appointmentStatus}) => ({doctorId, appointmentStatus})),
+        [
+            {doctorId: 1, appointmentStatus: "CONFIRMED"},
+            {doctorId: 1, appointmentStatus: "PENDING"}
+        ]
     );
+});
+
+test("conserva el número de un médico con identificador antiguo", () => {
+    localStorage.setItem("medireservas_appointments", JSON.stringify([
+        {id: "cita-2", doctorId: "doctor-2", specialtyId: 2, status: "PENDIENTE"}
+    ]));
+
+    assert.equal(getAppointments()[0].doctorId, 2);
 });
 
 test("guarda la cancelación de una cita", () => {

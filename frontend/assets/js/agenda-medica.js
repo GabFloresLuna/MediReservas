@@ -1,4 +1,4 @@
-import {getAppointments, getDoctors, getSession, initializeBaseAppointments} from "./storage.js";
+import {getAppointments, getDoctorForUser, getSession, getUserById, initializeBaseAppointments, initializeBaseDoctors} from "./storage.js";
 import {getLocalDateString} from "./validaciones.js";
 import {getAppointmentStatusBadgeClass, getAppointmentStatusLabel, getFirstPendingObservationDate} from "./citas-utils.js";
 
@@ -8,6 +8,7 @@ const emptyMessage = document.querySelector("#agenda-empty-message");
 const resultCount = document.querySelector("#agenda-result-count");
 
 initializeBaseAppointments();
+initializeBaseDoctors();
 
 function createStatusBadge(status) {
     const badge = document.createElement("span");
@@ -57,7 +58,7 @@ function createAppointmentCard(appointment) {
 
 function renderAgenda() {
     const session = getSession();
-    const doctor = getDoctors().find((item) => item.userId === session?.userId);
+    const doctor = getDoctorForUser(getUserById(session?.userId) ?? session);
     const selectedDate = dateInput.value;
     const appointments = getAppointments()
         .filter((appointment) => appointment.date === selectedDate && appointment.doctorId === doctor?.doctorId)
@@ -74,7 +75,7 @@ dateInput?.addEventListener("change", renderAgenda);
 
 const today = getLocalDateString();
 const session = getSession();
-const doctor = getDoctors().find((item) => item.userId === session?.userId);
+const doctor = getDoctorForUser(getUserById(session?.userId) ?? session);
 const showPendingObservation = new URLSearchParams(window.location.search).get("accion") === "observacion";
 
 dateInput.value = showPendingObservation

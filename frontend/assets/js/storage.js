@@ -130,6 +130,11 @@ function normalizeAppointmentId(appointmentId) {
     return Number(String(appointmentId).replace("cita-", ""));
 }
 
+function normalizeDoctorId(doctorId) {
+    const normalizedDoctorId = Number(String(doctorId).replace("doctor-", ""));
+    return Number.isFinite(normalizedDoctorId) ? normalizedDoctorId : null;
+}
+
 export function getSpecialties() {
     try {
         const specialties = JSON.parse(localStorage.getItem(SPECIALTIES_KEY)) ?? [];
@@ -186,12 +191,14 @@ export function initializeBaseSpecialties() {
 export function getDoctors() {
     try {
         const doctors = JSON.parse(localStorage.getItem(DOCTORS_KEY)) ?? [];
-        return doctors.map(({specialtyId, extraSpecialtyIds, ...doctor}) => {
+        return doctors.map(({specialtyId, extraSpecialtyIds, ...doctor}, index) => {
+            const doctorId = normalizeDoctorId(doctor.doctorId) ?? index + 1;
             const numericUserId = Number(doctor.userId);
-            const baseDoctor = BASE_DOCTORS.find(({doctorId}) => doctorId === doctor.doctorId);
+            const baseDoctor = BASE_DOCTORS.find((item) => item.doctorId === doctorId);
 
             return {
                 ...doctor,
+                doctorId,
                 userId: Number.isFinite(numericUserId) ? numericUserId : baseDoctor?.userId,
                 specialtyIds: doctor.specialtyIds ?? [specialtyId, ...(extraSpecialtyIds ?? [])].filter(Boolean)
             };
@@ -203,6 +210,23 @@ export function getDoctors() {
 
 export function getDoctorById(doctorId) {
     return getDoctors().find((doctor) => doctor.doctorId === Number(doctorId)) ?? null;
+}
+
+export function getDoctorForUser(user) {
+    if (!user) return null;
+
+    const normalizedEmail = String(user.email ?? "").trim().toLowerCase();
+    const normalizedRun = String(user.run ?? "").trim().toLowerCase();
+    const normalizedName = `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim().toLowerCase();
+
+    return getDoctors().find((doctor) => {
+        const doctorName = `${doctor.firstName ?? ""} ${doctor.lastName ?? ""}`.trim().toLowerCase();
+
+        return doctor.userId === Number(user.userId) ||
+            (normalizedEmail && doctor.email?.trim().toLowerCase() === normalizedEmail) ||
+            (normalizedRun && doctor.run?.trim().toLowerCase() === normalizedRun) ||
+            (normalizedName && doctorName === normalizedName);
+    }) ?? null;
 }
 
 export function saveDoctor(doctor) {
@@ -251,7 +275,7 @@ export function getAppointments() {
             ...appointment,
             appointmentId: normalizeAppointmentId(appointment.appointmentId ?? id ?? index + 1),
             patientUserId: Number(appointment.patientUserId ?? 0),
-            doctorId: Number.isFinite(Number(appointment.doctorId)) ? Number(appointment.doctorId) : 1,
+            doctorId: normalizeDoctorId(appointment.doctorId) ?? 1,
             specialtyId: Number(appointment.specialtyId),
             scheduleSlotId: normalizeAppointmentId(appointment.scheduleSlotId ?? appointment.appointmentId ?? id ?? index + 1),
             appointmentStatus: normalizeAppointmentStatus(appointment.appointmentStatus ?? status)
@@ -292,7 +316,13 @@ export function updateAppointment(appointmentId, changes) {
 }
 
 export function initializeBaseAppointments() {
-    if (localStorage.getItem(APPOINTMENTS_KEY)) return;
+    const appointments = getAppointments();
+    const existingIds = new Set(appointments.map(({appointmentId}) => appointmentId));
+    const missingAppointments = BASE_APPOINTMENTS.filter(
+        ({appointmentId}) => !existingIds.has(appointmentId)
+    );
 
-    localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(BASE_APPOINTMENTS));
+    if (missingAppointments.length > 0) {
+        localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify([...appointments, ...missingAppointments]));
+    }
 }

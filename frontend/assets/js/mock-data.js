@@ -223,5 +223,20 @@ export const BASE_APPOINTMENTS = [
         time: "09:00",
         reason: "Control post operatorio",
         appointmentStatus: "CANCELLED"
+    },
+    {
+        appointmentId: 7,
+        patientUserId: 4,
+        scheduleSlotId: 13,
+        patientName: "Paula Contreras",
+        patientRun: "44444444-4",
+        doctorId: 1,
+        doctorName: "Daniela Rojas",
+        specialtyId: 1,
+        specialtyName: "Cardiología",
+        date: "2026-09-06",
+        time: "15:30",
+        reason: "Control cardiológico",
+        appointmentStatus: "CONFIRMED"
     }
 ];

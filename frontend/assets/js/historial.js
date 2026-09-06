@@ -1,4 +1,4 @@
-import {getAppointments, getDoctors, getSession, getUserById, initializeBaseAppointments} from "./storage.js";
+import {getAppointments, getDoctorForUser, getSession, getUserById, initializeBaseAppointments, initializeBaseDoctors} from "./storage.js";
 import {formatAppointmentDate} from "./citas-utils.js";
 import {appendLabeledText} from "./ui-utils.js";
 import {getDiagnoses, getMedicalRecords, getMedicalVisits} from "./clinical-storage.js";
@@ -38,7 +38,7 @@ function renderHistory() {
     }
 
     const isDoctor = session.role === "DOCTOR";
-    const doctor = isDoctor ? getDoctors().find((item) => item.userId === currentUser.userId) : null;
+    const doctor = isDoctor ? getDoctorForUser(currentUser) : null;
     document.querySelector("#patient-data-section").hidden = isDoctor;
 
     if (!isDoctor) {
@@ -68,4 +68,5 @@ function renderHistory() {
 }
 
 initializeBaseAppointments();
+initializeBaseDoctors();
 renderHistory();
