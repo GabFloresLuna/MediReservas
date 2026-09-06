@@ -4,6 +4,15 @@ import { getSession } from "./storage.js";
 const session = getSession();
 const config = getDashboardConfig(session?.role);
 
+function updateSessionHeader() {
+    if (!session || !config) return;
+
+    const name = document.querySelector("#header-user-name");
+    const role = document.querySelector("#header-user-role");
+    if (name) name.textContent = `${session.firstName} ${session.lastName}`.trim();
+    if (role) role.textContent = config.label;
+}
+
 export function getNavigationItems(role) {
     const roleConfig = getDashboardConfig(role);
     if (!roleConfig) return [];
@@ -116,9 +125,6 @@ function initializeSharedMenu() {
     const button = document.querySelector("#mobile-menu-button");
     if (!button) return;
 
-    document.querySelector("#header-user-name").textContent = `${session.firstName} ${session.lastName}`.trim();
-    document.querySelector("#header-user-role").textContent = config.label;
-
     const backdrop = document.createElement("button");
     backdrop.className = "fixed inset-0 z-40 hidden bg-slate-950/45 lg:hidden";
     backdrop.type = "button";
@@ -167,5 +173,6 @@ function initializeSharedMenu() {
 }
 
 if (typeof document !== "undefined") {
+    updateSessionHeader();
     if (!initializeDashboardMenu()) initializeSharedMenu();
 }

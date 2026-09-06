@@ -15,7 +15,7 @@ test("existe una configuración completa para cada rol", () => {
         assert.ok(config, `Falta la configuración de ${role}`);
         assert.ok(config.label);
         assert.ok(config.description);
-        assert.ok(config.actions.length >= 3);
+        assert.ok(config.actions.length >= 1);
     });
 });
 
@@ -54,12 +54,9 @@ test("administrador y paciente reciben sus accesos principales", () => {
     assert.equal(patientActions.includes("Gestionar usuarios"), false);
 });
 
-test("el acceso para registrar observaciones dirige primero a la agenda", () => {
-    const observationAction = getDashboardConfig("DOCTOR").actions.find(
-        ({title}) => title === "Registrar observación"
-    );
-
-    assert.equal(observationAction.href, "agenda-medica.html?accion=observacion");
+test("recepción y médico no reciben accesos duplicados a una misma vista", () => {
+    assert.deepEqual(getDashboardConfig("RECEPTIONIST").actions.map(({href}) => href), ["gestion-citas.html"]);
+    assert.deepEqual(getDashboardConfig("DOCTOR").actions.map(({href}) => href), ["agenda-medica.html", "historial-clinico.html"]);
 });
 
 test("acepta únicamente los cuatro roles definidos", () => {

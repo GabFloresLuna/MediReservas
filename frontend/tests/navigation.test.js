@@ -8,7 +8,7 @@ test("cada rol recibe accesos al panel y al perfil", () => {
 
         assert.equal(items[0].href, "dashboard.html");
         assert.equal(items[1].href, "perfil.html");
-        assert.ok(items.length >= 5);
+        assert.ok(items.length >= 3);
     });
 });
 

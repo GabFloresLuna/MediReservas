@@ -13,17 +13,14 @@ const DASHBOARD_CONFIG = {
         label: "Recepcionista",
         description: "Revisa y gestiona las solicitudes de atención de los pacientes.",
         actions: [
-            { icon: "CI", title: "Gestionar citas", description: "Consulta todas las solicitudes y sus estados.", href: "gestion-citas.html" },
-            { icon: "CO", title: "Confirmar citas", description: "Confirma las solicitudes que se encuentran pendientes.", href: "gestion-citas.html?estado=pendiente" },
-            { icon: "RE", title: "Reagendar citas", description: "Modifica la fecha y hora de una atención solicitada.", href: "gestion-citas.html?accion=reagendar" }
+            { icon: "CI", title: "Gestionar citas", description: "Consulta, confirma, reagenda o cancela las solicitudes de atención.", href: "gestion-citas.html" }
         ]
     },
     DOCTOR: {
         label: "Médico",
         description: "Consulta tu agenda y registra la información de tus atenciones.",
         actions: [
-            { icon: "AG", title: "Mi agenda", description: "Revisa tus próximas citas ordenadas por fecha.", href: "agenda-medica.html" },
-            { icon: "OB", title: "Registrar observación", description: "Selecciona una atención confirmada desde tu agenda.", href: "agenda-medica.html?accion=observacion" },
+            { icon: "AG", title: "Mi agenda", description: "Revisa tus citas y registra observaciones de las atenciones confirmadas.", href: "agenda-medica.html" },
             { icon: "HI", title: "Historial clínico", description: "Consulta antecedentes asociados a tus atenciones.", href: "historial-clinico.html" }
         ]
     },
