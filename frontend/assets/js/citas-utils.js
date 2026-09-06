@@ -35,6 +35,17 @@ export function matchesAppointmentFilters(appointment, {query = "", status = "al
         && (!date || appointment.date === date);
 }
 
+export function getFirstPendingObservationDate(appointments, doctorId, today) {
+    return appointments
+        .filter(
+            (appointment) =>
+                appointment.doctorId === Number(doctorId) &&
+                appointment.appointmentStatus === "CONFIRMED" &&
+                appointment.date <= today
+        )
+        .sort((first, second) => `${first.date}${first.time}`.localeCompare(`${second.date}${second.time}`))[0]?.date ?? today;
+}
+
 export function formatAppointmentDate(date) {
     return new Intl.DateTimeFormat("es-CL", {timeZone: "UTC"}).format(new Date(`${date}T00:00:00Z`));
 }

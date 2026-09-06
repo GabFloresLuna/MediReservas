@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
     canCancelAppointment,
     formatAppointmentDate,
+    getFirstPendingObservationDate,
     getAppointmentStatusBadgeClass,
     getAppointmentStatusLabel,
     matchesAppointmentFilters
@@ -39,4 +40,16 @@ test("filtra citas por texto, estado y fecha", () => {
     assert.equal(matchesAppointmentFilters(appointment, {query: "camila", status: "PENDING", date: "2026-09-08"}), true);
     assert.equal(matchesAppointmentFilters(appointment, {date: "2026-09-09"}), false);
     assert.equal(matchesAppointmentFilters(appointment, {status: "CONFIRMED"}), false);
+});
+
+test("encuentra la fecha pendiente más antigua para registrar una observación", () => {
+    const appointments = [
+        {doctorId: 1, appointmentStatus: "CONFIRMED", date: "2026-09-05", time: "11:00"},
+        {doctorId: 1, appointmentStatus: "CONFIRMED", date: "2026-09-04", time: "09:00"},
+        {doctorId: 2, appointmentStatus: "CONFIRMED", date: "2026-09-03", time: "10:00"},
+        {doctorId: 1, appointmentStatus: "COMPLETED", date: "2026-09-02", time: "08:00"}
+    ];
+
+    assert.equal(getFirstPendingObservationDate(appointments, 1, "2026-09-05"), "2026-09-04");
+    assert.equal(getFirstPendingObservationDate(appointments, 3, "2026-09-05"), "2026-09-05");
 });

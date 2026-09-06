@@ -1,6 +1,6 @@
 import {getAppointments, getDoctors, getSession, initializeBaseAppointments} from "./storage.js";
 import {getLocalDateString} from "./validaciones.js";
-import {getAppointmentStatusBadgeClass, getAppointmentStatusLabel} from "./citas-utils.js";
+import {getAppointmentStatusBadgeClass, getAppointmentStatusLabel, getFirstPendingObservationDate} from "./citas-utils.js";
 
 const dateInput = document.querySelector("#agenda-date");
 const agendaList = document.querySelector("#agenda-list");
@@ -72,5 +72,12 @@ function renderAgenda() {
 
 dateInput?.addEventListener("change", renderAgenda);
 
-dateInput.value = getLocalDateString();
+const today = getLocalDateString();
+const session = getSession();
+const doctor = getDoctors().find((item) => item.userId === session?.userId);
+const showPendingObservation = new URLSearchParams(window.location.search).get("accion") === "observacion";
+
+dateInput.value = showPendingObservation
+    ? getFirstPendingObservationDate(getAppointments(), doctor?.doctorId, today)
+    : today;
 renderAgenda();
