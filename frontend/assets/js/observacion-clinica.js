@@ -1,6 +1,7 @@
 import {getAppointmentById, getDoctors, getSession, initializeBaseAppointments, updateAppointment} from "./storage.js";
 import {setFieldError} from "./ui-utils.js";
 import {getOrCreateMedicalRecord, saveDiagnosis, saveMedicalVisit} from "./clinical-storage.js";
+import {completeScheduleSlot, initializeBaseScheduleSlots} from "./schedule-storage.js";
 
 const form = document.querySelector("#observation-form");
 const formMessage = document.querySelector("#observation-form-message");
@@ -11,6 +12,7 @@ const notesInput = document.querySelector("#observation-notes");
 const treatmentInput = document.querySelector("#observation-treatment");
 
 initializeBaseAppointments();
+initializeBaseScheduleSlots();
 
 const appointmentId = new URLSearchParams(window.location.search).get("id");
 const appointment = appointmentId ? getAppointmentById(appointmentId) : null;
@@ -89,6 +91,7 @@ form?.addEventListener("submit", (event) => {
         diagnosisNotes: ""
     });
     updateAppointment(appointment.appointmentId, {appointmentStatus: "COMPLETED"});
+    completeScheduleSlot(appointment.scheduleSlotId);
 
     formMessage.className = "mt-4 text-center text-sm font-medium text-primary-dark";
     formMessage.textContent = "Observación registrada correctamente.";

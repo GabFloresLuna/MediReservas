@@ -4,9 +4,9 @@ import {
     initializeBaseAppointments,
     updateAppointment
 } from "./storage.js";
-import {getLocalDateString} from "./validaciones.js";
 import {createTableCell, setFieldError} from "./ui-utils.js";
-import {canCancelAppointment, getAppointmentStatusBadgeClass, getAppointmentStatusLabel} from "./citas-utils.js";
+import {canCancelAppointment, formatAppointmentDate, getAppointmentStatusBadgeClass, getAppointmentStatusLabel} from "./citas-utils.js";
+import {getAvailableScheduleSlots, initializeBaseScheduleSlots, releaseScheduleSlot, rescheduleScheduleSlot} from "./schedule-storage.js";
 
 const tableBody = document.querySelector("#appointments-table-body");
 const emptyMessage = document.querySelector("#appointments-empty-message");
@@ -20,8 +20,23 @@ const rescheduleSummary = document.querySelector("#reschedule-summary");
 const cancelDialog = document.querySelector("#cancel-dialog");
 const cancelDialogDescription = document.querySelector("#cancel-dialog-description");
 const cancelAppointmentId = document.querySelector("#cancel-appointment-id");
+const rescheduleDate = document.querySelector("#reschedule-date");
+const rescheduleTime = document.querySelector("#reschedule-time");
 
 initializeBaseAppointments();
+initializeBaseScheduleSlots();
+
+function resetSelect(select, placeholder) {
+    select.replaceChildren(new Option(placeholder, ""));
+}
+
+function fillRescheduleTimes(doctorId) {
+    resetSelect(rescheduleTime, "Selecciona una hora");
+    getAvailableScheduleSlots(doctorId)
+        .filter(({slotDate}) => slotDate === rescheduleDate.value)
+        .sort((first, second) => first.startTime.localeCompare(second.startTime))
+        .forEach((slot) => rescheduleTime.add(new Option(slot.startTime.slice(0, 5), slot.scheduleSlotId)));
+}
 
 function showFeedback(message, isError = false) {
     feedback.hidden = !message;
@@ -138,9 +153,12 @@ function openRescheduleDialog(appointmentId) {
     rescheduleForm.reset();
     document.querySelector("#reschedule-appointment-id").value = appointment.appointmentId;
     rescheduleSummary.textContent = `Cita de ${appointment.patientName} — ${appointment.specialtyName} con ${appointment.doctorName}.`;
-    document.querySelector("#reschedule-date").value = appointment.date;
-    document.querySelector("#reschedule-date").min = getLocalDateString();
-    document.querySelector("#reschedule-time").value = appointment.time;
+    resetSelect(rescheduleDate, "Selecciona una fecha");
+    resetSelect(rescheduleTime, "Selecciona una hora");
+    [...new Set(getAvailableScheduleSlots(appointment.doctorId).map(({slotDate}) => slotDate))]
+        .sort()
+        .forEach((date) => rescheduleDate.add(new Option(formatAppointmentDate(date), date)));
+    rescheduleDate.dataset.doctorId = appointment.doctorId;
     showRescheduleError("date");
     showRescheduleError("time");
     rescheduleDialog.showModal();
@@ -164,6 +182,7 @@ function openCancelDialog(appointmentId) {
 
 searchInput?.addEventListener("input", renderAppointments);
 statusFilter?.addEventListener("change", renderAppointments);
+rescheduleDate?.addEventListener("change", () => fillRescheduleTimes(rescheduleDate.dataset.doctorId));
 
 tableBody?.addEventListener("click", (event) => {
     const confirmButton = event.target.closest("[data-confirm-appointment]");
@@ -184,7 +203,7 @@ rescheduleForm?.addEventListener("submit", (event) => {
     event.preventDefault();
     const appointmentId = document.querySelector("#reschedule-appointment-id").value;
     const date = rescheduleForm.elements.namedItem("date").value;
-    const time = rescheduleForm.elements.namedItem("time").value;
+    const scheduleSlotId = Number(rescheduleForm.elements.namedItem("time").value);
 
     showRescheduleError("date");
     showRescheduleError("time");
@@ -193,17 +212,28 @@ rescheduleForm?.addEventListener("submit", (event) => {
     if (!date) {
         showRescheduleError("date", "Selecciona la nueva fecha.");
         hasErrors = true;
-    } else if (date < getLocalDateString()) {
-        showRescheduleError("date", "La nueva fecha no puede ser pasada.");
-        hasErrors = true;
     }
-    if (!time) {
+    if (!scheduleSlotId) {
         showRescheduleError("time", "Selecciona la nueva hora.");
         hasErrors = true;
     }
     if (hasErrors) return;
 
-    const appointment = updateAppointment(appointmentId, {date, time, appointmentStatus: "PENDING"});
+    const currentAppointment = getAppointmentById(appointmentId);
+    const newSlot = currentAppointment
+        ? rescheduleScheduleSlot(currentAppointment.scheduleSlotId, scheduleSlotId, appointmentId)
+        : null;
+    if (!newSlot) {
+        showRescheduleError("time", "El bloque seleccionado ya no está disponible.");
+        return;
+    }
+    const time = newSlot.startTime.slice(0, 5);
+    const appointment = updateAppointment(appointmentId, {
+        date: newSlot.slotDate,
+        time,
+        scheduleSlotId: newSlot.scheduleSlotId,
+        appointmentStatus: "PENDING"
+    });
     rescheduleDialog.close();
     renderAppointments();
     if (appointment) {
@@ -213,7 +243,9 @@ rescheduleForm?.addEventListener("submit", (event) => {
 
 document.querySelector("#confirm-cancel-button")?.addEventListener("click", () => {
     const appointmentId = cancelAppointmentId.value;
+    const currentAppointment = getAppointmentById(appointmentId);
     const appointment = updateAppointment(appointmentId, {appointmentStatus: "CANCELLED"});
+    if (currentAppointment) releaseScheduleSlot(currentAppointment.scheduleSlotId);
 
     cancelDialog.close();
     renderAppointments();

@@ -7,6 +7,7 @@ import {
 } from "./storage.js";
 import {canCancelAppointment, formatAppointmentDate, getAppointmentStatusLabel} from "./citas-utils.js";
 import {appendLabeledText} from "./ui-utils.js";
+import {initializeBaseScheduleSlots, releaseScheduleSlot} from "./schedule-storage.js";
 
 const searchInput = document.querySelector("#buscarCita");
 const statusFilter = document.querySelector("#estadoCita");
@@ -82,9 +83,14 @@ appointmentList?.addEventListener("click", (event) => {
 
     if (!window.confirm("¿Desea cancelar esta cita médica?")) return;
 
+    const appointment = getAppointments().find(
+        (item) => item.appointmentId === Number(button.dataset.appointmentId)
+    );
     updateAppointment(button.dataset.appointmentId, {appointmentStatus: "CANCELLED"});
+    if (appointment) releaseScheduleSlot(appointment.scheduleSlotId);
     renderAppointments();
 });
 
 initializeBaseAppointments();
+initializeBaseScheduleSlots();
 renderAppointments();

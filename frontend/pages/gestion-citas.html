@@ -149,23 +149,25 @@
                 <div class="grid gap-x-5 sm:grid-cols-2">
                     <div>
                         <label class="mb-2 block text-sm font-semibold" for="reschedule-date">Nueva fecha</label>
-                        <input
+                        <select
                             class="w-full rounded-xl border border-line px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100"
                             id="reschedule-date"
                             name="date"
-                            type="date"
-                        />
+                        >
+                            <option value="">Selecciona una fecha</option>
+                        </select>
                         <p class="mt-1.5 min-h-5 text-sm text-red-600" id="reschedule-date-error" role="alert"></p>
                     </div>
 
                     <div>
                         <label class="mb-2 block text-sm font-semibold" for="reschedule-time">Nueva hora</label>
-                        <input
+                        <select
                             class="w-full rounded-xl border border-line px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100"
                             id="reschedule-time"
                             name="time"
-                            type="time"
-                        />
+                        >
+                            <option value="">Selecciona una hora</option>
+                        </select>
                         <p class="mt-1.5 min-h-5 text-sm text-red-600" id="reschedule-time-error" role="alert"></p>
                     </div>
                 </div>
