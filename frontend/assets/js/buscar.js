@@ -20,7 +20,7 @@ function getActiveSpecialties() {
 
 function getDoctorSpecialties(doctor) {
     const doctorSpecialtyIds = [doctor.specialtyId, ...(doctor.extraSpecialtyIds ?? [])];
-    return getActiveSpecialties().filter((specialty) => doctorSpecialtyIds.includes(specialty.id));
+    return getActiveSpecialties().filter((specialty) => doctorSpecialtyIds.includes(specialty.specialtyId));
 }
 
 function createSpecialtyCard(specialty) {
@@ -35,7 +35,7 @@ function createSpecialtyCard(specialty) {
     description.className = "mt-3 flex-1 leading-7 text-muted";
     description.textContent = specialty.description;
     button.type = "button";
-    button.dataset.specialtyId = specialty.id;
+    button.dataset.specialtyId = specialty.specialtyId;
     button.className = "mt-5 self-start font-semibold text-primary-dark hover:text-primary";
     button.textContent = "Ver médicos";
     card.append(title, description, button);
@@ -56,7 +56,7 @@ function renderSpecialties() {
 function fillSpecialtyFilter() {
     specialtyFilter.replaceChildren(new Option("Todas las especialidades", ""));
     getActiveSpecialties().forEach((specialty) => {
-        specialtyFilter.add(new Option(specialty.specialtyName, specialty.id));
+        specialtyFilter.add(new Option(specialty.specialtyName, specialty.specialtyId));
     });
 }
 

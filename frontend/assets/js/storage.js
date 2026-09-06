@@ -108,14 +108,18 @@ function normalizeAppointmentStatus(status) {
 
 export function getSpecialties() {
     try {
-        return JSON.parse(localStorage.getItem(SPECIALTIES_KEY)) ?? [];
+        const specialties = JSON.parse(localStorage.getItem(SPECIALTIES_KEY)) ?? [];
+        return specialties.map(({id, ...specialty}) => ({
+            ...specialty,
+            specialtyId: specialty.specialtyId ?? id
+        }));
     } catch {
         return [];
     }
 }
 
 export function getSpecialtyById(specialtyId) {
-    return getSpecialties().find((specialty) => specialty.id === Number(specialtyId)) ?? null;
+    return getSpecialties().find((specialty) => specialty.specialtyId === Number(specialtyId)) ?? null;
 }
 
 export function saveSpecialty(specialty) {
@@ -126,11 +130,11 @@ export function saveSpecialty(specialty) {
 
 export function updateSpecialty(specialtyId, changes) {
     const specialties = getSpecialties();
-    const specialtyIndex = specialties.findIndex((specialty) => specialty.id === Number(specialtyId));
+    const specialtyIndex = specialties.findIndex((specialty) => specialty.specialtyId === Number(specialtyId));
 
     if (specialtyIndex < 0) return null;
 
-    specialties[specialtyIndex] = {...specialties[specialtyIndex], ...changes, id: Number(specialtyId)};
+    specialties[specialtyIndex] = {...specialties[specialtyIndex], ...changes, specialtyId: Number(specialtyId)};
     localStorage.setItem(SPECIALTIES_KEY, JSON.stringify(specialties));
     return specialties[specialtyIndex];
 }
@@ -140,13 +144,13 @@ export function isSpecialtyNameTaken(specialtyName, excludedSpecialtyId = null) 
 
     return getSpecialties().some(
         (specialty) =>
-            specialty.id !== excludedSpecialtyId &&
+            specialty.specialtyId !== excludedSpecialtyId &&
             specialty.specialtyName.trim().toLowerCase() === normalizedName
     );
 }
 
 export function getNextSpecialtyId() {
-    return getSpecialties().reduce((maxId, specialty) => Math.max(maxId, specialty.id), 0) + 1;
+    return getSpecialties().reduce((maxId, specialty) => Math.max(maxId, specialty.specialtyId), 0) + 1;
 }
 
 export function initializeBaseSpecialties() {

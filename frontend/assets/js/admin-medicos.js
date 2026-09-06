@@ -206,12 +206,12 @@ function fillDoctorSelects() {
     const activeSpecialties = getSpecialties().filter((specialty) => specialty.active);
     fillSelect(
         getInput("specialtyId"),
-        activeSpecialties.map((specialty) => ({value: specialty.id, label: specialty.specialtyName})),
+        activeSpecialties.map((specialty) => ({value: specialty.specialtyId, label: specialty.specialtyName})),
         "Selecciona una especialidad"
     );
     fillSelect(
         getInput("extraSpecialtyIds"),
-        activeSpecialties.map((specialty) => ({value: specialty.id, label: specialty.specialtyName}))
+        activeSpecialties.map((specialty) => ({value: specialty.specialtyId, label: specialty.specialtyName}))
     );
 }
 

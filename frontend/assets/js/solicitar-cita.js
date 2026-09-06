@@ -36,7 +36,7 @@ function fillSpecialties() {
     getSpecialties()
         .filter((specialty) => specialty.active)
         .forEach((specialty) => {
-            specialtySelect.add(new Option(specialty.specialtyName, specialty.id));
+            specialtySelect.add(new Option(specialty.specialtyName, specialty.specialtyId));
         });
 }
 
@@ -113,7 +113,7 @@ form?.addEventListener("submit", (event) => {
 
     const session = getSession();
     const patient = getUserById(session?.userId);
-    const specialty = getSpecialties().find((item) => item.id === values.specialtyId);
+    const specialty = getSpecialties().find((item) => item.specialtyId === values.specialtyId);
     const doctor = getDoctors().find((item) => item.doctorId === values.doctorId);
 
     if (!patient || !specialty || !doctor) {
@@ -129,7 +129,7 @@ form?.addEventListener("submit", (event) => {
         doctorId: doctor.userId,
         doctorRecordId: doctor.doctorId,
         doctorName: `${doctor.firstName} ${doctor.lastName}`,
-        specialtyId: specialty.id,
+        specialtyId: specialty.specialtyId,
         specialtyName: specialty.specialtyName,
         date: values.date,
         time: values.time,

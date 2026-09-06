@@ -31,7 +31,7 @@ function getFormValues() {
     const formData = new FormData(form);
 
     return {
-        id: Number(formData.get("specialtyId") ?? 0),
+        specialtyId: Number(formData.get("specialtyId") ?? 0),
         specialtyName: String(formData.get("specialtyName") ?? "").trim(),
         description: String(formData.get("description") ?? "").trim(),
         active: getInput("active").checked
@@ -75,9 +75,9 @@ function renderSpecialties() {
         const editButton = document.createElement("button");
         editButton.className = "rounded-lg border border-line px-3 py-2 text-sm font-semibold text-primary-dark transition hover:bg-primary-light";
         editButton.type = "button";
-        editButton.dataset.editSpecialty = specialty.id;
+        editButton.dataset.editSpecialty = specialty.specialtyId;
         editButton.textContent = "Editar";
-        const statusButton = createActiveStatusButton(specialty.active, specialty.id);
+        const statusButton = createActiveStatusButton(specialty.active, specialty.specialtyId);
         actions.append(editButton, statusButton);
         actionsCell.append(actions);
         row.append(actionsCell);
@@ -105,7 +105,7 @@ function openEditDialog(specialtyId) {
     if (!specialty) return;
 
     form.reset();
-    getInput("specialtyId").value = specialty.id;
+    getInput("specialtyId").value = specialty.specialtyId;
     getInput("specialtyName").value = specialty.specialtyName ?? "";
     getInput("description").value = specialty.description ?? "";
     getInput("active").checked = Boolean(specialty.active);
@@ -123,7 +123,7 @@ function openStatusDialog(specialtyId) {
     const nextActiveState = !specialty.active;
     const action = nextActiveState ? "activar" : "desactivar";
 
-    statusSpecialtyId.value = specialty.id;
+    statusSpecialtyId.value = specialty.specialtyId;
     confirmStatusButton.dataset.nextActive = String(nextActiveState);
     statusDialogTitle.textContent = `${nextActiveState ? "Activar" : "Desactivar"} especialidad`;
     statusDialogDescription.textContent = `¿Confirmas que deseas ${action} la especialidad ${specialty.specialtyName}?`;
@@ -164,7 +164,7 @@ confirmStatusButton?.addEventListener("click", () => {
 form?.addEventListener("submit", (event) => {
     event.preventDefault();
     const values = getFormValues();
-    const isEditing = Boolean(values.id);
+    const isEditing = Boolean(values.specialtyId);
     const errors = validateSpecialty(values);
 
     showFieldError("specialtyName", errors.specialtyName);
@@ -176,21 +176,21 @@ form?.addEventListener("submit", (event) => {
         return;
     }
 
-    if (isSpecialtyNameTaken(values.specialtyName, values.id || null)) {
+    if (isSpecialtyNameTaken(values.specialtyName, values.specialtyId || null)) {
         formMessage.className = "mt-4 text-center text-sm font-medium text-red-600";
         formMessage.textContent = "Ya existe una especialidad con ese nombre.";
         return;
     }
 
     if (isEditing) {
-        updateSpecialty(values.id, {
+        updateSpecialty(values.specialtyId, {
             specialtyName: values.specialtyName,
             description: values.description,
             active: values.active
         });
     } else {
         saveSpecialty({
-            id: getNextSpecialtyId(),
+            specialtyId: getNextSpecialtyId(),
             specialtyName: values.specialtyName,
             description: values.description,
             active: values.active
