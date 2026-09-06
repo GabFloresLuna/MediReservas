@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {getDoctors, initializeBaseDoctors} from "../assets/js/storage.js";
+import {getAppointments, getDoctors, initializeBaseAppointments, initializeBaseDoctors} from "../assets/js/storage.js";
 
 class LocalStorageMock {
     #data = new Map();
@@ -23,6 +23,7 @@ globalThis.localStorage = new LocalStorageMock();
 test.beforeEach(() => {
     localStorage.clear();
     initializeBaseDoctors();
+    initializeBaseAppointments();
 });
 
 test("cada médico se relaciona con una cuenta diferente", () => {
@@ -47,4 +48,16 @@ test("convierte la estructura antigua de especialidades médicas", () => {
 
     assert.deepEqual(getDoctors()[0].specialtyIds, [2, 4]);
     assert.equal(getDoctors()[0].userId, 5);
+});
+
+test("las citas usan médicos y especialidades coherentes", () => {
+    const doctors = getDoctors();
+
+    getAppointments().forEach((appointment) => {
+        const doctor = doctors.find(({doctorId}) => doctorId === appointment.doctorId);
+
+        assert.ok(doctor, `No existe el médico de la cita ${appointment.appointmentId}`);
+        assert.ok(doctor.specialtyIds.includes(appointment.specialtyId));
+        if (appointment.appointmentStatus === "CONFIRMED") assert.equal(doctor.active, true);
+    });
 });

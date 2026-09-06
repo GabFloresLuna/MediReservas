@@ -170,13 +170,13 @@ export const BASE_APPOINTMENTS = [
         scheduleSlotId: 3,
         patientName: "Carolina Fuentes",
         patientRun: "14235876-3",
-        doctorId: 3,
-        doctorName: "María Soto",
-        specialtyId: 3,
-        specialtyName: "Traumatología",
+        doctorId: 1,
+        doctorName: "Daniela Rojas",
+        specialtyId: 1,
+        specialtyName: "Cardiología",
         date: "2026-09-05",
         time: "11:15",
-        reason: "Dolor lumbar persistente",
+        reason: "Molestia torácica durante actividad física",
         appointmentStatus: "CONFIRMED"
     },
     {
