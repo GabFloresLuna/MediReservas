@@ -23,7 +23,7 @@ const DASHBOARD_CONFIG = {
         description: "Consulta tu agenda y registra la información de tus atenciones.",
         actions: [
             { icon: "AG", title: "Mi agenda", description: "Revisa tus próximas citas ordenadas por fecha.", href: "agenda-medica.html" },
-            { icon: "OB", title: "Registrar observación", description: "Añade observaciones después de atender a un paciente.", href: "observacion-clinica.html" },
+            { icon: "OB", title: "Registrar observación", description: "Selecciona una atención confirmada desde tu agenda.", href: "agenda-medica.html?accion=observacion" },
             { icon: "HI", title: "Historial clínico", description: "Consulta antecedentes asociados a tus atenciones.", href: "historial-clinico.html" }
         ]
     },

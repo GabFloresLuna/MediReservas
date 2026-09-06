@@ -15,13 +15,17 @@ export function getNavigationItems(role) {
     ];
 }
 
+export function isNavigationItemCurrent(itemHref, currentPage, currentSearch = "") {
+    return itemHref === `${currentPage}${currentSearch}`;
+}
+
 function createLink(item) {
     const currentPage = window.location.pathname.split("/").pop() || "dashboard.html";
     const link = document.createElement("a");
     link.href = item.href;
     link.className = "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-muted transition hover:bg-primary-light hover:text-primary-dark";
 
-    if (currentPage === item.href.split("?")[0]) {
+    if (isNavigationItemCurrent(item.href, currentPage, window.location.search)) {
         link.classList.add("bg-primary-light", "text-primary-dark");
         link.setAttribute("aria-current", "page");
     }

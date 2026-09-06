@@ -54,6 +54,14 @@ test("administrador y paciente reciben sus accesos principales", () => {
     assert.equal(patientActions.includes("Gestionar usuarios"), false);
 });
 
+test("el acceso para registrar observaciones dirige primero a la agenda", () => {
+    const observationAction = getDashboardConfig("MEDICO").actions.find(
+        ({title}) => title === "Registrar observación"
+    );
+
+    assert.equal(observationAction.href, "agenda-medica.html?accion=observacion");
+});
+
 test("acepta únicamente los cuatro roles definidos", () => {
     roles.forEach((role) => assert.equal(isValidRole(role), true));
     assert.equal(isValidRole("SUPERUSUARIO"), false);
