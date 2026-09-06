@@ -3,14 +3,14 @@ import assert from "node:assert/strict";
 import {getDashboardSummary} from "../assets/js/dashboard-data.js";
 
 const appointments = [
-    {id: "1", patientId: "patient-1", doctorId: "doctor-1", date: "2026-09-05", status: "PENDING"},
-    {id: "2", patientId: "patient-1", doctorId: "doctor-1", date: "2026-09-05", status: "CONFIRMED"},
-    {id: "3", patientId: "patient-1", doctorId: "doctor-1", date: "2026-09-04", status: "COMPLETED"}
+    {id: "1", patientUserId: 4, doctorId: 3, date: "2026-09-05", status: "PENDING"},
+    {id: "2", patientUserId: 4, doctorId: 3, date: "2026-09-05", status: "CONFIRMED"},
+    {id: "3", patientUserId: 4, doctorId: 3, date: "2026-09-04", status: "COMPLETED"}
 ];
 
 test("calcula el resumen del paciente desde sus citas", () => {
     const summary = getDashboardSummary({
-        session: {role: "PATIENT", userId: "patient-1"},
+        session: {role: "PATIENT", userId: 4},
         appointments,
         today: "2026-09-05"
     });
@@ -20,7 +20,7 @@ test("calcula el resumen del paciente desde sus citas", () => {
 
 test("calcula el resumen del médico desde su agenda", () => {
     const summary = getDashboardSummary({
-        session: {role: "DOCTOR", userId: "doctor-1"},
+        session: {role: "DOCTOR", userId: 3},
         appointments,
         today: "2026-09-05"
     });
@@ -30,7 +30,7 @@ test("calcula el resumen del médico desde su agenda", () => {
 
 test("calcula el resumen administrativo desde usuarios y especialidades", () => {
     const summary = getDashboardSummary({
-        session: {role: "ADMIN", userId: "admin-1"},
+        session: {role: "ADMIN", userId: 1},
         users: [{role: "ADMIN", active: true}, {role: "PATIENT", active: false}],
         specialties: [{active: true}, {active: false}],
         today: "2026-09-05"

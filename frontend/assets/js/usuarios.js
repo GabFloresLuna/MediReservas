@@ -2,6 +2,7 @@ import { getDashboardConfig } from "./roles.js";
 import {
     getUsers,
     getUserById,
+    getNextUserId,
     initializeBaseUsers,
     isUserDataTaken,
     saveUser,
@@ -36,7 +37,7 @@ function getFormValues() {
     const formData = new FormData(form);
 
     return {
-        id: String(formData.get("userId") ?? ""),
+        userId: Number(formData.get("userId") ?? 0),
         run: normalizeRun(String(formData.get("run") ?? "").trim()),
         firstName: String(formData.get("firstName") ?? "").trim(),
         lastName: String(formData.get("lastName") ?? "").trim(),
@@ -89,9 +90,9 @@ function renderUsers() {
         const editButton = document.createElement("button");
         editButton.className = "rounded-lg border border-line px-3 py-2 text-sm font-semibold text-primary-dark transition hover:bg-primary-light";
         editButton.type = "button";
-        editButton.dataset.editUser = user.id;
+        editButton.dataset.editUser = user.userId;
         editButton.textContent = "Editar";
-        const statusButton = createActiveStatusButton(user.active, user.id);
+        const statusButton = createActiveStatusButton(user.active, user.userId);
         actions.append(editButton, statusButton);
         actionsCell.append(actions);
         row.append(actionsCell);
@@ -113,11 +114,11 @@ function openCreateDialog() {
 }
 
 function openEditDialog(userId) {
-    const user = getUsers().find((item) => item.id === userId);
+    const user = getUserById(userId);
     if (!user) return;
 
     form.reset();
-    getInput("userId").value = user.id;
+    getInput("userId").value = user.userId;
     fieldNames.filter((field) => field !== "password").forEach((field) => {
         getInput(field).value = user[field] ?? "";
         showFieldError(field);
@@ -136,7 +137,7 @@ function openStatusDialog(userId) {
     const action = nextActiveState ? "activar" : "desactivar";
     const fullName = `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || "este usuario";
 
-    statusUserId.value = user.id;
+    statusUserId.value = user.userId;
     confirmStatusButton.dataset.nextActive = String(nextActiveState);
     statusDialogTitle.textContent = `${nextActiveState ? "Activar" : "Desactivar"} usuario`;
     statusDialogDescription.textContent = `¿Confirmas que deseas ${action} la cuenta de ${fullName}?`;
@@ -149,7 +150,7 @@ function openStatusDialog(userId) {
 
 function validateField(fieldName) {
     const values = getFormValues();
-    const errors = validateManagedUser(values, Boolean(values.id));
+    const errors = validateManagedUser(values, Boolean(values.userId));
     showFieldError(fieldName, errors[fieldName]);
 }
 
@@ -197,7 +198,7 @@ getInput("run")?.addEventListener("blur", (event) => {
 form?.addEventListener("submit", (event) => {
     event.preventDefault();
     const values = getFormValues();
-    const isEditing = Boolean(values.id);
+    const isEditing = Boolean(values.userId);
     const errors = validateManagedUser(values, isEditing);
 
     fieldNames.forEach((fieldName) => showFieldError(fieldName, errors[fieldName]));
@@ -208,7 +209,7 @@ form?.addEventListener("submit", (event) => {
         return;
     }
 
-    if (isUserDataTaken(values.run, values.email, values.id || null)) {
+    if (isUserDataTaken(values.run, values.email, values.userId || null)) {
         formMessage.className = "mt-4 text-center text-sm font-medium text-red-600";
         formMessage.textContent = "El RUN o correo ya está asociado a otra cuenta.";
         return;
@@ -216,13 +217,14 @@ form?.addEventListener("submit", (event) => {
 
     if (isEditing) {
         const changes = { ...values };
-        delete changes.id;
+        delete changes.userId;
         if (!changes.password) delete changes.password;
-        updateUser(values.id, changes);
+        updateUser(values.userId, changes);
     } else {
         saveUser({
             ...values,
-            id: crypto.randomUUID?.() ?? `user-${Date.now()}`,
+            userId: getNextUserId(),
+            authUserId: getNextUserId(),
             role: "PATIENT",
             active: true
         });

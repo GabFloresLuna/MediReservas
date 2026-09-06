@@ -62,7 +62,9 @@ test("adapta roles antiguos guardados al contrato del backend", () => {
     }));
 
     assert.equal(getUsers()[0].role, "PATIENT");
+    assert.equal(getUsers()[0].userId, 1);
     assert.equal(getSession().role, "PATIENT");
+    assert.equal(getSession().userId, 1);
 });
 
 test("autentica credenciales válidas sin distinguir mayúsculas del correo", () => {
@@ -75,7 +77,8 @@ test("rechaza una contraseña incorrecta y una cuenta inactiva", () => {
     assert.equal(authenticate("medico@medireservas.cl", "incorrecta"), undefined);
 
     saveUser({
-        id: "inactive-1",
+        userId: 5,
+        authUserId: 5,
         email: "inactivo@medireservas.cl",
         password: "Inactivo123",
         role: "PATIENT",

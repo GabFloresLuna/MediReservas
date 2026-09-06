@@ -57,7 +57,7 @@ function getPatientAppointments() {
     if (!patient) return [];
 
     return getAppointments().filter(
-        (appointment) => appointment.patientId === patient.id || appointment.patientRun === patient.run
+        (appointment) => appointment.patientUserId === patient.userId || appointment.patientRun === patient.run
     );
 }
 

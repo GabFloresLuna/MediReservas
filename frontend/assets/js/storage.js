@@ -16,7 +16,12 @@ function normalizeStoredRole(role) {
 export function getUsers() {
     try {
         const users = JSON.parse(localStorage.getItem(USERS_KEY)) ?? [];
-        return users.map((user) => ({...user, role: normalizeStoredRole(user.role)}));
+        return users.map(({id, ...user}, index) => ({
+            ...user,
+            userId: Number(user.userId ?? index + 1),
+            authUserId: Number(user.authUserId ?? user.userId ?? index + 1),
+            role: normalizeStoredRole(user.role)
+        }));
     } catch {
         return [];
     }
@@ -27,7 +32,7 @@ export function userExists(run, email) {
 }
 
 export function getUserById(userId) {
-    return getUsers().find((user) => user.id === userId) ?? null;
+    return getUsers().find((user) => user.userId === Number(userId)) ?? null;
 }
 
 export function saveUser(user) {
@@ -41,18 +46,19 @@ export function isUserDataTaken(run, email, excludedUserId = null) {
 
     return getUsers().some(
         (user) =>
-            user.id !== excludedUserId &&
+            user.userId !== Number(excludedUserId) &&
             (user.run === run || user.email.toLowerCase() === normalizedEmail)
     );
 }
 
 export function updateUser(userId, changes) {
     const users = getUsers();
-    const userIndex = users.findIndex((user) => user.id === userId);
+    const numericUserId = Number(userId);
+    const userIndex = users.findIndex((user) => user.userId === numericUserId);
 
     if (userIndex < 0) return null;
 
-    users[userIndex] = {...users[userIndex], ...changes, id: userId};
+    users[userIndex] = {...users[userIndex], ...changes, userId: numericUserId};
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
     return users[userIndex];
 }
@@ -60,6 +66,10 @@ export function updateUser(userId, changes) {
 export function updateUserStatus(userId, active) {
     if (typeof active !== "boolean") return null;
     return updateUser(userId, {active});
+}
+
+export function getNextUserId() {
+    return getUsers().reduce((maxId, user) => Math.max(maxId, user.userId), 0) + 1;
 }
 
 export function initializeBaseUsers() {
@@ -81,7 +91,17 @@ export function saveSession(session) {
 export function getSession() {
     try {
         const session = JSON.parse(localStorage.getItem(SESSION_KEY));
-        return session ? {...session, role: normalizeStoredRole(session.role)} : null;
+        if (!session) return null;
+
+        const storedUsers = JSON.parse(localStorage.getItem(USERS_KEY)) ?? [];
+        const legacyUserIndex = storedUsers.findIndex(
+            (user) => String(user.id ?? user.userId) === String(session.userId)
+        );
+        const userId = Number.isFinite(Number(session.userId))
+            ? Number(session.userId)
+            : legacyUserIndex + 1;
+
+        return {...session, userId, role: normalizeStoredRole(session.role)};
     } catch {
         return null;
     }

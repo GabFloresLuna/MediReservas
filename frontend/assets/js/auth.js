@@ -21,7 +21,7 @@ export function authenticate(email, password) {
 export function createSession(user) {
     const session = {
         token: crypto.randomUUID?.() ?? `session-${Date.now()}`,
-        userId: user.id,
+        userId: user.userId,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
@@ -41,7 +41,7 @@ export function isSessionValid(session, user) {
         typeof session?.token === "string" &&
         session.token.trim() &&
         user?.active === true &&
-        session.userId === user.id &&
+        session.userId === user.userId &&
         session.role === user.role
     );
 }

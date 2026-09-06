@@ -47,8 +47,8 @@ function renderHistory() {
         .filter(
             (appointment) =>
                 (isDoctor
-                    ? appointment.doctorId === currentUser.id
-                    : appointment.patientId === currentUser.id || appointment.patientRun === currentUser.run) &&
+                    ? appointment.doctorId === currentUser.userId
+                    : appointment.patientUserId === currentUser.userId || appointment.patientRun === currentUser.run) &&
                 appointment.status === "COMPLETED" &&
                 appointment.diagnosis &&
                 appointment.clinicalNotes

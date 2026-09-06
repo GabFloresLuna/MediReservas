@@ -123,7 +123,7 @@ form?.addEventListener("submit", (event) => {
 
     saveAppointment({
         id: getNextAppointmentId(),
-        patientId: patient.id,
+        patientUserId: patient.userId,
         patientName: `${patient.firstName} ${patient.lastName}`,
         patientRun: patient.run,
         doctorId: doctor.userId,

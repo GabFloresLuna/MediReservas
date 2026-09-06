@@ -1,6 +1,7 @@
 export const BASE_USERS = [
     {
-        id: "admin-1",
+        userId: 1,
+        authUserId: 1,
         run: "11111111-1",
         firstName: "Andrea",
         lastName: "Muñoz",
@@ -10,7 +11,8 @@ export const BASE_USERS = [
         active: true
     },
     {
-        id: "receptionist-1",
+        userId: 2,
+        authUserId: 2,
         run: "22222222-2",
         firstName: "Ricardo",
         lastName: "Silva",
@@ -20,7 +22,8 @@ export const BASE_USERS = [
         active: true
     },
     {
-        id: "doctor-1",
+        userId: 3,
+        authUserId: 3,
         run: "33333333-3",
         firstName: "Daniela",
         lastName: "Rojas",
@@ -30,7 +33,8 @@ export const BASE_USERS = [
         active: true
     },
     {
-        id: "patient-1",
+        userId: 4,
+        authUserId: 4,
         run: "44444444-4",
         firstName: "Paula",
         lastName: "Contreras",
@@ -68,7 +72,7 @@ export const BASE_SPECIALTIES = [
 export const BASE_DOCTORS = [
     {
         doctorId: 1,
-        userId: "doctor-1",
+        userId: 3,
         firstName: "Ana",
         lastName: "Rojas",
         run: "12345678-5",
@@ -82,7 +86,7 @@ export const BASE_DOCTORS = [
     },
     {
         doctorId: 2,
-        userId: "doctor-1",
+        userId: 3,
         firstName: "Luis",
         lastName: "Pérez",
         run: "18265432-9",
@@ -96,7 +100,7 @@ export const BASE_DOCTORS = [
     },
     {
         doctorId: 3,
-        userId: "doctor-1",
+        userId: 3,
         firstName: "María",
         lastName: "Soto",
         run: "16753248-9",
@@ -115,7 +119,7 @@ export const BASE_APPOINTMENTS = [
         id: "cita-1",
         patientName: "Paula Contreras",
         patientRun: "44444444-4",
-        doctorId: "doctor-1",
+        doctorId: 3,
         doctorName: "Daniela Rojas",
         specialtyId: 1,
         specialtyName: "Cardiología",
@@ -128,7 +132,7 @@ export const BASE_APPOINTMENTS = [
         id: "cita-2",
         patientName: "Juan Morales",
         patientRun: "15678234-0",
-        doctorId: "doctor-1",
+        doctorId: 3,
         doctorName: "Daniela Rojas",
         specialtyId: 2,
         specialtyName: "Pediatría",
@@ -141,7 +145,7 @@ export const BASE_APPOINTMENTS = [
         id: "cita-3",
         patientName: "Carolina Fuentes",
         patientRun: "14235876-3",
-        doctorId: "doctor-1",
+        doctorId: 3,
         doctorName: "Daniela Rojas",
         specialtyId: 3,
         specialtyName: "Traumatología",
@@ -154,7 +158,7 @@ export const BASE_APPOINTMENTS = [
         id: "cita-4",
         patientName: "Pedro Salinas",
         patientRun: "13987654-2",
-        doctorId: "doctor-1",
+        doctorId: 3,
         doctorName: "Daniela Rojas",
         specialtyId: 4,
         specialtyName: "Dermatología",
@@ -167,7 +171,7 @@ export const BASE_APPOINTMENTS = [
         id: "cita-5",
         patientName: "Lucía Vega",
         patientRun: "16543987-K",
-        doctorId: "doctor-1",
+        doctorId: 3,
         doctorName: "Daniela Rojas",
         specialtyId: 5,
         specialtyName: "Neurología",
@@ -180,7 +184,7 @@ export const BASE_APPOINTMENTS = [
         id: "cita-6",
         patientName: "Marcos Díaz",
         patientRun: "17893451-1",
-        doctorId: "doctor-1",
+        doctorId: 3,
         doctorName: "Daniela Rojas",
         specialtyId: 1,
         specialtyName: "Cardiología",

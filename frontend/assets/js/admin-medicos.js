@@ -49,7 +49,7 @@ function getFormValues() {
 
     return {
         doctorId: Number(formData.get("doctorId") ?? 0),
-        userId: String(formData.get("userId") ?? ""),
+        userId: Number(formData.get("userId") ?? 0),
         firstName: String(formData.get("firstName") ?? "").trim(),
         lastName: String(formData.get("lastName") ?? "").trim(),
         run: normalizeRun(String(formData.get("run") ?? "").trim()),
@@ -199,7 +199,7 @@ function fillDoctorSelects() {
     const doctorUsers = getUsers().filter((user) => user.role === "DOCTOR" && user.active);
     fillSelect(
         getInput("userId"),
-        doctorUsers.map((user) => ({value: user.id, label: `${user.firstName} ${user.lastName} — ${user.email}`})),
+        doctorUsers.map((user) => ({value: user.userId, label: `${user.firstName} ${user.lastName} — ${user.email}`})),
         "Selecciona un usuario con rol médico"
     );
 

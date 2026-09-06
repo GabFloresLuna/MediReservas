@@ -31,9 +31,9 @@ export function getDashboardSummary({session, users = [], specialties = [], appo
     }
 
     if (session.role === "PATIENT") {
-        const patientRun = users.find((user) => user.id === session.userId)?.run ?? session.run;
+        const patientRun = users.find((user) => user.userId === session.userId)?.run ?? session.run;
         const patientAppointments = appointments.filter(
-            (appointment) => appointment.patientId === session.userId || appointment.patientRun === patientRun
+            (appointment) => appointment.patientUserId === session.userId || appointment.patientRun === patientRun
         );
         return [
             createSummary(

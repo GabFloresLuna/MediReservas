@@ -39,10 +39,10 @@ test.beforeEach(() => {
 test("guarda una cita sin reemplazar las solicitudes existentes", () => {
     const appointment = {
         id: getNextAppointmentId(),
-        patientId: "patient-1",
+        patientUserId: 4,
         patientName: "Paula Contreras",
         patientRun: "44444444-4",
-        doctorId: "doctor-1",
+        doctorId: 3,
         doctorRecordId: 1,
         doctorName: "Ana Rojas",
         specialtyId: 1,

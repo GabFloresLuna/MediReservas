@@ -43,7 +43,7 @@ function renderRoles() {
         const button = document.createElement("button");
         button.className = "rounded-lg border border-line px-3 py-2 text-sm font-semibold text-primary-dark transition hover:bg-primary-light";
         button.type = "button";
-        button.dataset.assignRole = user.id;
+        button.dataset.assignRole = user.userId;
         button.textContent = "Cambiar rol";
         actionCell.append(button);
         row.append(actionCell);
@@ -64,7 +64,7 @@ function openRoleDialog(userId) {
     if (!user) return;
 
     form.reset();
-    form.elements.namedItem("userId").value = user.id;
+    form.elements.namedItem("userId").value = user.userId;
     roleSelect.value = user.role;
     document.querySelector("#role-user-name").textContent = `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || "Sin nombre";
     document.querySelector("#role-user-email").textContent = user.email;

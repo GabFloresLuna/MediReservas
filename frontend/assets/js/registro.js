@@ -1,5 +1,5 @@
 import { getLocalDateString, normalizeRun, validateRegistration } from "./validaciones.js";
-import { saveUser, userExists } from "./storage.js";
+import {getNextUserId, saveUser, userExists} from "./storage.js";
 import {setFieldError} from "./ui-utils.js";
 
 const form = document.querySelector("#register-form");
@@ -91,7 +91,8 @@ form?.addEventListener("submit", (event) => {
 
     submitButton.disabled = true;
     saveUser({
-        id: crypto.randomUUID?.() ?? `patient-${Date.now()}`,
+        userId: getNextUserId(),
+        authUserId: getNextUserId(),
         run: values.run,
         firstName: values.firstName,
         lastName: values.lastName,
