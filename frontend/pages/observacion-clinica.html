@@ -114,6 +114,18 @@
                         <p class="mt-1.5 min-h-5 text-sm text-red-600" id="observation-notes-error" role="alert"></p>
                     </div>
 
+                    <div class="mt-4">
+                        <label class="mb-2 block text-sm font-semibold" for="observation-treatment">Tratamiento</label>
+                        <textarea
+                            class="min-h-24 w-full rounded-xl border border-line px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100"
+                            id="observation-treatment"
+                            name="treatment"
+                            maxlength="2000"
+                            placeholder="Indica el tratamiento o las recomendaciones médicas"
+                        ></textarea>
+                        <p class="mt-1.5 min-h-5 text-sm text-red-600" id="observation-treatment-error" role="alert"></p>
+                    </div>
+
                     <footer class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                         <a class="rounded-xl border border-line px-5 py-3 text-center font-semibold text-muted transition hover:bg-page" href="agenda-medica.html"
                             >Volver a mi agenda</a

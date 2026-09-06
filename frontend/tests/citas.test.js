@@ -83,16 +83,13 @@ test("guarda la cancelación de una cita", () => {
     assert.equal(getAppointmentById(1).appointmentStatus, "CANCELLED");
 });
 
-test("guarda la observación clínica y completa la cita", () => {
+test("marca una cita como completada sin mezclar datos clínicos", () => {
     updateAppointment(3, {
-        diagnosis: "Dolor lumbar",
-        clinicalNotes: "Se indica reposo y control médico.",
-        completedAt: "2026-09-05T15:00:00.000Z",
         appointmentStatus: "COMPLETED"
     });
 
     const completed = getAppointmentById(3);
     assert.equal(completed.appointmentStatus, "COMPLETED");
-    assert.equal(completed.diagnosis, "Dolor lumbar");
-    assert.equal(completed.clinicalNotes, "Se indica reposo y control médico.");
+    assert.equal("diagnosis" in completed, false);
+    assert.equal("clinicalNotes" in completed, false);
 });

@@ -1,11 +1,12 @@
 import {getAppointments, getDoctors, getSession, getUserById, initializeBaseAppointments} from "./storage.js";
 import {formatAppointmentDate} from "./citas-utils.js";
 import {appendLabeledText} from "./ui-utils.js";
+import {getDiagnoses, getMedicalRecords, getMedicalVisits} from "./clinical-storage.js";
 
 const consultationList = document.querySelector("#listaConsultas");
 const emptyMessage = document.querySelector("#mensajeSinConsultas");
 
-function createConsultationCard(appointment, showPatient) {
+function createConsultationCard({appointment, diagnosis, visit}, showPatient) {
     const card = document.createElement("article");
     card.className = "rounded-xl border border-line p-4";
 
@@ -20,8 +21,9 @@ function createConsultationCard(appointment, showPatient) {
     appendLabeledText(card, "Fecha", formatAppointmentDate(appointment.date), "mt-2");
     appendLabeledText(card, "Médico", appointment.doctorName);
     appendLabeledText(card, "Motivo", appointment.reason);
-    appendLabeledText(card, "Diagnóstico", appointment.diagnosis);
-    appendLabeledText(card, "Observación clínica", appointment.clinicalNotes);
+    appendLabeledText(card, "Diagnóstico", diagnosis.diagnosisDescription);
+    appendLabeledText(card, "Observación clínica", visit.observations || "Sin información");
+    appendLabeledText(card, "Tratamiento", visit.treatment);
 
     return card;
 }
@@ -44,17 +46,22 @@ function renderHistory() {
         document.querySelector("#patient-run").textContent = currentUser.run;
     }
 
-    const consultations = getAppointments()
-        .filter(
-            (appointment) =>
-                (isDoctor
-                    ? appointment.doctorId === doctor?.doctorId
-                    : appointment.patientUserId === currentUser.userId || appointment.patientRun === currentUser.run) &&
-                appointment.appointmentStatus === "COMPLETED" &&
-                appointment.diagnosis &&
-                appointment.clinicalNotes
-        )
-        .sort((first, second) => `${second.date} ${second.time}`.localeCompare(`${first.date} ${first.time}`));
+    const appointments = getAppointments();
+    const diagnoses = getDiagnoses();
+    const patientRecordIds = new Set(
+        getMedicalRecords()
+            .filter((record) => record.patientId === currentUser.userId)
+            .map((record) => record.medicalRecordId)
+    );
+    const consultations = getMedicalVisits()
+        .filter((visit) => isDoctor ? visit.doctorId === doctor?.doctorId : patientRecordIds.has(visit.medicalRecordId))
+        .map((visit) => ({
+            visit,
+            appointment: appointments.find((item) => item.appointmentId === visit.appointmentId),
+            diagnosis: diagnoses.find((item) => item.medicalVisitId === visit.medicalVisitId)
+        }))
+        .filter(({appointment, diagnosis}) => appointment && diagnosis)
+        .sort((first, second) => second.visit.visitDate.localeCompare(first.visit.visitDate));
 
     consultationList.replaceChildren(...consultations.map((appointment) => createConsultationCard(appointment, isDoctor)));
     emptyMessage.classList.toggle("hidden", consultations.length > 0);
