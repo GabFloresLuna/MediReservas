@@ -7,7 +7,7 @@ import {
     updateSpecialty,
     getNextSpecialtyId
 } from "./storage.js";
-import {createActiveStatusCell, createTableCell, setFieldError} from "./ui-utils.js";
+import {createActiveStatusButton, createActiveStatusCell, createTableCell, setFieldError} from "./ui-utils.js";
 
 const dialog = document.querySelector("#specialty-dialog");
 const form = document.querySelector("#specialty-form");
@@ -77,13 +77,7 @@ function renderSpecialties() {
         editButton.type = "button";
         editButton.dataset.editSpecialty = specialty.id;
         editButton.textContent = "Editar";
-        const statusButton = document.createElement("button");
-        statusButton.className = specialty.active
-            ? "rounded-lg border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50"
-            : "rounded-lg border border-emerald-200 px-3 py-2 text-sm font-semibold text-primary-dark transition hover:bg-emerald-50";
-        statusButton.type = "button";
-        statusButton.dataset.changeStatus = specialty.id;
-        statusButton.textContent = specialty.active ? "Desactivar" : "Activar";
+        const statusButton = createActiveStatusButton(specialty.active, specialty.id);
         actions.append(editButton, statusButton);
         actionsCell.append(actions);
         row.append(actionsCell);

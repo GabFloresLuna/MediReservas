@@ -19,7 +19,7 @@ import {
     isValidRun,
     normalizeRun
 } from "./validaciones.js";
-import {createActiveStatusCell, createTableCell, setFieldError} from "./ui-utils.js";
+import {createActiveStatusButton, createActiveStatusCell, createTableCell, setFieldError} from "./ui-utils.js";
 
 const dialog = document.querySelector("#doctor-dialog");
 const form = document.querySelector("#doctor-form");
@@ -165,13 +165,7 @@ function renderDoctors() {
         editButton.type = "button";
         editButton.dataset.editDoctor = doctor.doctorId;
         editButton.textContent = "Editar";
-        const statusButton = document.createElement("button");
-        statusButton.className = doctor.active
-            ? "rounded-lg border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50"
-            : "rounded-lg border border-emerald-200 px-3 py-2 text-sm font-semibold text-primary-dark transition hover:bg-emerald-50";
-        statusButton.type = "button";
-        statusButton.dataset.changeStatus = doctor.doctorId;
-        statusButton.textContent = doctor.active ? "Desactivar" : "Activar";
+        const statusButton = createActiveStatusButton(doctor.active, doctor.doctorId);
         actions.append(editButton, statusButton);
         actionsCell.append(actions);
         row.append(actionsCell);

@@ -9,7 +9,7 @@ import {
     updateUserStatus
 } from "./storage.js";
 import { normalizeRun, validateManagedUser } from "./validaciones.js";
-import {createActiveStatusCell, createTableCell, setFieldError} from "./ui-utils.js";
+import {createActiveStatusButton, createActiveStatusCell, createTableCell, setFieldError} from "./ui-utils.js";
 
 const dialog = document.querySelector("#user-dialog");
 const form = document.querySelector("#user-form");
@@ -91,13 +91,7 @@ function renderUsers() {
         editButton.type = "button";
         editButton.dataset.editUser = user.id;
         editButton.textContent = "Editar";
-        const statusButton = document.createElement("button");
-        statusButton.className = user.active
-            ? "rounded-lg border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50"
-            : "rounded-lg border border-emerald-200 px-3 py-2 text-sm font-semibold text-primary-dark transition hover:bg-emerald-50";
-        statusButton.type = "button";
-        statusButton.dataset.changeStatus = user.id;
-        statusButton.textContent = user.active ? "Desactivar" : "Activar";
+        const statusButton = createActiveStatusButton(user.active, user.id);
         actions.append(editButton, statusButton);
         actionsCell.append(actions);
         row.append(actionsCell);

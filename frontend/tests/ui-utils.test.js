@@ -1,6 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {appendLabeledText, createActiveStatusCell, createTableCell, setFieldError} from "../assets/js/ui-utils.js";
+import {
+    appendLabeledText,
+    createActiveStatusButton,
+    createActiveStatusCell,
+    createTableCell,
+    setFieldError
+} from "../assets/js/ui-utils.js";
 
 test("crea una celda segura con texto y clases", () => {
     globalThis.document = {
@@ -37,6 +43,27 @@ test("crea una celda de estado activo con etiquetas configurables", () => {
     assert.match(activeCell.children[0].className, /bg-emerald-50/);
     assert.equal(inactiveCell.children[0].textContent, "Inactiva");
     assert.match(inactiveCell.children[0].className, /bg-red-50/);
+});
+
+test("crea un botón para cambiar el estado activo", () => {
+    globalThis.document = {
+        createElement(tagName) {
+            return {
+                tagName: tagName.toUpperCase(),
+                className: "",
+                dataset: {},
+                textContent: "",
+                type: ""
+            };
+        }
+    };
+
+    const button = createActiveStatusButton(true, 25);
+
+    assert.equal(button.type, "button");
+    assert.equal(button.dataset.changeStatus, "25");
+    assert.equal(button.textContent, "Desactivar");
+    assert.match(button.className, /border-red-200/);
 });
 
 test("agrega texto etiquetado sin interpretar HTML", () => {

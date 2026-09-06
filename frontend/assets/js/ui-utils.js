@@ -21,6 +21,18 @@ export function createActiveStatusCell(isActive, labels = {}) {
     return cell;
 }
 
+export function createActiveStatusButton(isActive, itemId) {
+    const button = document.createElement("button");
+    button.className = isActive
+        ? "rounded-lg border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50"
+        : "rounded-lg border border-emerald-200 px-3 py-2 text-sm font-semibold text-primary-dark transition hover:bg-emerald-50";
+    button.type = "button";
+    button.dataset.changeStatus = String(itemId);
+    button.textContent = isActive ? "Desactivar" : "Activar";
+
+    return button;
+}
+
 export function appendLabeledText(container, label, value, className = "") {
     const paragraph = document.createElement("p");
     paragraph.className = className;
