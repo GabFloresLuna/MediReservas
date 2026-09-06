@@ -15,18 +15,18 @@ export function getDashboardSummary({session, users = [], specialties = [], appo
 
     if (session.role === "RECEPTIONIST") {
         return [
-            createSummary(appointments.filter((appointment) => appointment.status === "PENDIENTE").length, "Citas pendientes"),
-            createSummary(appointments.filter((appointment) => appointment.status === "CONFIRMADA").length, "Citas confirmadas"),
-            createSummary(appointments.filter((appointment) => appointment.status === "REAGENDADA").length, "Citas reagendadas")
+            createSummary(appointments.filter((appointment) => appointment.status === "PENDING").length, "Citas pendientes"),
+            createSummary(appointments.filter((appointment) => appointment.status === "CONFIRMED").length, "Citas confirmadas"),
+            createSummary(appointments.filter((appointment) => appointment.status === "CANCELLED").length, "Citas canceladas")
         ];
     }
 
     if (session.role === "DOCTOR") {
         const doctorAppointments = appointments.filter((appointment) => appointment.doctorId === session.userId);
         return [
-            createSummary(doctorAppointments.filter((appointment) => appointment.date === today && appointment.status !== "CANCELADA").length, "Atenciones de hoy"),
-            createSummary(doctorAppointments.filter((appointment) => appointment.status === "CONFIRMADA" && appointment.date <= today).length, "Observaciones pendientes"),
-            createSummary(doctorAppointments.filter((appointment) => appointment.status === "COMPLETADA").length, "Atenciones completadas")
+            createSummary(doctorAppointments.filter((appointment) => appointment.date === today && appointment.status !== "CANCELLED").length, "Atenciones de hoy"),
+            createSummary(doctorAppointments.filter((appointment) => appointment.status === "CONFIRMED" && appointment.date <= today).length, "Observaciones pendientes"),
+            createSummary(doctorAppointments.filter((appointment) => appointment.status === "COMPLETED").length, "Atenciones completadas")
         ];
     }
 
@@ -38,12 +38,12 @@ export function getDashboardSummary({session, users = [], specialties = [], appo
         return [
             createSummary(
                 patientAppointments.filter(
-                    (appointment) => appointment.date >= today && !["CANCELADA", "COMPLETADA"].includes(appointment.status)
+                    (appointment) => appointment.date >= today && !["CANCELLED", "COMPLETED", "NO_SHOW"].includes(appointment.status)
                 ).length,
                 "Próximas citas"
             ),
-            createSummary(patientAppointments.filter((appointment) => appointment.status === "PENDIENTE").length, "Solicitudes pendientes"),
-            createSummary(patientAppointments.filter((appointment) => appointment.status === "COMPLETADA").length, "Atenciones realizadas")
+            createSummary(patientAppointments.filter((appointment) => appointment.status === "PENDING").length, "Solicitudes pendientes"),
+            createSummary(patientAppointments.filter((appointment) => appointment.status === "COMPLETED").length, "Atenciones realizadas")
         ];
     }
 

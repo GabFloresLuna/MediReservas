@@ -13,7 +13,7 @@ initializeBaseAppointments();
 const appointmentId = new URLSearchParams(window.location.search).get("id");
 const appointment = appointmentId ? getAppointmentById(appointmentId) : null;
 const session = getSession();
-const canEditAppointment = appointment?.doctorId === session?.userId && appointment.status === "CONFIRMADA";
+const canEditAppointment = appointment?.doctorId === session?.userId && appointment.status === "CONFIRMED";
 
 function showFieldError(input, errorElementId, error = "") {
     const errorElement = document.querySelector(`#${errorElementId}`);
@@ -70,7 +70,7 @@ form?.addEventListener("submit", (event) => {
         diagnosis: values.diagnosis,
         clinicalNotes: values.notes,
         completedAt: new Date().toISOString(),
-        status: "COMPLETADA"
+        status: "COMPLETED"
     });
 
     formMessage.className = "mt-4 text-center text-sm font-medium text-primary-dark";

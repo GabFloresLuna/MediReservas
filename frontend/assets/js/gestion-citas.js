@@ -57,7 +57,7 @@ function createActionButtons(appointment) {
     const actions = document.createElement("div");
     actions.className = "flex flex-wrap justify-end gap-2";
 
-    if (appointment.status === "PENDIENTE" || appointment.status === "REAGENDADA") {
+    if (appointment.status === "PENDING") {
         const confirmButton = document.createElement("button");
         confirmButton.className = "rounded-lg border border-emerald-200 px-3 py-2 text-sm font-semibold text-primary-dark transition hover:bg-emerald-50";
         confirmButton.type = "button";
@@ -66,7 +66,7 @@ function createActionButtons(appointment) {
         actions.append(confirmButton);
     }
 
-    if (appointment.status === "PENDIENTE" || appointment.status === "REAGENDADA") {
+    if (appointment.status === "PENDING") {
         const rescheduleButton = document.createElement("button");
         rescheduleButton.className = "rounded-lg border border-line px-3 py-2 text-sm font-semibold text-primary-dark transition hover:bg-primary-light";
         rescheduleButton.type = "button";
@@ -126,7 +126,7 @@ function confirmAppointment(appointmentId) {
     const appointment = getAppointmentById(appointmentId);
     if (!appointment) return;
 
-    updateAppointment(appointmentId, {status: "CONFIRMADA"});
+    updateAppointment(appointmentId, {status: "CONFIRMED"});
     renderAppointments();
     showFeedback(`La cita de ${appointment.patientName} del ${appointment.date} a las ${appointment.time} fue confirmada.`);
 }
@@ -203,7 +203,7 @@ rescheduleForm?.addEventListener("submit", (event) => {
     }
     if (hasErrors) return;
 
-    const appointment = updateAppointment(appointmentId, {date, time, status: "REAGENDADA"});
+    const appointment = updateAppointment(appointmentId, {date, time, status: "PENDING"});
     rescheduleDialog.close();
     renderAppointments();
     if (appointment) {
@@ -213,7 +213,7 @@ rescheduleForm?.addEventListener("submit", (event) => {
 
 document.querySelector("#confirm-cancel-button")?.addEventListener("click", () => {
     const appointmentId = cancelAppointmentId.value;
-    const appointment = updateAppointment(appointmentId, {status: "CANCELADA"});
+    const appointment = updateAppointment(appointmentId, {status: "CANCELLED"});
 
     cancelDialog.close();
     renderAppointments();
@@ -224,7 +224,7 @@ document.querySelector("#confirm-cancel-button")?.addEventListener("click", () =
 
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.get("estado") === "pendiente" || urlParams.get("accion") === "reagendar") {
-    statusFilter.value = "PENDIENTE";
+    statusFilter.value = "PENDING";
 }
 
 feedback.hidden = true;

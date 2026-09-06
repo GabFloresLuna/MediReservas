@@ -135,7 +135,7 @@ form?.addEventListener("submit", (event) => {
         time: values.time,
         reason: values.reason,
         modality: values.modality,
-        status: "PENDIENTE"
+        status: "PENDING"
     });
 
     successMessage.classList.remove("hidden");

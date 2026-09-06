@@ -8,9 +8,10 @@ import {
 } from "../assets/js/citas-utils.js";
 
 test("presenta todos los estados de cita conocidos", () => {
-    assert.equal(getAppointmentStatusLabel("PENDIENTE"), "Pendiente");
-    assert.equal(getAppointmentStatusLabel("COMPLETADA"), "Completada");
-    assert.match(getAppointmentStatusBadgeClass("CANCELADA"), /red/);
+    assert.equal(getAppointmentStatusLabel("PENDING"), "Pendiente");
+    assert.equal(getAppointmentStatusLabel("COMPLETED"), "Completada");
+    assert.equal(getAppointmentStatusLabel("NO_SHOW"), "Inasistencia");
+    assert.match(getAppointmentStatusBadgeClass("CANCELLED"), /red/);
 });
 
 test("formatea las fechas de citas para Chile sin cambiar el día", () => {
@@ -18,9 +19,9 @@ test("formatea las fechas de citas para Chile sin cambiar el día", () => {
 });
 
 test("solo permite cancelar citas que todavía admiten cambios", () => {
-    assert.equal(canCancelAppointment("PENDIENTE"), true);
-    assert.equal(canCancelAppointment("CONFIRMADA"), true);
-    assert.equal(canCancelAppointment("REAGENDADA"), true);
-    assert.equal(canCancelAppointment("CANCELADA"), false);
-    assert.equal(canCancelAppointment("COMPLETADA"), false);
+    assert.equal(canCancelAppointment("PENDING"), true);
+    assert.equal(canCancelAppointment("CONFIRMED"), true);
+    assert.equal(canCancelAppointment("CANCELLED"), false);
+    assert.equal(canCancelAppointment("COMPLETED"), false);
+    assert.equal(canCancelAppointment("NO_SHOW"), false);
 });

@@ -1,17 +1,17 @@
 const STATUS_LABELS = Object.freeze({
-    PENDIENTE: "Pendiente",
-    CONFIRMADA: "Confirmada",
-    REAGENDADA: "Reagendada",
-    CANCELADA: "Cancelada",
-    COMPLETADA: "Completada"
+    PENDING: "Pendiente",
+    CONFIRMED: "Confirmada",
+    CANCELLED: "Cancelada",
+    COMPLETED: "Completada",
+    NO_SHOW: "Inasistencia"
 });
 
 const STATUS_BADGE_CLASSES = Object.freeze({
-    PENDIENTE: "inline-flex rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700",
-    CONFIRMADA: "inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-primary-dark",
-    REAGENDADA: "inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-secondary",
-    CANCELADA: "inline-flex rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700",
-    COMPLETADA: "inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700"
+    PENDING: "inline-flex rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700",
+    CONFIRMED: "inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-primary-dark",
+    CANCELLED: "inline-flex rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700",
+    COMPLETED: "inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700",
+    NO_SHOW: "inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700"
 });
 
 export function getAppointmentStatusLabel(status) {
@@ -19,11 +19,11 @@ export function getAppointmentStatusLabel(status) {
 }
 
 export function getAppointmentStatusBadgeClass(status) {
-    return STATUS_BADGE_CLASSES[status] ?? STATUS_BADGE_CLASSES.PENDIENTE;
+    return STATUS_BADGE_CLASSES[status] ?? STATUS_BADGE_CLASSES.PENDING;
 }
 
 export function canCancelAppointment(status) {
-    return ["PENDIENTE", "CONFIRMADA", "REAGENDADA"].includes(status);
+    return ["PENDING", "CONFIRMED"].includes(status);
 }
 
 export function formatAppointmentDate(date) {

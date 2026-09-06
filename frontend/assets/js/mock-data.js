@@ -122,7 +122,7 @@ export const BASE_APPOINTMENTS = [
         date: "2026-09-07",
         time: "09:30",
         reason: "Control de presión arterial",
-        status: "PENDIENTE"
+        status: "PENDING"
     },
     {
         id: "cita-2",
@@ -135,7 +135,7 @@ export const BASE_APPOINTMENTS = [
         date: "2026-09-08",
         time: "10:00",
         reason: "Control de niño sano",
-        status: "PENDIENTE"
+        status: "PENDING"
     },
     {
         id: "cita-3",
@@ -148,7 +148,7 @@ export const BASE_APPOINTMENTS = [
         date: "2026-09-05",
         time: "11:15",
         reason: "Dolor lumbar persistente",
-        status: "CONFIRMADA"
+        status: "CONFIRMED"
     },
     {
         id: "cita-4",
@@ -161,7 +161,7 @@ export const BASE_APPOINTMENTS = [
         date: "2026-09-10",
         time: "16:00",
         reason: "Evaluación de lunar en el brazo",
-        status: "CONFIRMADA"
+        status: "CONFIRMED"
     },
     {
         id: "cita-5",
@@ -174,7 +174,7 @@ export const BASE_APPOINTMENTS = [
         date: "2026-09-09",
         time: "12:00",
         reason: "Control de migrañas",
-        status: "REAGENDADA"
+        status: "PENDING"
     },
     {
         id: "cita-6",
@@ -187,6 +187,6 @@ export const BASE_APPOINTMENTS = [
         date: "2026-09-03",
         time: "09:00",
         reason: "Control post operatorio",
-        status: "CANCELADA"
+        status: "CANCELLED"
     }
 ];

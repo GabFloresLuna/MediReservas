@@ -41,7 +41,7 @@ function createAppointmentCard(appointment) {
     cancelButton.type = "button";
     cancelButton.dataset.appointmentId = appointment.id;
     cancelButton.disabled = !canCancelAppointment(appointment.status);
-    cancelButton.textContent = appointment.status === "CANCELADA" ? "Cancelada" : "Cancelar cita";
+    cancelButton.textContent = appointment.status === "CANCELLED" ? "Cancelada" : "Cancelar cita";
     cancelButton.className = cancelButton.disabled
         ? "mt-4 rounded-xl bg-slate-300 px-4 py-2 font-semibold text-slate-600"
         : "cancelarCita mt-4 rounded-xl bg-red-600 px-4 py-2 font-semibold text-white transition hover:bg-red-700";
@@ -82,7 +82,7 @@ appointmentList?.addEventListener("click", (event) => {
 
     if (!window.confirm("¿Desea cancelar esta cita médica?")) return;
 
-    updateAppointment(button.dataset.appointmentId, {status: "CANCELADA"});
+    updateAppointment(button.dataset.appointmentId, {status: "CANCELLED"});
     renderAppointments();
 });
 

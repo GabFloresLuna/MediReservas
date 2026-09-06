@@ -94,6 +94,17 @@ export function removeSession() {
 const DOCTORS_KEY = "medireservas_doctors";
 const SPECIALTIES_KEY = "medireservas_specialties";
 const APPOINTMENTS_KEY = "medireservas_appointments";
+const LEGACY_APPOINTMENT_STATUSES = Object.freeze({
+    PENDIENTE: "PENDING",
+    CONFIRMADA: "CONFIRMED",
+    REAGENDADA: "PENDING",
+    CANCELADA: "CANCELLED",
+    COMPLETADA: "COMPLETED"
+});
+
+function normalizeAppointmentStatus(status) {
+    return LEGACY_APPOINTMENT_STATUSES[status] ?? status;
+}
 
 export function getSpecialties() {
     try {
@@ -197,7 +208,11 @@ export function initializeBaseDoctors() {
 
 export function getAppointments() {
     try {
-        return JSON.parse(localStorage.getItem(APPOINTMENTS_KEY)) ?? [];
+        const appointments = JSON.parse(localStorage.getItem(APPOINTMENTS_KEY)) ?? [];
+        return appointments.map((appointment) => ({
+            ...appointment,
+            status: normalizeAppointmentStatus(appointment.status)
+        }));
     } catch {
         return [];
     }
