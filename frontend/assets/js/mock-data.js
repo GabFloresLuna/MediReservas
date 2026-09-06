@@ -135,7 +135,9 @@ export const BASE_DOCTORS = [
 
 export const BASE_APPOINTMENTS = [
     {
-        id: "cita-1",
+        appointmentId: 1,
+        patientUserId: 4,
+        scheduleSlotId: 1,
         patientName: "Paula Contreras",
         patientRun: "44444444-4",
         doctorId: 1,
@@ -145,10 +147,12 @@ export const BASE_APPOINTMENTS = [
         date: "2026-09-07",
         time: "09:30",
         reason: "Control de presión arterial",
-        status: "PENDING"
+        appointmentStatus: "PENDING"
     },
     {
-        id: "cita-2",
+        appointmentId: 2,
+        patientUserId: 7,
+        scheduleSlotId: 2,
         patientName: "Juan Morales",
         patientRun: "15678234-0",
         doctorId: 2,
@@ -158,10 +162,12 @@ export const BASE_APPOINTMENTS = [
         date: "2026-09-08",
         time: "10:00",
         reason: "Control de niño sano",
-        status: "PENDING"
+        appointmentStatus: "PENDING"
     },
     {
-        id: "cita-3",
+        appointmentId: 3,
+        patientUserId: 8,
+        scheduleSlotId: 3,
         patientName: "Carolina Fuentes",
         patientRun: "14235876-3",
         doctorId: 3,
@@ -171,10 +177,12 @@ export const BASE_APPOINTMENTS = [
         date: "2026-09-05",
         time: "11:15",
         reason: "Dolor lumbar persistente",
-        status: "CONFIRMED"
+        appointmentStatus: "CONFIRMED"
     },
     {
-        id: "cita-4",
+        appointmentId: 4,
+        patientUserId: 9,
+        scheduleSlotId: 4,
         patientName: "Pedro Salinas",
         patientRun: "13987654-2",
         doctorId: 2,
@@ -184,10 +192,12 @@ export const BASE_APPOINTMENTS = [
         date: "2026-09-10",
         time: "16:00",
         reason: "Evaluación de lunar en el brazo",
-        status: "CONFIRMED"
+        appointmentStatus: "CONFIRMED"
     },
     {
-        id: "cita-5",
+        appointmentId: 5,
+        patientUserId: 10,
+        scheduleSlotId: 5,
         patientName: "Lucía Vega",
         patientRun: "16543987-K",
         doctorId: 1,
@@ -197,10 +207,12 @@ export const BASE_APPOINTMENTS = [
         date: "2026-09-09",
         time: "12:00",
         reason: "Control de migrañas",
-        status: "PENDING"
+        appointmentStatus: "PENDING"
     },
     {
-        id: "cita-6",
+        appointmentId: 6,
+        patientUserId: 11,
+        scheduleSlotId: 6,
         patientName: "Marcos Díaz",
         patientRun: "17893451-1",
         doctorId: 1,
@@ -210,6 +222,6 @@ export const BASE_APPOINTMENTS = [
         date: "2026-09-03",
         time: "09:00",
         reason: "Control post operatorio",
-        status: "CANCELLED"
+        appointmentStatus: "CANCELLED"
     }
 ];

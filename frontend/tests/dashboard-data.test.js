@@ -3,9 +3,9 @@ import assert from "node:assert/strict";
 import {getDashboardSummary} from "../assets/js/dashboard-data.js";
 
 const appointments = [
-    {id: "1", patientUserId: 4, doctorId: 1, date: "2026-09-05", status: "PENDING"},
-    {id: "2", patientUserId: 4, doctorId: 1, date: "2026-09-05", status: "CONFIRMED"},
-    {id: "3", patientUserId: 4, doctorId: 1, date: "2026-09-04", status: "COMPLETED"}
+    {appointmentId: 1, patientUserId: 4, doctorId: 1, date: "2026-09-05", appointmentStatus: "PENDING"},
+    {appointmentId: 2, patientUserId: 4, doctorId: 1, date: "2026-09-05", appointmentStatus: "CONFIRMED"},
+    {appointmentId: 3, patientUserId: 4, doctorId: 1, date: "2026-09-04", appointmentStatus: "COMPLETED"}
 ];
 
 test("calcula el resumen del paciente desde sus citas", () => {

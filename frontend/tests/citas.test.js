@@ -38,60 +38,61 @@ test.beforeEach(() => {
 
 test("guarda una cita sin reemplazar las solicitudes existentes", () => {
     const appointment = {
-        id: getNextAppointmentId(),
+        appointmentId: getNextAppointmentId(),
         patientUserId: 4,
         patientName: "Paula Contreras",
         patientRun: "44444444-4",
         doctorId: 1,
         doctorName: "Ana Rojas",
         specialtyId: 1,
+        scheduleSlotId: 7,
         specialtyName: "Cardiología",
         date: "2026-09-20",
         time: "10:00",
         reason: "Control médico",
         modality: "Presencial",
-        status: "PENDING"
+        appointmentStatus: "PENDING"
     };
 
     saveAppointment(appointment);
 
     assert.equal(getAppointments().length, 7);
-    assert.deepEqual(getAppointmentById("cita-7"), appointment);
+    assert.deepEqual(getAppointmentById(7), appointment);
 });
 
 test("genera un identificador correlativo para la siguiente cita", () => {
-    assert.equal(getNextAppointmentId(), "cita-7");
+    assert.equal(getNextAppointmentId(), 7);
 });
 
 test("adapta estados antiguos guardados al contrato del backend", () => {
     localStorage.setItem("medireservas_appointments", JSON.stringify([
-        {id: "legacy-1", status: "CONFIRMADA"},
-        {id: "legacy-2", status: "REAGENDADA"}
+        {id: "cita-1", doctorId: "doctor-1", specialtyId: 1, status: "CONFIRMADA"},
+        {id: "cita-2", doctorId: "doctor-1", specialtyId: 2, status: "REAGENDADA"}
     ]));
 
     assert.deepEqual(
-        getAppointments().map(({status}) => status),
+        getAppointments().map(({appointmentStatus}) => appointmentStatus),
         ["CONFIRMED", "PENDING"]
     );
 });
 
 test("guarda la cancelación de una cita", () => {
-    const cancelled = updateAppointment("cita-1", {status: "CANCELLED"});
+    const cancelled = updateAppointment(1, {appointmentStatus: "CANCELLED"});
 
-    assert.equal(cancelled.status, "CANCELLED");
-    assert.equal(getAppointmentById("cita-1").status, "CANCELLED");
+    assert.equal(cancelled.appointmentStatus, "CANCELLED");
+    assert.equal(getAppointmentById(1).appointmentStatus, "CANCELLED");
 });
 
 test("guarda la observación clínica y completa la cita", () => {
-    updateAppointment("cita-3", {
+    updateAppointment(3, {
         diagnosis: "Dolor lumbar",
         clinicalNotes: "Se indica reposo y control médico.",
         completedAt: "2026-09-05T15:00:00.000Z",
-        status: "COMPLETED"
+        appointmentStatus: "COMPLETED"
     });
 
-    const completed = getAppointmentById("cita-3");
-    assert.equal(completed.status, "COMPLETED");
+    const completed = getAppointmentById(3);
+    assert.equal(completed.appointmentStatus, "COMPLETED");
     assert.equal(completed.diagnosis, "Dolor lumbar");
     assert.equal(completed.clinicalNotes, "Se indica reposo y control médico.");
 });

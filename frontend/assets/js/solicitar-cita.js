@@ -122,19 +122,20 @@ form?.addEventListener("submit", (event) => {
     }
 
     saveAppointment({
-        id: getNextAppointmentId(),
+        appointmentId: getNextAppointmentId(),
         patientUserId: patient.userId,
         patientName: `${patient.firstName} ${patient.lastName}`,
         patientRun: patient.run,
         doctorId: doctor.doctorId,
         doctorName: `${doctor.firstName} ${doctor.lastName}`,
         specialtyId: specialty.specialtyId,
+        scheduleSlotId: getNextAppointmentId(),
         specialtyName: specialty.specialtyName,
         date: values.date,
         time: values.time,
         reason: values.reason,
         modality: values.modality,
-        status: "PENDING"
+        appointmentStatus: "PENDING"
     });
 
     successMessage.classList.remove("hidden");

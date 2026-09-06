@@ -32,7 +32,7 @@ function createAppointmentCard(appointment) {
     specialty.textContent = appointment.specialtyName;
     timeBlock.append(time, specialty);
 
-    topRow.append(timeBlock, createStatusBadge(appointment.status));
+    topRow.append(timeBlock, createStatusBadge(appointment.appointmentStatus));
 
     const patientName = document.createElement("p");
     patientName.className = "mt-4 font-semibold";
@@ -44,10 +44,10 @@ function createAppointmentCard(appointment) {
 
     item.append(topRow, patientName, reason);
 
-    if (appointment.status === "CONFIRMED" && appointment.date <= getLocalDateString()) {
+    if (appointment.appointmentStatus === "CONFIRMED" && appointment.date <= getLocalDateString()) {
         const observationLink = document.createElement("a");
         observationLink.className = "mt-4 inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-dark";
-        observationLink.href = `observacion-clinica.html?id=${appointment.id}`;
+        observationLink.href = `observacion-clinica.html?id=${appointment.appointmentId}`;
         observationLink.textContent = "Registrar observación";
         item.append(observationLink);
     }

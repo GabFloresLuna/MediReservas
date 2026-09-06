@@ -126,6 +126,10 @@ function normalizeAppointmentStatus(status) {
     return LEGACY_APPOINTMENT_STATUSES[status] ?? status;
 }
 
+function normalizeAppointmentId(appointmentId) {
+    return Number(String(appointmentId).replace("cita-", ""));
+}
+
 export function getSpecialties() {
     try {
         const specialties = JSON.parse(localStorage.getItem(SPECIALTIES_KEY)) ?? [];
@@ -243,10 +247,14 @@ export function initializeBaseDoctors() {
 export function getAppointments() {
     try {
         const appointments = JSON.parse(localStorage.getItem(APPOINTMENTS_KEY)) ?? [];
-        return appointments.map((appointment) => ({
+        return appointments.map(({id, status, ...appointment}, index) => ({
             ...appointment,
+            appointmentId: normalizeAppointmentId(appointment.appointmentId ?? id ?? index + 1),
+            patientUserId: Number(appointment.patientUserId ?? 0),
             doctorId: Number.isFinite(Number(appointment.doctorId)) ? Number(appointment.doctorId) : 1,
-            status: normalizeAppointmentStatus(appointment.status)
+            specialtyId: Number(appointment.specialtyId),
+            scheduleSlotId: normalizeAppointmentId(appointment.scheduleSlotId ?? appointment.appointmentId ?? id ?? index + 1),
+            appointmentStatus: normalizeAppointmentStatus(appointment.appointmentStatus ?? status)
         }));
     } catch {
         return [];
@@ -254,7 +262,7 @@ export function getAppointments() {
 }
 
 export function getAppointmentById(appointmentId) {
-    return getAppointments().find((appointment) => appointment.id === appointmentId) ?? null;
+    return getAppointments().find((appointment) => appointment.appointmentId === normalizeAppointmentId(appointmentId)) ?? null;
 }
 
 export function saveAppointment(appointment) {
@@ -265,20 +273,20 @@ export function saveAppointment(appointment) {
 
 export function getNextAppointmentId() {
     const highestId = getAppointments().reduce((maxId, appointment) => {
-        const numericId = Number.parseInt(String(appointment.id).replace("cita-", ""), 10);
-        return Number.isNaN(numericId) ? maxId : Math.max(maxId, numericId);
+        return Math.max(maxId, appointment.appointmentId);
     }, 0);
 
-    return `cita-${highestId + 1}`;
+    return highestId + 1;
 }
 
 export function updateAppointment(appointmentId, changes) {
     const appointments = getAppointments();
-    const appointmentIndex = appointments.findIndex((appointment) => appointment.id === appointmentId);
+    const numericAppointmentId = normalizeAppointmentId(appointmentId);
+    const appointmentIndex = appointments.findIndex((appointment) => appointment.appointmentId === numericAppointmentId);
 
     if (appointmentIndex < 0) return null;
 
-    appointments[appointmentIndex] = {...appointments[appointmentIndex], ...changes, id: appointmentId};
+    appointments[appointmentIndex] = {...appointments[appointmentIndex], ...changes, appointmentId: numericAppointmentId};
     localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments));
     return appointments[appointmentIndex];
 }

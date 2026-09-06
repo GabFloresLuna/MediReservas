@@ -50,7 +50,7 @@ function renderHistory() {
                 (isDoctor
                     ? appointment.doctorId === doctor?.doctorId
                     : appointment.patientUserId === currentUser.userId || appointment.patientRun === currentUser.run) &&
-                appointment.status === "COMPLETED" &&
+                appointment.appointmentStatus === "COMPLETED" &&
                 appointment.diagnosis &&
                 appointment.clinicalNotes
         )

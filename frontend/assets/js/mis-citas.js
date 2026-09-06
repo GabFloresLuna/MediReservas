@@ -33,15 +33,15 @@ function createAppointmentCard(appointment) {
     statusLabel.textContent = "Estado: ";
     const statusValue = document.createElement("span");
     statusValue.className = "estado font-semibold";
-    statusValue.textContent = getAppointmentStatusLabel(appointment.status);
+    statusValue.textContent = getAppointmentStatusLabel(appointment.appointmentStatus);
     status.append(statusLabel, statusValue);
     card.append(status);
 
     const cancelButton = document.createElement("button");
     cancelButton.type = "button";
-    cancelButton.dataset.appointmentId = appointment.id;
-    cancelButton.disabled = !canCancelAppointment(appointment.status);
-    cancelButton.textContent = appointment.status === "CANCELLED" ? "Cancelada" : "Cancelar cita";
+    cancelButton.dataset.appointmentId = appointment.appointmentId;
+    cancelButton.disabled = !canCancelAppointment(appointment.appointmentStatus);
+    cancelButton.textContent = appointment.appointmentStatus === "CANCELLED" ? "Cancelada" : "Cancelar cita";
     cancelButton.className = cancelButton.disabled
         ? "mt-4 rounded-xl bg-slate-300 px-4 py-2 font-semibold text-slate-600"
         : "cancelarCita mt-4 rounded-xl bg-red-600 px-4 py-2 font-semibold text-white transition hover:bg-red-700";
@@ -66,7 +66,7 @@ function renderAppointments() {
     const selectedStatus = statusFilter.value;
     const appointments = getPatientAppointments()
         .filter((appointment) => appointment.doctorName.toLowerCase().includes(search))
-        .filter((appointment) => !selectedStatus || appointment.status === selectedStatus)
+        .filter((appointment) => !selectedStatus || appointment.appointmentStatus === selectedStatus)
         .sort((first, second) => `${first.date} ${first.time}`.localeCompare(`${second.date} ${second.time}`));
 
     appointmentList.replaceChildren(...appointments.map(createAppointmentCard));
@@ -82,7 +82,7 @@ appointmentList?.addEventListener("click", (event) => {
 
     if (!window.confirm("¿Desea cancelar esta cita médica?")) return;
 
-    updateAppointment(button.dataset.appointmentId, {status: "CANCELLED"});
+    updateAppointment(button.dataset.appointmentId, {appointmentStatus: "CANCELLED"});
     renderAppointments();
 });
 

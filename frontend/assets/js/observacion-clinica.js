@@ -14,7 +14,7 @@ const appointmentId = new URLSearchParams(window.location.search).get("id");
 const appointment = appointmentId ? getAppointmentById(appointmentId) : null;
 const session = getSession();
 const doctor = getDoctors().find((item) => item.userId === session?.userId);
-const canEditAppointment = appointment?.doctorId === doctor?.doctorId && appointment.status === "CONFIRMED";
+const canEditAppointment = appointment?.doctorId === doctor?.doctorId && appointment.appointmentStatus === "CONFIRMED";
 
 function showFieldError(input, errorElementId, error = "") {
     const errorElement = document.querySelector(`#${errorElementId}`);
@@ -67,11 +67,11 @@ form?.addEventListener("submit", (event) => {
         return;
     }
 
-    updateAppointment(appointment.id, {
+    updateAppointment(appointment.appointmentId, {
         diagnosis: values.diagnosis,
         clinicalNotes: values.notes,
         completedAt: new Date().toISOString(),
-        status: "COMPLETED"
+        appointmentStatus: "COMPLETED"
     });
 
     formMessage.className = "mt-4 text-center text-sm font-medium text-primary-dark";

@@ -38,7 +38,7 @@ function getFilteredAppointments() {
     return getAppointments().filter((appointment) => {
         const searchableText = `${appointment.patientName} ${appointment.patientRun} ${appointment.doctorName}`.toLowerCase();
         const matchesQuery = searchableText.includes(query);
-        const matchesStatus = status === "all" || appointment.status === status;
+        const matchesStatus = status === "all" || appointment.appointmentStatus === status;
         return matchesQuery && matchesStatus;
     });
 }
@@ -57,29 +57,29 @@ function createActionButtons(appointment) {
     const actions = document.createElement("div");
     actions.className = "flex flex-wrap justify-end gap-2";
 
-    if (appointment.status === "PENDING") {
+    if (appointment.appointmentStatus === "PENDING") {
         const confirmButton = document.createElement("button");
         confirmButton.className = "rounded-lg border border-emerald-200 px-3 py-2 text-sm font-semibold text-primary-dark transition hover:bg-emerald-50";
         confirmButton.type = "button";
-        confirmButton.dataset.confirmAppointment = appointment.id;
+        confirmButton.dataset.confirmAppointment = appointment.appointmentId;
         confirmButton.textContent = "Confirmar";
         actions.append(confirmButton);
     }
 
-    if (appointment.status === "PENDING") {
+    if (appointment.appointmentStatus === "PENDING") {
         const rescheduleButton = document.createElement("button");
         rescheduleButton.className = "rounded-lg border border-line px-3 py-2 text-sm font-semibold text-primary-dark transition hover:bg-primary-light";
         rescheduleButton.type = "button";
-        rescheduleButton.dataset.rescheduleAppointment = appointment.id;
+        rescheduleButton.dataset.rescheduleAppointment = appointment.appointmentId;
         rescheduleButton.textContent = "Reagendar";
         actions.append(rescheduleButton);
     }
 
-    if (canCancelAppointment(appointment.status)) {
+    if (canCancelAppointment(appointment.appointmentStatus)) {
         const cancelButton = document.createElement("button");
         cancelButton.className = "rounded-lg border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-50";
         cancelButton.type = "button";
-        cancelButton.dataset.cancelAppointment = appointment.id;
+        cancelButton.dataset.cancelAppointment = appointment.appointmentId;
         cancelButton.textContent = "Cancelar";
         actions.append(cancelButton);
     }
@@ -107,7 +107,7 @@ function renderAppointments() {
             createTableCell(appointment.doctorName),
             createTableCell(appointment.date),
             createTableCell(appointment.time),
-            createStatusCell(appointment.status)
+            createStatusCell(appointment.appointmentStatus)
         );
 
         const actionsCell = document.createElement("td");
@@ -126,7 +126,7 @@ function confirmAppointment(appointmentId) {
     const appointment = getAppointmentById(appointmentId);
     if (!appointment) return;
 
-    updateAppointment(appointmentId, {status: "CONFIRMED"});
+    updateAppointment(appointmentId, {appointmentStatus: "CONFIRMED"});
     renderAppointments();
     showFeedback(`La cita de ${appointment.patientName} del ${appointment.date} a las ${appointment.time} fue confirmada.`);
 }
@@ -136,7 +136,7 @@ function openRescheduleDialog(appointmentId) {
     if (!appointment) return;
 
     rescheduleForm.reset();
-    document.querySelector("#reschedule-appointment-id").value = appointment.id;
+    document.querySelector("#reschedule-appointment-id").value = appointment.appointmentId;
     rescheduleSummary.textContent = `Cita de ${appointment.patientName} — ${appointment.specialtyName} con ${appointment.doctorName}.`;
     document.querySelector("#reschedule-date").value = appointment.date;
     document.querySelector("#reschedule-date").min = getLocalDateString();
@@ -157,7 +157,7 @@ function openCancelDialog(appointmentId) {
     const appointment = getAppointmentById(appointmentId);
     if (!appointment) return;
 
-    cancelAppointmentId.value = appointment.id;
+    cancelAppointmentId.value = appointment.appointmentId;
     cancelDialogDescription.textContent = `¿Confirmas que deseas cancelar la cita de ${appointment.patientName} del ${appointment.date} a las ${appointment.time}?`;
     cancelDialog.showModal();
 }
@@ -203,7 +203,7 @@ rescheduleForm?.addEventListener("submit", (event) => {
     }
     if (hasErrors) return;
 
-    const appointment = updateAppointment(appointmentId, {date, time, status: "PENDING"});
+    const appointment = updateAppointment(appointmentId, {date, time, appointmentStatus: "PENDING"});
     rescheduleDialog.close();
     renderAppointments();
     if (appointment) {
@@ -213,7 +213,7 @@ rescheduleForm?.addEventListener("submit", (event) => {
 
 document.querySelector("#confirm-cancel-button")?.addEventListener("click", () => {
     const appointmentId = cancelAppointmentId.value;
-    const appointment = updateAppointment(appointmentId, {status: "CANCELLED"});
+    const appointment = updateAppointment(appointmentId, {appointmentStatus: "CANCELLED"});
 
     cancelDialog.close();
     renderAppointments();
