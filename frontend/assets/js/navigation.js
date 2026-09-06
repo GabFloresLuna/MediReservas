@@ -59,10 +59,12 @@ function createMenuItems(items) {
 
 function addPageLocation(main) {
     const pageName = document.body.dataset.pageName;
-    if (!main || !pageName || pageName === "Panel principal") return;
+    if (!main || !pageName || pageName === "Panel principal" || main.querySelector("[data-page-location]")) return;
 
+    main.classList.add("pt-6", "sm:pt-8", "lg:pt-8");
     const location = document.createElement("nav");
     location.className = "mb-6 overflow-x-auto text-sm";
+    location.dataset.pageLocation = "";
     location.setAttribute("aria-label", "Ruta de navegación");
     const list = document.createElement("ol");
     list.className = "flex min-w-max items-center gap-2 text-muted";
@@ -112,8 +114,18 @@ function initializeDashboardMenu() {
     const menu = document.querySelector("#dashboard-menu");
     if (!button || !sidebar || !backdrop || !closeButton || !menu || !config) return false;
 
+    const navigation = menu.closest("nav");
+    if (navigation && !navigation.querySelector(":scope > p")) {
+        const label = document.createElement("p");
+        label.className = "mb-3 hidden px-3 text-xs font-bold uppercase tracking-widest text-muted lg:block";
+        label.dataset.navigationLabel = "";
+        label.textContent = "Navegación";
+        navigation.prepend(label);
+    }
+
     menu.replaceChildren(...createMenuItems(getNavigationItems(session.role)));
     connectMenu(button, sidebar, backdrop, closeButton);
+    addPageLocation(sidebar.parentElement?.querySelector(":scope > main"));
     return true;
 }
 
@@ -148,6 +160,7 @@ function initializeSharedMenu() {
     const nav = document.createElement("nav");
     const navLabel = document.createElement("p");
     navLabel.className = "mb-3 hidden px-3 text-xs font-bold uppercase tracking-widest text-muted lg:block";
+    navLabel.dataset.navigationLabel = "";
     navLabel.textContent = "Navegación";
     const menu = document.createElement("ul");
     menu.className = "flex flex-col gap-2";
