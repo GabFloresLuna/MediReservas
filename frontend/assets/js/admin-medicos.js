@@ -19,7 +19,7 @@ import {
     isValidRun,
     normalizeRun
 } from "./validaciones.js";
-import {createTableCell, setFieldError} from "./ui-utils.js";
+import {createActiveStatusCell, createTableCell, setFieldError} from "./ui-utils.js";
 
 const dialog = document.querySelector("#doctor-dialog");
 const form = document.querySelector("#doctor-form");
@@ -139,18 +139,6 @@ function getFilteredDoctors() {
     });
 }
 
-function createStatusCell(isActive) {
-    const cell = document.createElement("td");
-    cell.className = "px-5 py-4";
-    const badge = document.createElement("span");
-    badge.className = isActive
-        ? "inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-primary-dark"
-        : "inline-flex rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700";
-    badge.textContent = isActive ? "Activo" : "Inactivo";
-    cell.append(badge);
-    return cell;
-}
-
 function renderDoctors() {
     const doctors = getFilteredDoctors();
     const rows = doctors.map((doctor) => {
@@ -165,7 +153,7 @@ function renderDoctors() {
             createTableCell(doctor.medicalLicenseNumber),
             createTableCell(getSpecialtyNames(doctor)),
             createTableCell(doctor.admissionDate || "Sin información"),
-            createStatusCell(doctor.active)
+            createActiveStatusCell(doctor.active)
         );
 
         const actionsCell = document.createElement("td");

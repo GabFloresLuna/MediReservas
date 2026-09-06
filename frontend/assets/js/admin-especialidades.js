@@ -7,7 +7,7 @@ import {
     updateSpecialty,
     getNextSpecialtyId
 } from "./storage.js";
-import {createTableCell, setFieldError} from "./ui-utils.js";
+import {createActiveStatusCell, createTableCell, setFieldError} from "./ui-utils.js";
 
 const dialog = document.querySelector("#specialty-dialog");
 const form = document.querySelector("#specialty-form");
@@ -56,18 +56,6 @@ function validateSpecialty(values) {
     return errors;
 }
 
-function createStatusCell(isActive) {
-    const cell = document.createElement("td");
-    cell.className = "px-5 py-4";
-    const badge = document.createElement("span");
-    badge.className = isActive
-        ? "inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-primary-dark"
-        : "inline-flex rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700";
-    badge.textContent = isActive ? "Activa" : "Inactiva";
-    cell.append(badge);
-    return cell;
-}
-
 function renderSpecialties() {
     const specialties = getSpecialties();
     const rows = specialties.map((specialty) => {
@@ -77,7 +65,7 @@ function renderSpecialties() {
         row.append(
             createTableCell(specialty.specialtyName, "px-5 py-4 font-semibold"),
             createTableCell(specialty.description || "Sin descripción"),
-            createStatusCell(specialty.active)
+            createActiveStatusCell(specialty.active, {active: "Activa", inactive: "Inactiva"})
         );
 
         const actionsCell = document.createElement("td");

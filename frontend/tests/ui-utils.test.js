@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {appendLabeledText, createTableCell, setFieldError} from "../assets/js/ui-utils.js";
+import {appendLabeledText, createActiveStatusCell, createTableCell, setFieldError} from "../assets/js/ui-utils.js";
 
 test("crea una celda segura con texto y clases", () => {
     globalThis.document = {
@@ -14,6 +14,29 @@ test("crea una celda segura con texto y clases", () => {
     assert.equal(cell.tagName, "TD");
     assert.equal(cell.className, "cell-class");
     assert.equal(cell.textContent, "Paciente <script>");
+});
+
+test("crea una celda de estado activo con etiquetas configurables", () => {
+    globalThis.document = {
+        createElement(tagName) {
+            return {
+                tagName: tagName.toUpperCase(),
+                className: "",
+                textContent: "",
+                append(...items) {
+                    this.children = items;
+                }
+            };
+        }
+    };
+
+    const activeCell = createActiveStatusCell(true);
+    const inactiveCell = createActiveStatusCell(false, {inactive: "Inactiva"});
+
+    assert.equal(activeCell.children[0].textContent, "Activo");
+    assert.match(activeCell.children[0].className, /bg-emerald-50/);
+    assert.equal(inactiveCell.children[0].textContent, "Inactiva");
+    assert.match(inactiveCell.children[0].className, /bg-red-50/);
 });
 
 test("agrega texto etiquetado sin interpretar HTML", () => {

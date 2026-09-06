@@ -9,7 +9,7 @@ import {
     updateUserStatus
 } from "./storage.js";
 import { normalizeRun, validateManagedUser } from "./validaciones.js";
-import {createTableCell, setFieldError} from "./ui-utils.js";
+import {createActiveStatusCell, createTableCell, setFieldError} from "./ui-utils.js";
 
 const dialog = document.querySelector("#user-dialog");
 const form = document.querySelector("#user-form");
@@ -66,18 +66,6 @@ function getFilteredUsers() {
     });
 }
 
-function createStatusCell(isActive) {
-    const cell = document.createElement("td");
-    cell.className = "px-5 py-4";
-    const badge = document.createElement("span");
-    badge.className = isActive
-        ? "inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-primary-dark"
-        : "inline-flex rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-700";
-    badge.textContent = isActive ? "Activo" : "Inactivo";
-    cell.append(badge);
-    return cell;
-}
-
 function renderUsers() {
     const users = getFilteredUsers();
     const rows = users.map((user) => {
@@ -91,7 +79,7 @@ function renderUsers() {
             createTableCell(user.run ?? "Sin información"),
             createTableCell(user.email),
             createTableCell(role),
-            createStatusCell(user.active)
+            createActiveStatusCell(user.active)
         );
 
         const actionsCell = document.createElement("td");
