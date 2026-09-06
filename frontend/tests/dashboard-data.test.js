@@ -10,7 +10,7 @@ const appointments = [
 
 test("calcula el resumen del paciente desde sus citas", () => {
     const summary = getDashboardSummary({
-        session: {role: "PACIENTE", userId: "patient-1"},
+        session: {role: "PATIENT", userId: "patient-1"},
         appointments,
         today: "2026-09-05"
     });
@@ -20,7 +20,7 @@ test("calcula el resumen del paciente desde sus citas", () => {
 
 test("calcula el resumen del médico desde su agenda", () => {
     const summary = getDashboardSummary({
-        session: {role: "MEDICO", userId: "doctor-1"},
+        session: {role: "DOCTOR", userId: "doctor-1"},
         appointments,
         today: "2026-09-05"
     });
@@ -30,8 +30,8 @@ test("calcula el resumen del médico desde su agenda", () => {
 
 test("calcula el resumen administrativo desde usuarios y especialidades", () => {
     const summary = getDashboardSummary({
-        session: {role: "ADMINISTRADOR", userId: "admin-1"},
-        users: [{role: "ADMINISTRADOR", active: true}, {role: "PACIENTE", active: false}],
+        session: {role: "ADMIN", userId: "admin-1"},
+        users: [{role: "ADMIN", active: true}, {role: "PATIENT", active: false}],
         specialties: [{active: true}, {active: false}],
         today: "2026-09-05"
     });

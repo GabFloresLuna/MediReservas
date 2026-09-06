@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {getNavigationItems, isNavigationItemCurrent} from "../assets/js/navigation.js";
 
 test("cada rol recibe accesos al panel y al perfil", () => {
-    ["ADMINISTRADOR", "RECEPCIONISTA", "MEDICO", "PACIENTE"].forEach((role) => {
+    ["ADMIN", "RECEPTIONIST", "DOCTOR", "PATIENT"].forEach((role) => {
         const items = getNavigationItems(role);
 
         assert.equal(items[0].href, "dashboard.html");
@@ -18,7 +18,7 @@ test("la navegación no expone enlaces para roles desconocidos", () => {
 });
 
 test("los enlaces internos usan rutas HTML válidas", () => {
-    getNavigationItems("ADMINISTRADOR").forEach((item) => {
+    getNavigationItems("ADMIN").forEach((item) => {
         assert.match(item.href, /^[a-z0-9-]+\.html(?:\?[a-z0-9=&-]+)?$/);
     });
 });

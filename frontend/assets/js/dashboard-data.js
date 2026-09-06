@@ -5,7 +5,7 @@ function createSummary(value, label) {
 export function getDashboardSummary({session, users = [], specialties = [], appointments = [], today}) {
     if (!session) return [];
 
-    if (session.role === "ADMINISTRADOR") {
+    if (session.role === "ADMIN") {
         return [
             createSummary(new Set(users.map((user) => user.role)).size, "Perfiles del sistema"),
             createSummary(users.filter((user) => user.active).length, "Usuarios activos"),
@@ -13,7 +13,7 @@ export function getDashboardSummary({session, users = [], specialties = [], appo
         ];
     }
 
-    if (session.role === "RECEPCIONISTA") {
+    if (session.role === "RECEPTIONIST") {
         return [
             createSummary(appointments.filter((appointment) => appointment.status === "PENDIENTE").length, "Citas pendientes"),
             createSummary(appointments.filter((appointment) => appointment.status === "CONFIRMADA").length, "Citas confirmadas"),
@@ -21,7 +21,7 @@ export function getDashboardSummary({session, users = [], specialties = [], appo
         ];
     }
 
-    if (session.role === "MEDICO") {
+    if (session.role === "DOCTOR") {
         const doctorAppointments = appointments.filter((appointment) => appointment.doctorId === session.userId);
         return [
             createSummary(doctorAppointments.filter((appointment) => appointment.date === today && appointment.status !== "CANCELADA").length, "Atenciones de hoy"),
@@ -30,7 +30,7 @@ export function getDashboardSummary({session, users = [], specialties = [], appo
         ];
     }
 
-    if (session.role === "PACIENTE") {
+    if (session.role === "PATIENT") {
         const patientRun = users.find((user) => user.id === session.userId)?.run ?? session.run;
         const patientAppointments = appointments.filter(
             (appointment) => appointment.patientId === session.userId || appointment.patientRun === patientRun

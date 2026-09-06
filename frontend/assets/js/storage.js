@@ -2,10 +2,21 @@ import {BASE_APPOINTMENTS, BASE_DOCTORS, BASE_SPECIALTIES, BASE_USERS} from "./m
 
 const USERS_KEY = "medireservas_users";
 const SESSION_KEY = "medireservas_session";
+const LEGACY_ROLES = Object.freeze({
+    ADMINISTRADOR: "ADMIN",
+    RECEPCIONISTA: "RECEPTIONIST",
+    MEDICO: "DOCTOR",
+    PACIENTE: "PATIENT"
+});
+
+function normalizeStoredRole(role) {
+    return LEGACY_ROLES[role] ?? role;
+}
 
 export function getUsers() {
     try {
-        return JSON.parse(localStorage.getItem(USERS_KEY)) ?? [];
+        const users = JSON.parse(localStorage.getItem(USERS_KEY)) ?? [];
+        return users.map((user) => ({...user, role: normalizeStoredRole(user.role)}));
     } catch {
         return [];
     }
@@ -69,7 +80,8 @@ export function saveSession(session) {
 
 export function getSession() {
     try {
-        return JSON.parse(localStorage.getItem(SESSION_KEY));
+        const session = JSON.parse(localStorage.getItem(SESSION_KEY));
+        return session ? {...session, role: normalizeStoredRole(session.role)} : null;
     } catch {
         return null;
     }

@@ -6,7 +6,7 @@ import {
     validateRoleChange,
 } from "../assets/js/roles.js";
 
-const roles = ["ADMINISTRADOR", "RECEPCIONISTA", "MEDICO", "PACIENTE"];
+const roles = ["ADMIN", "RECEPTIONIST", "DOCTOR", "PATIENT"];
 
 test("existe una configuración completa para cada rol", () => {
     roles.forEach((role) => {
@@ -44,8 +44,8 @@ test("un rol desconocido no obtiene contenido del dashboard", () => {
 });
 
 test("administrador y paciente reciben sus accesos principales", () => {
-    const adminActions = getDashboardConfig("ADMINISTRADOR").actions.map(({ title }) => title);
-    const patientActions = getDashboardConfig("PACIENTE").actions.map(({ title }) => title);
+    const adminActions = getDashboardConfig("ADMIN").actions.map(({ title }) => title);
+    const patientActions = getDashboardConfig("PATIENT").actions.map(({ title }) => title);
 
     assert.ok(adminActions.includes("Gestionar usuarios"));
     assert.ok(adminActions.includes("Roles y permisos"));
@@ -55,7 +55,7 @@ test("administrador y paciente reciben sus accesos principales", () => {
 });
 
 test("el acceso para registrar observaciones dirige primero a la agenda", () => {
-    const observationAction = getDashboardConfig("MEDICO").actions.find(
+    const observationAction = getDashboardConfig("DOCTOR").actions.find(
         ({title}) => title === "Registrar observación"
     );
 
@@ -69,17 +69,17 @@ test("acepta únicamente los cuatro roles definidos", () => {
 });
 
 test("rechaza una selección vacía o desconocida", () => {
-    assert.equal(validateRoleChange("PACIENTE", ""), "Selecciona un rol válido.");
+    assert.equal(validateRoleChange("PATIENT", ""), "Selecciona un rol válido.");
     assert.equal(
-        validateRoleChange("PACIENTE", "SUPERUSUARIO"),
+        validateRoleChange("PATIENT", "SUPERUSUARIO"),
         "Selecciona un rol válido."
     );
 });
 
 test("exige cambiar a un rol diferente", () => {
     assert.equal(
-        validateRoleChange("MEDICO", "MEDICO"),
+        validateRoleChange("DOCTOR", "DOCTOR"),
         "Selecciona un rol diferente al actual."
     );
-    assert.equal(validateRoleChange("PACIENTE", "MEDICO"), "");
+    assert.equal(validateRoleChange("PATIENT", "DOCTOR"), "");
 });

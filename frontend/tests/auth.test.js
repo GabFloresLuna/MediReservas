@@ -47,14 +47,28 @@ test("inicializa una sola cuenta por cada rol", () => {
     assert.equal(getUsers().length, 4);
     assert.deepEqual(
         new Set(getUsers().map((user) => user.role)),
-        new Set(["ADMINISTRADOR", "RECEPCIONISTA", "MEDICO", "PACIENTE"])
+        new Set(["ADMIN", "RECEPTIONIST", "DOCTOR", "PATIENT"])
     );
+});
+
+test("adapta roles antiguos guardados al contrato del backend", () => {
+    localStorage.setItem("medireservas_users", JSON.stringify([
+        {id: "legacy-1", email: "legacy@medireservas.cl", role: "PACIENTE", active: true}
+    ]));
+    localStorage.setItem("medireservas_session", JSON.stringify({
+        token: "legacy-token",
+        userId: "legacy-1",
+        role: "PACIENTE"
+    }));
+
+    assert.equal(getUsers()[0].role, "PATIENT");
+    assert.equal(getSession().role, "PATIENT");
 });
 
 test("autentica credenciales válidas sin distinguir mayúsculas del correo", () => {
     const user = authenticate("ADMINISTRADOR@MEDIRESERVAS.CL", "Admin123");
 
-    assert.equal(user?.role, "ADMINISTRADOR");
+    assert.equal(user?.role, "ADMIN");
 });
 
 test("rechaza una contraseña incorrecta y una cuenta inactiva", () => {
@@ -64,7 +78,7 @@ test("rechaza una contraseña incorrecta y una cuenta inactiva", () => {
         id: "inactive-1",
         email: "inactivo@medireservas.cl",
         password: "Inactivo123",
-        role: "PACIENTE",
+        role: "PATIENT",
         active: false
     });
 
@@ -75,7 +89,7 @@ test("crea una sesión sin incluir la contraseña", () => {
     const user = authenticate("paciente@medireservas.cl", "Paciente123");
     const session = createSession(user);
 
-    assert.equal(session.role, "PACIENTE");
+    assert.equal(session.role, "PATIENT");
     assert.equal(getSession().email, "paciente@medireservas.cl");
     assert.equal("password" in getSession(), false);
 });
@@ -92,10 +106,10 @@ test("cierra la sesión sin eliminar las cuentas almacenadas", () => {
 });
 
 test("dirige los roles reconocidos al dashboard compartido", () => {
-    assert.equal(getRoleDestination("ADMINISTRADOR"), "dashboard.html");
-    assert.equal(getRoleDestination("RECEPCIONISTA"), "dashboard.html");
-    assert.equal(getRoleDestination("MEDICO"), "dashboard.html");
-    assert.equal(getRoleDestination("PACIENTE"), "dashboard.html");
+    assert.equal(getRoleDestination("ADMIN"), "dashboard.html");
+    assert.equal(getRoleDestination("RECEPTIONIST"), "dashboard.html");
+    assert.equal(getRoleDestination("DOCTOR"), "dashboard.html");
+    assert.equal(getRoleDestination("PATIENT"), "dashboard.html");
     assert.equal(getRoleDestination("ROL_DESCONOCIDO"), "login.html");
 });
 

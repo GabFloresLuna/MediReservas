@@ -1,5 +1,5 @@
 const DASHBOARD_CONFIG = {
-    ADMINISTRADOR: {
+    ADMIN: {
         label: "Administrador",
         description: "Administra usuarios, perfiles y la configuración general de MediReservas.",
         actions: [
@@ -9,7 +9,7 @@ const DASHBOARD_CONFIG = {
             { icon: "ES", title: "Especialidades", description: "Administra las áreas de atención médica disponibles.", href: "admin-especialidades.html" }
         ]
     },
-    RECEPCIONISTA: {
+    RECEPTIONIST: {
         label: "Recepcionista",
         description: "Revisa y gestiona las solicitudes de atención de los pacientes.",
         actions: [
@@ -18,7 +18,7 @@ const DASHBOARD_CONFIG = {
             { icon: "RE", title: "Reagendar citas", description: "Modifica la fecha y hora de una atención solicitada.", href: "gestion-citas.html?accion=reagendar" }
         ]
     },
-    MEDICO: {
+    DOCTOR: {
         label: "Médico",
         description: "Consulta tu agenda y registra la información de tus atenciones.",
         actions: [
@@ -27,7 +27,7 @@ const DASHBOARD_CONFIG = {
             { icon: "HI", title: "Historial clínico", description: "Consulta antecedentes asociados a tus atenciones.", href: "historial-clinico.html" }
         ]
     },
-    PACIENTE: {
+    PATIENT: {
         label: "Paciente",
         description: "Reserva horas y consulta el estado de tus próximas atenciones médicas.",
         actions: [
@@ -39,21 +39,21 @@ const DASHBOARD_CONFIG = {
     }
 };
 
-const ALL_ROLES = Object.freeze(["ADMINISTRADOR", "RECEPCIONISTA", "MEDICO", "PACIENTE"]);
+const ALL_ROLES = Object.freeze(["ADMIN", "RECEPTIONIST", "DOCTOR", "PATIENT"]);
 
 const ROUTE_PERMISSIONS = Object.freeze({
     "dashboard.html": ALL_ROLES,
     "perfil.html": ALL_ROLES,
-    "usuarios.html": Object.freeze(["ADMINISTRADOR"]),
-    "roles.html": Object.freeze(["ADMINISTRADOR"]),
-    "admin-medicos.html": Object.freeze(["ADMINISTRADOR"]),
-    "admin-especialidades.html": Object.freeze(["ADMINISTRADOR"]),
-    "gestion-citas.html": Object.freeze(["RECEPCIONISTA", "ADMINISTRADOR"]),
-    "agenda-medica.html": Object.freeze(["MEDICO"]),
-    "observacion-clinica.html": Object.freeze(["MEDICO"]),
-    "solicitar-cita.html": Object.freeze(["PACIENTE"]),
-    "mis-citas.html": Object.freeze(["PACIENTE"]),
-    "historial-clinico.html": Object.freeze(["MEDICO", "PACIENTE"]),
+    "usuarios.html": Object.freeze(["ADMIN"]),
+    "roles.html": Object.freeze(["ADMIN"]),
+    "admin-medicos.html": Object.freeze(["ADMIN"]),
+    "admin-especialidades.html": Object.freeze(["ADMIN"]),
+    "gestion-citas.html": Object.freeze(["RECEPTIONIST", "ADMIN"]),
+    "agenda-medica.html": Object.freeze(["DOCTOR"]),
+    "observacion-clinica.html": Object.freeze(["DOCTOR"]),
+    "solicitar-cita.html": Object.freeze(["PATIENT"]),
+    "mis-citas.html": Object.freeze(["PATIENT"]),
+    "historial-clinico.html": Object.freeze(["DOCTOR", "PATIENT"]),
 });
 
 export function getDashboardConfig(role) {

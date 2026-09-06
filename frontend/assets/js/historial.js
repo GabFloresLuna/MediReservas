@@ -35,7 +35,7 @@ function renderHistory() {
         return;
     }
 
-    const isDoctor = session.role === "MEDICO";
+    const isDoctor = session.role === "DOCTOR";
     document.querySelector("#patient-data-section").hidden = isDoctor;
 
     if (!isDoctor) {

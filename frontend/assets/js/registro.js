@@ -100,7 +100,7 @@ form?.addEventListener("submit", (event) => {
         address: values.address,
         email: values.email,
         password: values.password,
-        role: "PACIENTE",
+        role: "PATIENT",
         active: true
     });
 

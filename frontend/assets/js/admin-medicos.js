@@ -196,7 +196,7 @@ function fillSelect(select, options, placeholder) {
 }
 
 function fillDoctorSelects() {
-    const doctorUsers = getUsers().filter((user) => user.role === "MEDICO" && user.active);
+    const doctorUsers = getUsers().filter((user) => user.role === "DOCTOR" && user.active);
     fillSelect(
         getInput("userId"),
         doctorUsers.map((user) => ({value: user.id, label: `${user.firstName} ${user.lastName} — ${user.email}`})),

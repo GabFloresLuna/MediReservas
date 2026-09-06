@@ -223,7 +223,7 @@ form?.addEventListener("submit", (event) => {
         saveUser({
             ...values,
             id: crypto.randomUUID?.() ?? `user-${Date.now()}`,
-            role: "PACIENTE",
+            role: "PATIENT",
             active: true
         });
     }

@@ -6,7 +6,7 @@ export const BASE_USERS = [
         lastName: "Muñoz",
         email: "administrador@medireservas.cl",
         password: "Admin123",
-        role: "ADMINISTRADOR",
+        role: "ADMIN",
         active: true
     },
     {
@@ -16,7 +16,7 @@ export const BASE_USERS = [
         lastName: "Silva",
         email: "recepcion@medireservas.cl",
         password: "Recepcion123",
-        role: "RECEPCIONISTA",
+        role: "RECEPTIONIST",
         active: true
     },
     {
@@ -26,7 +26,7 @@ export const BASE_USERS = [
         lastName: "Rojas",
         email: "medico@medireservas.cl",
         password: "Medico123",
-        role: "MEDICO",
+        role: "DOCTOR",
         active: true
     },
     {
@@ -36,7 +36,7 @@ export const BASE_USERS = [
         lastName: "Contreras",
         email: "paciente@medireservas.cl",
         password: "Paciente123",
-        role: "PACIENTE",
+        role: "PATIENT",
         active: true
     }
 ];

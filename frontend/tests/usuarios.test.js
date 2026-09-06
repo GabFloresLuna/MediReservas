@@ -42,7 +42,7 @@ const newUser = {
     phone: "+56912345678",
     address: "Santiago",
     password: "Temporal123",
-    role: "PACIENTE",
+    role: "PATIENT",
     active: true
 };
 

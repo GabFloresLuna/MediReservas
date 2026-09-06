@@ -1,10 +1,10 @@
 import { getUsers, removeSession, saveSession } from "./storage.js";
 
 const ROLE_DESTINATIONS = {
-    ADMINISTRADOR: "dashboard.html",
-    RECEPCIONISTA: "dashboard.html",
-    MEDICO: "dashboard.html",
-    PACIENTE: "dashboard.html"
+    ADMIN: "dashboard.html",
+    RECEPTIONIST: "dashboard.html",
+    DOCTOR: "dashboard.html",
+    PATIENT: "dashboard.html"
 };
 
 export function authenticate(email, password) {
