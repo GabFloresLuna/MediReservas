@@ -1,4 +1,5 @@
 import { getUsers, removeSession, saveSession } from "./storage.js";
+import {getAllowedRolesForRoute} from "./roles.js";
 
 const ROLE_DESTINATIONS = {
     ADMIN: "dashboard.html",
@@ -34,6 +35,20 @@ export function createSession(user) {
 
 export function getRoleDestination(role) {
     return ROLE_DESTINATIONS[role] ?? "login.html";
+}
+
+export function getPostLoginDestination(role, returnTo = "") {
+    if (!returnTo || returnTo.includes(":")) return getRoleDestination(role);
+
+    const destination = new URL(returnTo, "https://medireservas.local/");
+    const routeName = destination.pathname.slice(1);
+    const allowedRoles = getAllowedRolesForRoute(routeName);
+
+    if (!routeName || routeName.includes("/") || !allowedRoles?.includes(role)) {
+        return getRoleDestination(role);
+    }
+
+    return `${routeName}${destination.search}`;
 }
 
 export function isSessionValid(session, user) {

@@ -1,4 +1,4 @@
-import { authenticate, createSession, getRoleDestination } from "./auth.js";
+import { authenticate, createSession, getPostLoginDestination } from "./auth.js";
 import { initializeBaseUsers } from "./storage.js";
 import { validateLogin } from "./validaciones.js";
 import {setFieldError} from "./ui-utils.js";
@@ -71,8 +71,9 @@ form?.addEventListener("submit", (event) => {
     message.className = "text-center text-sm font-medium text-primary-dark";
     message.textContent = "Inicio de sesión correcto. Redirigiendo...";
     const session = createSession(user);
+    const returnTo = new URLSearchParams(window.location.search).get("returnTo") ?? "";
 
     window.setTimeout(() => {
-        window.location.href = getRoleDestination(session.role);
+        window.location.href = getPostLoginDestination(session.role, returnTo);
     }, 500);
 });

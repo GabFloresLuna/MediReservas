@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
     authenticate,
     createSession,
+    getPostLoginDestination,
     getRoleDestination,
     logout
 } from "../assets/js/auth.js";
@@ -114,6 +115,15 @@ test("dirige los roles reconocidos al dashboard compartido", () => {
     assert.equal(getRoleDestination("DOCTOR"), "dashboard.html");
     assert.equal(getRoleDestination("PATIENT"), "dashboard.html");
     assert.equal(getRoleDestination("ROL_DESCONOCIDO"), "login.html");
+});
+
+test("recupera una ruta protegida solo cuando corresponde al rol autenticado", () => {
+    assert.equal(
+        getPostLoginDestination("PATIENT", "solicitar-cita.html?medico=2"),
+        "solicitar-cita.html?medico=2"
+    );
+    assert.equal(getPostLoginDestination("DOCTOR", "solicitar-cita.html?medico=2"), "dashboard.html");
+    assert.equal(getPostLoginDestination("PATIENT", "https://sitio-malicioso.cl"), "dashboard.html");
 });
 
 test("valida los campos del formulario antes de autenticar", () => {
