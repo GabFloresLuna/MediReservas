@@ -7,6 +7,7 @@ const config = getDashboardConfig(session?.role);
 function updateSessionHeader() {
     if (!session || !config) return;
 
+    document.querySelector("body > header nav > div:first-child")?.classList.add("lg:pl-8");
     const name = document.querySelector("#header-user-name");
     const role = document.querySelector("#header-user-role");
     if (name) name.textContent = `${session.firstName} ${session.lastName}`.trim();
