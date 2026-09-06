@@ -16,9 +16,9 @@
         </a>
         <header class="relative border-b border-line bg-white">
             <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8" aria-label="Navegación principal">
-                <a class="flex items-center gap-2 text-xl font-bold text-primary-dark" href="index.html" aria-label="Ir al inicio de MediReservas">
+                <a class="flex items-center gap-2 text-lg font-bold text-primary-dark sm:text-xl" href="index.html" aria-label="Ir al inicio de MediReservas">
                     <span class="grid size-10 place-items-center rounded-xl bg-primary text-xl text-white" aria-hidden="true">+</span>
-                    <span>MediReservas</span>
+                    <span class="hidden sm:inline">MediReservas</span>
                 </a>
 
                 <ul class="hidden items-center gap-8 text-sm font-medium text-muted lg:flex">
@@ -28,7 +28,7 @@
                     <li><a class="transition hover:text-primary" href="pages/contacto.html">Contacto</a></li>
                 </ul>
 
-                <div class="flex items-center gap-2 sm:gap-3">
+                <div class="flex items-center gap-2 sm:gap-3" data-public-auth-actions>
                     <a class="hidden rounded-lg px-4 py-2 text-sm font-semibold text-primary-dark transition hover:bg-primary-light sm:inline-flex" href="pages/login.html">Iniciar sesión</a>
                     <a class="hidden rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-dark sm:inline-flex" href="pages/registro.html">Crear cuenta</a>
                     <button
@@ -53,7 +53,7 @@
                     <li><a class="block rounded-lg px-4 py-3 text-muted hover:bg-page hover:text-primary-dark" href="pages/medicos-especialidades.html#medicos">Médicos</a></li>
                     <li><a class="block rounded-lg px-4 py-3 text-muted hover:bg-page hover:text-primary-dark" href="pages/contacto.html">Contacto</a></li>
                 </ul>
-                <div class="mt-4 grid grid-cols-2 gap-3 border-t border-line pt-4">
+                <div class="mt-4 grid grid-cols-2 gap-3 border-t border-line pt-4" data-public-auth-actions>
                     <a class="inline-flex justify-center rounded-lg border border-line px-4 py-2.5 text-sm font-semibold text-primary-dark" href="pages/login.html">Iniciar sesión</a>
                     <a class="inline-flex justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white" href="pages/registro.html">Crear cuenta</a>
                 </div>
@@ -165,6 +165,6 @@
                 <p class="text-sm text-muted md:text-right">&copy; <span id="current-year">2026</span> MediReservas. Todos los derechos reservados.</p>
             </div>
         </footer>
-        <script src="assets/js/main.js"></script>
+        <script type="module" src="assets/js/main.js"></script>
     </body>
 </html>

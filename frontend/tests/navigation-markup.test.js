@@ -39,6 +39,18 @@ test("cada vista contiene un único destino principal", () => {
     });
 });
 
+test("el logo de las vistas internas siempre dirige al inicio público", () => {
+    pages
+        .filter(({html}) => html.includes("data-auth-required"))
+        .forEach(({path, html}) => {
+            assert.match(
+                html,
+                /<a(?=[^>]*href="\.\.\/index\.html")(?=[^>]*aria-label="Ir al inicio de MediReservas")[^>]*>/,
+                `${path} no dirige su logo al inicio`
+            );
+        });
+});
+
 test("todos los enlaces y recursos locales apuntan a archivos existentes", () => {
     pages.forEach(({path, url, html}) => {
         const references = [...html.matchAll(/(?:href|src)="([^"]+)"/g)].map((match) => match[1]);
