@@ -1,4 +1,4 @@
-import {getAppointmentById, getSession, initializeBaseAppointments, updateAppointment} from "./storage.js";
+import {getAppointmentById, getDoctors, getSession, initializeBaseAppointments, updateAppointment} from "./storage.js";
 import {setFieldError} from "./ui-utils.js";
 
 const form = document.querySelector("#observation-form");
@@ -13,7 +13,8 @@ initializeBaseAppointments();
 const appointmentId = new URLSearchParams(window.location.search).get("id");
 const appointment = appointmentId ? getAppointmentById(appointmentId) : null;
 const session = getSession();
-const canEditAppointment = appointment?.doctorId === session?.userId && appointment.status === "CONFIRMED";
+const doctor = getDoctors().find((item) => item.userId === session?.userId);
+const canEditAppointment = appointment?.doctorId === doctor?.doctorId && appointment.status === "CONFIRMED";
 
 function showFieldError(input, errorElementId, error = "") {
     const errorElement = document.querySelector(`#${errorElementId}`);

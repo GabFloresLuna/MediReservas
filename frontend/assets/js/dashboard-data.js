@@ -2,7 +2,7 @@ function createSummary(value, label) {
     return {value: String(value), label};
 }
 
-export function getDashboardSummary({session, users = [], specialties = [], appointments = [], today}) {
+export function getDashboardSummary({session, users = [], doctors = [], specialties = [], appointments = [], today}) {
     if (!session) return [];
 
     if (session.role === "ADMIN") {
@@ -22,7 +22,8 @@ export function getDashboardSummary({session, users = [], specialties = [], appo
     }
 
     if (session.role === "DOCTOR") {
-        const doctorAppointments = appointments.filter((appointment) => appointment.doctorId === session.userId);
+        const doctor = doctors.find((item) => item.userId === session.userId);
+        const doctorAppointments = appointments.filter((appointment) => appointment.doctorId === doctor?.doctorId);
         return [
             createSummary(doctorAppointments.filter((appointment) => appointment.date === today && appointment.status !== "CANCELLED").length, "Atenciones de hoy"),
             createSummary(doctorAppointments.filter((appointment) => appointment.status === "CONFIRMED" && appointment.date <= today).length, "Observaciones pendientes"),

@@ -181,7 +181,17 @@ export function initializeBaseSpecialties() {
 
 export function getDoctors() {
     try {
-        return JSON.parse(localStorage.getItem(DOCTORS_KEY)) ?? [];
+        const doctors = JSON.parse(localStorage.getItem(DOCTORS_KEY)) ?? [];
+        return doctors.map(({specialtyId, extraSpecialtyIds, ...doctor}) => {
+            const numericUserId = Number(doctor.userId);
+            const baseDoctor = BASE_DOCTORS.find(({doctorId}) => doctorId === doctor.doctorId);
+
+            return {
+                ...doctor,
+                userId: Number.isFinite(numericUserId) ? numericUserId : baseDoctor?.userId,
+                specialtyIds: doctor.specialtyIds ?? [specialtyId, ...(extraSpecialtyIds ?? [])].filter(Boolean)
+            };
+        });
     } catch {
         return [];
     }
@@ -235,6 +245,7 @@ export function getAppointments() {
         const appointments = JSON.parse(localStorage.getItem(APPOINTMENTS_KEY)) ?? [];
         return appointments.map((appointment) => ({
             ...appointment,
+            doctorId: Number.isFinite(Number(appointment.doctorId)) ? Number(appointment.doctorId) : 1,
             status: normalizeAppointmentStatus(appointment.status)
         }));
     } catch {

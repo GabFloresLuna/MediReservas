@@ -34,8 +34,8 @@ class LocalStorageMock {
 globalThis.localStorage = new LocalStorageMock();
 
 const newUser = {
-    userId: 5,
-    authUserId: 5,
+    userId: 7,
+    authUserId: 7,
     run: "12345678-5",
     firstName: "Camila",
     lastName: "Soto",
@@ -55,7 +55,7 @@ test.beforeEach(() => {
 test("crea un usuario sin reemplazar las cuentas existentes", () => {
     saveUser(newUser);
 
-    assert.equal(getUsers().length, 5);
+    assert.equal(getUsers().length, 7);
     assert.deepEqual(getUserById(newUser.userId), newUser);
 });
 

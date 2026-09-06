@@ -41,10 +41,10 @@ test.beforeEach(() => {
     initializeBaseUsers();
 });
 
-test("inicializa una sola cuenta por cada rol", () => {
+test("inicializa cuentas para todos los roles del sistema", () => {
     initializeBaseUsers();
 
-    assert.equal(getUsers().length, 4);
+    assert.equal(getUsers().length, 6);
     assert.deepEqual(
         new Set(getUsers().map((user) => user.role)),
         new Set(["ADMIN", "RECEPTIONIST", "DOCTOR", "PATIENT"])
@@ -77,8 +77,8 @@ test("rechaza una contraseña incorrecta y una cuenta inactiva", () => {
     assert.equal(authenticate("medico@medireservas.cl", "incorrecta"), undefined);
 
     saveUser({
-        userId: 5,
-        authUserId: 5,
+        userId: 7,
+        authUserId: 7,
         email: "inactivo@medireservas.cl",
         password: "Inactivo123",
         role: "PATIENT",

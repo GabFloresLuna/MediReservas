@@ -1,5 +1,5 @@
 import { getDashboardConfig } from "./roles.js";
-import {getAppointments, getSession, getSpecialties, getUsers, initializeBaseAppointments, initializeBaseSpecialties, initializeBaseUsers} from "./storage.js";
+import {getAppointments, getDoctors, getSession, getSpecialties, getUsers, initializeBaseAppointments, initializeBaseDoctors, initializeBaseSpecialties, initializeBaseUsers} from "./storage.js";
 import {getDashboardSummary} from "./dashboard-data.js";
 import {getLocalDateString} from "./validaciones.js";
 
@@ -8,6 +8,7 @@ const config = getDashboardConfig(session?.role);
 
 initializeBaseUsers();
 initializeBaseSpecialties();
+initializeBaseDoctors();
 initializeBaseAppointments();
 
 function createActionLink(action, compact = false) {
@@ -61,6 +62,7 @@ function renderDashboard() {
     const summaryItems = getDashboardSummary({
         session,
         users: getUsers(),
+        doctors: getDoctors(),
         specialties: getSpecialties(),
         appointments: getAppointments(),
         today: getLocalDateString()

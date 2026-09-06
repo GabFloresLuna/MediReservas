@@ -1,4 +1,4 @@
-import {getAppointments, getSession, initializeBaseAppointments} from "./storage.js";
+import {getAppointments, getDoctors, getSession, initializeBaseAppointments} from "./storage.js";
 import {getLocalDateString} from "./validaciones.js";
 import {getAppointmentStatusBadgeClass, getAppointmentStatusLabel} from "./citas-utils.js";
 
@@ -57,9 +57,10 @@ function createAppointmentCard(appointment) {
 
 function renderAgenda() {
     const session = getSession();
+    const doctor = getDoctors().find((item) => item.userId === session?.userId);
     const selectedDate = dateInput.value;
     const appointments = getAppointments()
-        .filter((appointment) => appointment.date === selectedDate && appointment.doctorId === session?.userId)
+        .filter((appointment) => appointment.date === selectedDate && appointment.doctorId === doctor?.doctorId)
         .sort((first, second) => first.time.localeCompare(second.time));
 
     agendaList.replaceChildren(...appointments.map(createAppointmentCard));

@@ -56,8 +56,10 @@ function getFormValues() {
         email: String(formData.get("email") ?? "").trim().toLowerCase(),
         phone: String(formData.get("phone") ?? "").trim(),
         medicalLicenseNumber: String(formData.get("medicalLicenseNumber") ?? "").trim().toUpperCase(),
-        specialtyId: Number(formData.get("specialtyId") ?? 0),
-        extraSpecialtyIds: formData.getAll("extraSpecialtyIds").map(Number),
+        specialtyIds: [
+            Number(formData.get("specialtyId") ?? 0),
+            ...formData.getAll("extraSpecialtyIds").map(Number)
+        ].filter((specialtyId, index, values) => specialtyId && values.indexOf(specialtyId) === index),
         admissionDate: String(formData.get("admissionDate") ?? ""),
         active: getInput("active").checked
     };
@@ -110,7 +112,7 @@ function validateDoctor(values) {
         errors.medicalLicenseNumber = "Usa entre 5 y 20 letras, números o guiones.";
     }
 
-    if (!values.specialtyId) errors.specialtyId = "Selecciona la especialidad principal.";
+    if (!values.specialtyIds.length) errors.specialtyId = "Selecciona la especialidad principal.";
 
     if (values.admissionDate && values.admissionDate > getLocalDateString()) {
         errors.admissionDate = "La fecha de ingreso no puede ser futura.";
@@ -120,7 +122,7 @@ function validateDoctor(values) {
 }
 
 function getSpecialtyNames(doctor) {
-    const names = [doctor.specialtyId, ...(doctor.extraSpecialtyIds ?? [])]
+    const names = doctor.specialtyIds
         .map((specialtyId) => getSpecialtyById(specialtyId)?.specialtyName)
         .filter(Boolean);
 
@@ -243,14 +245,14 @@ function openEditDialog(doctorId) {
     getInput("email").value = doctor.email ?? "";
     getInput("phone").value = doctor.phone ?? "";
     getInput("medicalLicenseNumber").value = doctor.medicalLicenseNumber ?? "";
-    getInput("specialtyId").value = doctor.specialtyId ?? "";
+    getInput("specialtyId").value = doctor.specialtyIds[0] ?? "";
     getInput("admissionDate").value = doctor.admissionDate ?? "";
     getInput("admissionDate").max = getLocalDateString();
     getInput("active").checked = Boolean(doctor.active);
 
     const extraSpecialties = getInput("extraSpecialtyIds");
     [...extraSpecialties.options].forEach((option) => {
-        option.selected = (doctor.extraSpecialtyIds ?? []).includes(Number(option.value));
+        option.selected = doctor.specialtyIds.slice(1).includes(Number(option.value));
     });
 
     document.querySelector("#doctor-dialog-title").textContent = "Editar médico";

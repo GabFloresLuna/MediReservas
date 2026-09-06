@@ -50,7 +50,7 @@ function fillDoctors() {
         .filter(
             (doctor) =>
                 doctor.active &&
-                (doctor.specialtyId === specialtyId || (doctor.extraSpecialtyIds ?? []).includes(specialtyId))
+                doctor.specialtyIds.includes(specialtyId)
         )
         .forEach((doctor) => {
             doctorSelect.add(new Option(`${doctor.firstName} ${doctor.lastName}`, doctor.doctorId));
@@ -126,8 +126,7 @@ form?.addEventListener("submit", (event) => {
         patientUserId: patient.userId,
         patientName: `${patient.firstName} ${patient.lastName}`,
         patientRun: patient.run,
-        doctorId: doctor.userId,
-        doctorRecordId: doctor.doctorId,
+        doctorId: doctor.doctorId,
         doctorName: `${doctor.firstName} ${doctor.lastName}`,
         specialtyId: specialty.specialtyId,
         specialtyName: specialty.specialtyName,

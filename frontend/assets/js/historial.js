@@ -1,4 +1,4 @@
-import {getAppointments, getSession, getUserById, initializeBaseAppointments} from "./storage.js";
+import {getAppointments, getDoctors, getSession, getUserById, initializeBaseAppointments} from "./storage.js";
 import {formatAppointmentDate} from "./citas-utils.js";
 import {appendLabeledText} from "./ui-utils.js";
 
@@ -36,6 +36,7 @@ function renderHistory() {
     }
 
     const isDoctor = session.role === "DOCTOR";
+    const doctor = isDoctor ? getDoctors().find((item) => item.userId === currentUser.userId) : null;
     document.querySelector("#patient-data-section").hidden = isDoctor;
 
     if (!isDoctor) {
@@ -47,7 +48,7 @@ function renderHistory() {
         .filter(
             (appointment) =>
                 (isDoctor
-                    ? appointment.doctorId === currentUser.userId
+                    ? appointment.doctorId === doctor?.doctorId
                     : appointment.patientUserId === currentUser.userId || appointment.patientRun === currentUser.run) &&
                 appointment.status === "COMPLETED" &&
                 appointment.diagnosis &&

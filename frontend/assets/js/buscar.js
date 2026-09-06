@@ -19,8 +19,7 @@ function getActiveSpecialties() {
 }
 
 function getDoctorSpecialties(doctor) {
-    const doctorSpecialtyIds = [doctor.specialtyId, ...(doctor.extraSpecialtyIds ?? [])];
-    return getActiveSpecialties().filter((specialty) => doctorSpecialtyIds.includes(specialty.specialtyId));
+    return getActiveSpecialties().filter((specialty) => doctor.specialtyIds.includes(specialty.specialtyId));
 }
 
 function createSpecialtyCard(specialty) {
@@ -93,8 +92,7 @@ function renderDoctors() {
         .filter(
             (doctor) =>
                 !selectedSpecialtyId ||
-                doctor.specialtyId === selectedSpecialtyId ||
-                (doctor.extraSpecialtyIds ?? []).includes(selectedSpecialtyId)
+                doctor.specialtyIds.includes(selectedSpecialtyId)
         );
 
     doctorList.replaceChildren(...doctors.map(createDoctorCard));
