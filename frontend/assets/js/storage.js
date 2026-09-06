@@ -135,6 +135,17 @@ function normalizeDoctorId(doctorId) {
     return Number.isFinite(normalizedDoctorId) ? normalizedDoctorId : null;
 }
 
+function normalizePatientUserId(appointment) {
+    const patientUserId = Number(appointment.patientUserId ?? 0);
+    const linkedUser = getUsers().find((user) => user.userId === patientUserId);
+
+    if (linkedUser && appointment.patientRun && linkedUser.run !== appointment.patientRun) {
+        return 0;
+    }
+
+    return patientUserId;
+}
+
 export function getSpecialties() {
     try {
         const specialties = JSON.parse(localStorage.getItem(SPECIALTIES_KEY)) ?? [];
@@ -274,7 +285,7 @@ export function getAppointments() {
         return appointments.map(({id, status, ...appointment}, index) => ({
             ...appointment,
             appointmentId: normalizeAppointmentId(appointment.appointmentId ?? id ?? index + 1),
-            patientUserId: Number(appointment.patientUserId ?? 0),
+            patientUserId: normalizePatientUserId(appointment),
             doctorId: normalizeDoctorId(appointment.doctorId) ?? 1,
             specialtyId: Number(appointment.specialtyId),
             scheduleSlotId: normalizeAppointmentId(appointment.scheduleSlotId ?? appointment.appointmentId ?? id ?? index + 1),

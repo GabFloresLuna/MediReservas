@@ -151,7 +151,7 @@ export const BASE_APPOINTMENTS = [
     },
     {
         appointmentId: 2,
-        patientUserId: 7,
+        patientUserId: 0,
         scheduleSlotId: 2,
         patientName: "Juan Morales",
         patientRun: "15678234-0",
@@ -166,7 +166,7 @@ export const BASE_APPOINTMENTS = [
     },
     {
         appointmentId: 3,
-        patientUserId: 8,
+        patientUserId: 0,
         scheduleSlotId: 3,
         patientName: "Carolina Fuentes",
         patientRun: "14235876-3",
@@ -181,7 +181,7 @@ export const BASE_APPOINTMENTS = [
     },
     {
         appointmentId: 4,
-        patientUserId: 9,
+        patientUserId: 0,
         scheduleSlotId: 4,
         patientName: "Pedro Salinas",
         patientRun: "13987654-2",
@@ -196,7 +196,7 @@ export const BASE_APPOINTMENTS = [
     },
     {
         appointmentId: 5,
-        patientUserId: 10,
+        patientUserId: 0,
         scheduleSlotId: 5,
         patientName: "Lucía Vega",
         patientRun: "16543987-K",
@@ -211,7 +211,7 @@ export const BASE_APPOINTMENTS = [
     },
     {
         appointmentId: 6,
-        patientUserId: 11,
+        patientUserId: 0,
         scheduleSlotId: 6,
         patientName: "Marcos Díaz",
         patientRun: "17893451-1",

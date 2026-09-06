@@ -98,6 +98,17 @@ test("conserva el número de un médico con identificador antiguo", () => {
     assert.equal(getAppointments()[0].doctorId, 2);
 });
 
+test("evita asignar una cita simulada a otra cuenta con el mismo identificador", () => {
+    localStorage.setItem("medireservas_users", JSON.stringify([
+        {userId: 7, run: "99999999-9", email: "nuevo@ejemplo.cl", role: "PATIENT"}
+    ]));
+    localStorage.setItem("medireservas_appointments", JSON.stringify([
+        {appointmentId: 2, patientUserId: 7, patientRun: "15678234-0", doctorId: 2, specialtyId: 2, appointmentStatus: "PENDING"}
+    ]));
+
+    assert.equal(getAppointments()[0].patientUserId, 0);
+});
+
 test("guarda la cancelación de una cita", () => {
     const cancelled = updateAppointment(1, {appointmentStatus: "CANCELLED"});
 
