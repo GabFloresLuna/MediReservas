@@ -83,6 +83,18 @@ function fillAvailableTimes() {
         });
 }
 
+function preselectDoctorFromUrl() {
+    const doctorId = Number(new URLSearchParams(window.location.search).get("medico"));
+    const doctor = getDoctors().find((item) => item.doctorId === doctorId && item.active);
+    const specialtyId = doctor?.specialtyIds.find((id) => getSpecialties().some((specialty) => specialty.specialtyId === id && specialty.active));
+    if (!doctor || !specialtyId) return;
+
+    specialtySelect.value = String(specialtyId);
+    fillDoctors();
+    doctorSelect.value = String(doctorId);
+    fillAvailableDates();
+}
+
 function clearErrors() {
     Object.values(errorElements).forEach((element) => {
         element.textContent = "";
@@ -189,3 +201,4 @@ initializeBaseDoctors();
 initializeBaseAppointments();
 initializeBaseScheduleSlots();
 fillSpecialties();
+preselectDoctorFromUrl();

@@ -4,6 +4,8 @@ import {
     initializeBaseDoctors,
     initializeBaseSpecialties
 } from "./storage.js";
+import {formatAppointmentDate} from "./citas-utils.js";
+import {getAvailableScheduleSlots, initializeBaseScheduleSlots} from "./schedule-storage.js";
 
 const specialtySearch = document.querySelector("#buscarEspecialidad");
 const specialtyList = document.querySelector("#listaEspecialidades");
@@ -108,6 +110,28 @@ function showDoctorDetail(doctorId) {
     document.querySelector("#detalleEspecialidad").textContent = specialties.map((item) => item.specialtyName).join(", ");
     document.querySelector("#detalleRegistro").textContent = doctor.medicalLicenseNumber;
     document.querySelector("#detalleDescripcion").textContent = specialties.map((item) => item.description).join(" ");
+    const availableSlots = getAvailableScheduleSlots(doctorId)
+        .sort((first, second) => `${first.slotDate}${first.startTime}`.localeCompare(`${second.slotDate}${second.startTime}`))
+        .slice(0, 3);
+    const scheduleList = document.querySelector("#detalleHorarios");
+    scheduleList.replaceChildren();
+
+    if (availableSlots.length) {
+        const list = document.createElement("ul");
+        list.className = "flex flex-wrap gap-2";
+        availableSlots.forEach((slot) => {
+            const item = document.createElement("li");
+            item.className = "rounded-lg bg-primary-light px-3 py-2 text-sm font-semibold text-primary-dark";
+            item.textContent = `${formatAppointmentDate(slot.slotDate)} · ${slot.startTime.slice(0, 5)} hrs`;
+            list.append(item);
+        });
+        scheduleList.append(list);
+    } else {
+        scheduleList.textContent = "No hay horarios disponibles por el momento.";
+        scheduleList.className = "mt-2 text-sm text-muted";
+    }
+
+    document.querySelector("#solicitarCitaMedico").href = `solicitar-cita.html?medico=${doctorId}`;
     doctorDetail.showModal();
 }
 
@@ -139,6 +163,7 @@ doctorDetail?.addEventListener("click", (event) => {
 
 initializeBaseSpecialties();
 initializeBaseDoctors();
+initializeBaseScheduleSlots();
 fillSpecialtyFilter();
 renderSpecialties();
 renderDoctors();
