@@ -109,5 +109,8 @@ form?.addEventListener("submit", (event) => {
     fieldNames.forEach((fieldName) => showFieldError(fieldName));
     message.className = "text-center text-sm font-medium text-primary-dark";
     message.textContent = "Cuenta creada correctamente. Ya puedes iniciar sesión.";
-    submitButton.disabled = false;
+
+    window.setTimeout(() => {
+        window.location.href = "login.html";
+    }, 800);
 });
