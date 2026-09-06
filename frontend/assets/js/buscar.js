@@ -24,22 +24,33 @@ function getDoctorSpecialties(doctor) {
     return getActiveSpecialties().filter((specialty) => doctor.specialtyIds.includes(specialty.specialtyId));
 }
 
+function createActiveBadge(itemType) {
+    const badge = document.createElement("span");
+    badge.className = "inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-primary-dark";
+    badge.textContent = "Activo";
+    badge.setAttribute("aria-label", `Estado de ${itemType}: activo`);
+    return badge;
+}
+
 function createSpecialtyCard(specialty) {
     const card = document.createElement("article");
+    const heading = document.createElement("div");
     const title = document.createElement("h3");
     const description = document.createElement("p");
     const button = document.createElement("button");
 
     card.className = "flex flex-col rounded-2xl border border-line bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-primary hover:shadow-lg";
+    heading.className = "flex items-start justify-between gap-3";
     title.className = "text-xl font-bold";
     title.textContent = specialty.specialtyName;
+    heading.append(title, createActiveBadge("la especialidad"));
     description.className = "mt-3 flex-1 leading-7 text-muted";
     description.textContent = specialty.description;
     button.type = "button";
     button.dataset.specialtyId = specialty.specialtyId;
     button.className = "mt-5 self-start font-semibold text-primary-dark hover:text-primary";
     button.textContent = "Ver médicos";
-    card.append(title, description, button);
+    card.append(heading, description, button);
 
     return card;
 }
@@ -64,14 +75,17 @@ function fillSpecialtyFilter() {
 function createDoctorCard(doctor) {
     const specialties = getDoctorSpecialties(doctor);
     const card = document.createElement("article");
+    const heading = document.createElement("div");
     const title = document.createElement("h3");
     const specialty = document.createElement("p");
     const license = document.createElement("p");
     const button = document.createElement("button");
 
     card.className = "medico flex flex-col rounded-2xl border border-line bg-white p-6 shadow-sm";
+    heading.className = "flex items-start justify-between gap-3";
     title.className = "text-xl font-bold";
     title.textContent = `${doctor.firstName} ${doctor.lastName}`;
+    heading.append(title, createActiveBadge("el médico"));
     specialty.className = "mt-3 text-primary-dark";
     specialty.textContent = `Especialidad: ${specialties.map((item) => item.specialtyName).join(", ")}`;
     license.className = "mt-1 text-sm text-muted";
@@ -80,7 +94,7 @@ function createDoctorCard(doctor) {
     button.className = "verDetalle mt-5 self-start rounded-xl border border-primary px-4 py-2 font-semibold text-primary-dark transition hover:bg-primary-light";
     button.dataset.doctorId = doctor.doctorId;
     button.textContent = "Ver detalle";
-    card.append(title, specialty, license, button);
+    card.append(heading, specialty, license, button);
 
     return card;
 }
