@@ -62,7 +62,7 @@
                     <p class="rounded-2xl border border-line bg-white p-4 text-sm font-medium" id="appointments-feedback" role="status"></p>
                 </div>
 
-                <form class="mt-6 grid gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm sm:grid-cols-[1fr_14rem]" id="appointment-filters" role="search">
+                <form class="mt-6 grid gap-4 rounded-2xl border border-line bg-white p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-[1fr_14rem_14rem]" id="appointment-filters" role="search">
                     <div>
                         <label class="mb-2 block text-sm font-semibold" for="appointment-search">Buscar cita</label>
                         <input
@@ -88,6 +88,16 @@
                             <option value="COMPLETED">Completadas</option>
                             <option value="NO_SHOW">Inasistencias</option>
                         </select>
+                    </div>
+
+                    <div>
+                        <label class="mb-2 block text-sm font-semibold" for="appointment-date-filter">Fecha</label>
+                        <input
+                            class="w-full rounded-xl border border-line bg-white px-4 py-3 outline-none transition focus:border-primary focus:ring-3 focus:ring-emerald-100"
+                            id="appointment-date-filter"
+                            name="date"
+                            type="date"
+                        />
                     </div>
                 </form>
 

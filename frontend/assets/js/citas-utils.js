@@ -26,6 +26,15 @@ export function canCancelAppointment(status) {
     return ["PENDING", "CONFIRMED"].includes(status);
 }
 
+export function matchesAppointmentFilters(appointment, {query = "", status = "all", date = ""} = {}) {
+    const normalizedQuery = query.trim().toLowerCase();
+    const searchableText = `${appointment.patientName} ${appointment.patientRun} ${appointment.doctorName}`.toLowerCase();
+
+    return searchableText.includes(normalizedQuery)
+        && (status === "all" || appointment.appointmentStatus === status)
+        && (!date || appointment.date === date);
+}
+
 export function formatAppointmentDate(date) {
     return new Intl.DateTimeFormat("es-CL", {timeZone: "UTC"}).format(new Date(`${date}T00:00:00Z`));
 }

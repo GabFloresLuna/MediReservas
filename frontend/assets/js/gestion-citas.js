@@ -5,7 +5,7 @@ import {
     updateAppointment
 } from "./storage.js";
 import {createTableCell, setFieldError} from "./ui-utils.js";
-import {canCancelAppointment, formatAppointmentDate, getAppointmentStatusBadgeClass, getAppointmentStatusLabel} from "./citas-utils.js";
+import {canCancelAppointment, formatAppointmentDate, getAppointmentStatusBadgeClass, getAppointmentStatusLabel, matchesAppointmentFilters} from "./citas-utils.js";
 import {getAvailableScheduleSlots, initializeBaseScheduleSlots, releaseScheduleSlot, rescheduleScheduleSlot} from "./schedule-storage.js";
 
 const tableBody = document.querySelector("#appointments-table-body");
@@ -13,6 +13,7 @@ const emptyMessage = document.querySelector("#appointments-empty-message");
 const resultCount = document.querySelector("#appointments-result-count");
 const searchInput = document.querySelector("#appointment-search");
 const statusFilter = document.querySelector("#appointment-status-filter");
+const dateFilter = document.querySelector("#appointment-date-filter");
 const feedback = document.querySelector("#appointments-feedback");
 const rescheduleDialog = document.querySelector("#reschedule-dialog");
 const rescheduleForm = document.querySelector("#reschedule-form");
@@ -47,15 +48,11 @@ function showFeedback(message, isError = false) {
 }
 
 function getFilteredAppointments() {
-    const query = searchInput.value.trim().toLowerCase();
-    const status = statusFilter.value;
-
-    return getAppointments().filter((appointment) => {
-        const searchableText = `${appointment.patientName} ${appointment.patientRun} ${appointment.doctorName}`.toLowerCase();
-        const matchesQuery = searchableText.includes(query);
-        const matchesStatus = status === "all" || appointment.appointmentStatus === status;
-        return matchesQuery && matchesStatus;
-    });
+    return getAppointments().filter((appointment) => matchesAppointmentFilters(appointment, {
+        query: searchInput.value,
+        status: statusFilter.value,
+        date: dateFilter.value
+    }));
 }
 
 function createStatusCell(status) {
@@ -182,6 +179,7 @@ function openCancelDialog(appointmentId) {
 
 searchInput?.addEventListener("input", renderAppointments);
 statusFilter?.addEventListener("change", renderAppointments);
+dateFilter?.addEventListener("change", renderAppointments);
 rescheduleDate?.addEventListener("change", () => fillRescheduleTimes(rescheduleDate.dataset.doctorId));
 
 tableBody?.addEventListener("click", (event) => {
